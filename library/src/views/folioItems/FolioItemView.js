@@ -48,6 +48,7 @@ App.views.folioItems.FolioItemView = Backbone.View.extend({
     
 		cx = {
 		  model: json,
+		  cover_img: json.libraryPreviewUrl + "/" + (+new Date()),
 		  price: (json.state == this.FolioStates.PURCHASABLE) ? json.price : 'Download'
 		};
 		

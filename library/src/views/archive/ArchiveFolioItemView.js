@@ -30,7 +30,7 @@ App.views.archive.ArchiveFolioItemView = Backbone.View.extend({
 
 		cx = {
 		  model: this.model,
-		  cover_img: "http://edge.adobe-dcfs.com/ddp/issueServer/issues/" + this.model.id + "/libraryPreview/portrait"
+		  cover_img: "http://edge.adobe-dcfs.com/ddp/issueServer/issues/" + this.model.id + "/libraryPreview/portrait/" + (+new Date())
 		};
 		
 		this.$el.html(this.template(cx));
