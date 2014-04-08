@@ -7,8 +7,19 @@ App.views.Library = Backbone.View.extend({
   },
   initialize: function() {
     console.log("App.views.Library.initialize()");
+    var that = this,
+        render;
+        
     this.library_chrome_view = new App.views.LibraryChrome();
     this.library_issues_view = new App.views.LibraryIssues();
+     
+    render = _.bind(this.render, this, $.noop);
+    render = _.partial(_.delay, render, 50);
+    render = _.debounce(render, 200);
+    
+    App.api.receiptService.newReceiptsAvailableSignal.add(render);
+    App.api.authenticationService.userAuthenticationChangedSignal.add(render);
+    App.api.libraryService.updatedSignal.add(render);
   },
   render: function(cb) {
     cb = cb || $.noop;
