@@ -1,0 +1,10 @@
+.DS_Store
+*-dev/
+*-deploy/
+*-zipfiles/
+*.swp
+*~
+
+/store/styles/.sass-cache/
+/store/css/
+/urls.txt
