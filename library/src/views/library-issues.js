@@ -18,6 +18,8 @@ App.views.LibraryIssues = Backbone.View.extend({
   
   // Whether or not a subscription is active.
   isSubscriptionActive: false,
+  
+  previewDialog: null,
     
 	events: {
 	  "tap #banner"        : "banner_tap",
@@ -302,24 +304,32 @@ App.views.LibraryIssues = Backbone.View.extend({
 	
 	display_previewDialog: function(e, folio, elementId) {
     console.log("App.views.LibraryIssues.display_previewDialog()");
-    e.stopPropagation();
+    e.preventDefault();
     
-    var previewDialog = new App.views.dialogs.PreviewDialog({model: folio});
-    this.$el.append(previewDialog.render().el);
-    previewDialog.setImageProperties($(e.target), elementId);
-    
-    // Only show the subscribe button if testing on the desktop or
-    // if the user doesn't own the latest folio and does not have an active subscription.
-    //if ((!this.userOwnsLatestFolio && !this.isSubscriptionActive) && folio == this.folios[0]) {
-      // Only show the subscribe button for the most recent.
-      //previewDialog.showSubscribeButton();
-    //}
-    
-    // Only show the preview button if testing on the desktop.
-    // Otherwise the preview button visibility is determined in PreviewDialog.
-    //if (!App._using_adobe_api) {
-      //previewDialog.showPreviewButton();
-    //}
+    if (!this.previewDialog) {
+      this.previewDialog = new App.views.dialogs.PreviewDialog({model: folio});
+      this.$el.append(this.previewDialog.render().el);
+      this.previewDialog.setImageProperties($(e.target), elementId);
+      
+      this.previewDialog.$el.on("previewDialogClosed", function() {
+        this.previewDialog = null;
+      });
+      // Only show the subscribe button if testing on the desktop or
+      // if the user doesn't own the latest folio and does not have an active subscription.
+      //if ((!this.userOwnsLatestFolio && !this.isSubscriptionActive) && folio == this.folios[0]) {
+        // Only show the subscribe button for the most recent.
+        //previewDialog.showSubscribeButton();
+      //}
+      
+      // Only show the preview button if testing on the desktop.
+      // Otherwise the preview button visibility is determined in PreviewDialog.
+      //if (!App._using_adobe_api) {
+        //previewDialog.showPreviewButton();
+      //}
+    } else {
+      this.previewDialog = null;
+      return false;
+    }
   },
   
   showMore_clickHandler: function(e) {

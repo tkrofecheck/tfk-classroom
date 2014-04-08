@@ -217,6 +217,8 @@ App.views.dialogs.PreviewDialog = Backbone.View.extend({
 	},
 
 	close: function() {
+		this.$el.trigger("previewDialogClosed");
+		
 		this.$("#preview-dialog-header-border").css({"-webkit-transition" : ".4s"});
 		this.$("#preview-dialog-header-border").css({"-webkit-transform" : "rotateX(180deg)"});
 		
