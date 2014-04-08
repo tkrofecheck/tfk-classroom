@@ -13,6 +13,8 @@ window.settings = {
     "library_show_banner"           : true,
     "store_banners_type"            : "link", //(e.g. subscribe, link, '')
     
+    "library_show_subscribe"        : false,
+    
     "IS_ENTITLEMENT_VIEWER"         : true,
     "IS_HEADER_TEXT"                : true,
     "IS_AUTO_OPEN_DOWNLOADED_FOLIO" : true,
