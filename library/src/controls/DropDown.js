@@ -109,7 +109,7 @@ $.fn.dropDown = function(method) {
 							
 							$item.on("mouseover touchmove", function() {
 								$item.addClass("selected");
-							})
+							});
 						});
 				
 						var height = ITEM_HEIGHT * numItems + BACKGROUND_PADDING * 2 - 8; // Subtract 8 from the height to offset padding.
@@ -181,6 +181,7 @@ $.fn.dropDown = function(method) {
 			}
 			
 			function close() {
+				console.log("dropdown close");
 				isOpen = false;
 				
 				$menu.detach();
@@ -194,34 +195,34 @@ $.fn.dropDown = function(method) {
 			 */
 			this.getSelectedIndex = function() {
 				return selectedIndex;
-			}
+			};
 			
 			this.getSelectedLabel = function() {
 				return $($this.children()[selectedIndex]).html();
-			}
+			};
 			
 			// Forces a redraw of the menu the next time it is opened.
 			// This should be used when the HTML of an item has changed such as toggling between login/logout.
 			this.invalidate = function() {
 				isRedraw = true;
-			}
+			};
 			
 			this.setDisabled = function(index) {
 				if ($menu)
 					$($menu.find(".item").get(index)).addClass("item-disabled");
 				
 				disabledHash[index] = true;
-			}
+			};
 			
 			this.setEnabled = function(index) {
 				if ($menu)
 					$($menu.find(".item").get(index)).removeClass("item-disabled");
 				
 				delete disabledHash[index];
-			}
+			};
 		});
 	} else {
 		$.error( 'Method ' +  method + ' does not exist on jQuery.dropDown' );
 	} 
-}
+};
 })(jQuery);
