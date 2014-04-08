@@ -31,17 +31,25 @@
     <img id='title-image' src=''>
   {{/if}}
   
-    <div class='drop-down' id='header-drop-down'>
-      <div id='restore-all-purchases'>{{settings.LBL_RESTORE_ALL_PURCHASES}}</div>
-      <div id='remove-issues-from-ipad'>{{settings.LBL_REMOVE_ISSUES_FROM_IPAD}}</div>
-  
-      {{#if model.autoarchive_support}}
-      <!--
-        If testing on desktop then include the
-        switch otherwise make sure it is supported.
-      -->
-      <div id='auto-archive' class='flip-switch' {{#if model.autoarchive_enabled}}state='on'{{else}}state='off'{{/if}}>{{settings.LBL_AUTO_ARCHIVE}}</div>
-      {{/if}}
+    <div id="drop-down-container">
+      <div class='drop-down filter' id='header-drop-down-filter'>
+        <div class='grade' id='grade-k1'>Grade K-1</div>
+        <div class='grade' id='grade-2'>Grade 2</div>
+        <div class='grade' id='grade-34'>Grade 3-4</div>
+        <div class='grade' id='grade-56'>Grade 5-6</div>
+      </div>
+      <div class='drop-down settings' id='header-drop-down'>
+        <div id='restore-all-purchases'>{{settings.LBL_RESTORE_ALL_PURCHASES}}</div>
+        <div id='remove-issues-from-ipad'>{{settings.LBL_REMOVE_ISSUES_FROM_IPAD}}</div>
+    
+        {{#if model.autoarchive_support}}
+        <!--
+          If testing on desktop then include the
+          switch otherwise make sure it is supported.
+        -->
+        <div id='auto-archive' class='flip-switch' {{#if model.autoarchive_enabled}}state='on'{{else}}state='off'{{/if}}>{{settings.LBL_AUTO_ARCHIVE}}</div>
+        {{/if}}
+      </div>
     </div>
   </div>
 </div>

@@ -205,14 +205,24 @@ body, #archive-grid, #sections-grid {
     display: none;
 }
 
-#header-drop-down {
+#drop-down-container {
     float: right;
     margin-left: 15px;
     display: inline;
     position: fixed;
     right: -15px;
     top: 2px;
+    width: 110px;
 }
+
+/*#header-drop-down, #header-drop-down-filter {
+    float: right;
+    margin-left: 15px;
+    display: inline;
+    position: fixed;
+    right: -15px;
+    top: 2px;
+}*/
 
 .button {
     font-size: 12px;
@@ -267,11 +277,27 @@ body, #archive-grid, #sections-grid {
 
 /* The icon to open the drop down. */
 .drop-down {
-    background: url("../images/settings_icon.png") no-repeat;
     width: 50px;
     height: 50px;
     margin-top: 10px;
+    display: block;
+}
+
+.drop-down.settings {
+    background: url("../images/settings_icon.png") no-repeat;
     background-size: 25px 25px;
+    float: right;
+}
+
+.drop-down.filter {
+    background: url("../images/filter_icon.png") no-repeat;
+    background-size: 18px 18px;
+    margin-top: 13px;
+    float: left;
+}
+
+.dropdown-check {
+    content: "X";
 }
 
 .drop-down div {

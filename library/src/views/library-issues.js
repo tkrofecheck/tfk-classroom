@@ -88,7 +88,10 @@ App.views.LibraryIssues = Backbone.View.extend({
 		$("#header #title .spinner").remove();
 		App.$headerTitle.html("Library");
 
+		$("#header-drop-down-filter").dropDown({verticalGap: -20});
+		
 		$("#header-drop-down").dropDown({verticalGap: -20});
+		
 
     App.isOnline = App.api.deviceService.isOnline;
     

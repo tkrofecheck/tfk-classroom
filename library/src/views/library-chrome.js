@@ -10,8 +10,9 @@ App.views.LibraryChrome = Backbone.View.extend({
     "click #print-subscriber-login"   : "display_loginDialog",
     "click #subscribe"                : "display_subscribeDialog",
     
-    "change #header-drop-down"      : "header_dropDownChangeHandler",
-    "change #auto-archive"          : "autoArchive_changeHandler"
+    "change #header-drop-down"        : "header_dropDownChangeHandler",
+    "change #header-drop-down-filter" : "header_dropDownChangeHandler",
+    "change #auto-archive"            : "autoArchive_changeHandler"
   },
   
   initialize: function() {
@@ -65,6 +66,10 @@ App.views.LibraryChrome = Backbone.View.extend({
       this.display_restorePurchasesDialog();
     } else if (selectedLabel == settings.LBL_REMOVE_ISSUES_FROM_IPAD) {
       this.display_archiveIssueView();
+    } else { // filter folios by grade
+      var grade = $(e.target).dropDown("getSelectedIndex");
+      $(e.target).addClass("dropdown-check");
+      console.log(selectedLabel + ", index:" + grade);
     }
   },
 
