@@ -1,0 +1,9 @@
+#!/bin/bash
+
+cd $(dirname $0)
+cd ..
+PATH=./bin:$PATH
+
+for BRAND in $(cut -d ' ' -f 1 bin/brands.txt); do
+  $@ $BRAND
+done

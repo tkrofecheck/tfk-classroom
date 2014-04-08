@@ -1,0 +1,16 @@
+<form id='login'>
+  <div class='title'>{{settings.LBL_SIGN_IN}}<div id='close'>Cancel</div></div>
+  <div class='description'>Please sign in to your account.</div>
+  <input id='username' type='email' name='username' placeholder='Username'/></div>
+  <input id='password' type='password' name='password' placeholder='Password'/></div>
+  <div id='submit'>{{settings.LBL_SIGN_IN}}</div>
+  <div class='error'></div>
+  
+  {{#if settings.FORGOT_PASSWORD_URL}}
+  <a class='link' href="{{settings.FORGOT_PASSWORD_URL}}">Forgot password?</a>
+  {{/if}}
+  
+  {{#if settings.CREATE_ACCOUNT_URL}}
+  <a class='link' href="{{settings.CREATE_ACCOUNT_URL}}">Create an Account</a>
+  {{/if}}
+</form>

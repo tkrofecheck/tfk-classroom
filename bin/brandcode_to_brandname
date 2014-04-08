@@ -1,0 +1,10 @@
+#!/bin/bash
+
+cd $(dirname $0)
+cd ..
+
+while read BRAND; do
+  if [[ ${BRAND:0:2} == $1 ]]; then
+    echo "${BRAND:3}"
+  fi
+done < bin/brands.txt

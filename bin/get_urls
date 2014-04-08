@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+if [ -z "$1" ]; then
+  TITLE="EW"
+else
+  TITLE="$1"
+fi
+
+cd $(dirname $0)
+cd ..
+
+print_urls() {
+    echo "  base url: ${1}"
+    echo "  ipad banner: ${1}banners/online_ipad/index.html"
+    echo "  iphone banner: ${1}banners/online_iphone/index.html"
+    echo "  post-subs: ${1}lucie-library.html"
+}
+
+echo
+echo "URLS for $TITLE:"
+echo
+echo "Dev urls:"
+print_urls "http://ecom-dev01-app.usdlls2.savvis.net:10400/appstorefronts-jq/${TITLE}/adobe/apple/ipad/v25/"
+echo
+echo "Prod urls:"
+print_urls "http://subscription-assets.timeinc.com/prod/assets/appstorefronts-jq/${TITLE}/adobe/apple/ipad/v25/" 
+echo
+
+
+
+

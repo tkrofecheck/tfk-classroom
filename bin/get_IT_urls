@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+if [ -z "$1" ]; then
+  TITLE="EW"
+else
+  TITLE="$1"
+fi
+
+cd $(dirname $0)
+cd ..
+
+BRANDNAME=$(bin/brandcode_to_brandname $TITLE)
+print_urls() {
+    echo "iPad Banner: ${1}banners/online_ipad/index.html"
+    echo "iPhone Banner: ${1}banners/online_iphone/index.html"
+    echo "Post-Subs: ${1}lucie-library.html"
+    echo "Privacy Policy: $(bin/getsetting privacyPolicyUrl $TITLE)"
+#    echo "license agreement: $(bin/getsetting licenceAgreementUrl $TITLE)"
+#    echo "terms of use: $(bin/getsetting termsOfUseUrl $TITLE)"
+    echo "Forgot Password: $(bin/getsetting signInForgotPasswordUrl $TITLE)"
+    echo "Existing Subs: $(bin/getsetting WesPageURL $TITLE)"
+}
+
+echo "$BRANDNAME:"
+print_urls "http://subscription-assets.timeinc.com/prod/assets/appstorefronts-jq/${TITLE}/adobe/apple/ipad/v25/" 
+echo
+
+

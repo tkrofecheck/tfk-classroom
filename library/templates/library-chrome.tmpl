@@ -1,0 +1,48 @@
+<div id='header'>
+  <div id='header-left-column-container'>
+    
+  {{#if settings.IS_ENTITLEMENT_VIEWER}}
+    <!--
+      If API is not available then testing on the
+      desktop so show the button, otherwise only
+      if this is an entitlement viewer.
+    -->
+    <div class='text-link' id='print-subscriber-login'>{{model.loginLbl}}</div>
+  {{/if}}
+
+  
+  {{#unless model.userOwnsLatestFolio}}
+    <!--
+      If API is not available then testing on the
+      desktop so show the button, otherwise only
+      if the user doesn't own the latest folio
+      and doesn't have an active subscription.
+    -->
+    {{#unless model.isSubscriptionActive}}
+    <div class='text-link' id='subscribe'>Subscribe</div>
+    {{/unless}}
+  {{/unless}}
+
+  {{#if settings.IS_HEADER_TEXT}}
+    <div id='title'><span style='margin:0;padding:0;border:0;'>Library</span></div>
+  {{else}}
+    <img id='title-image' src=''>
+  {{/if}}
+  
+    <div class='drop-down' id='header-drop-down'>
+      <div id='restore-all-purchases'>{{settings.LBL_RESTORE_ALL_PURCHASES}}</div>
+      <div id='remove-issues-from-ipad'>{{settings.LBL_REMOVE_ISSUES_FROM_IPAD}}</div>
+  
+      {{#if model.autoarchive_support}}
+      <!--
+        If testing on desktop then include the
+        switch otherwise make sure it is supported.
+      -->
+      <div id='auto-archive' class='flip-switch' {{#if model.autoarchive_enabled}}state='on'{{else}}state='off'{{/if}}>{{settings.LBL_AUTO_ARCHIVE}}</div>
+      {{/if}}
+    </div>
+  </div>
+</div>
+
+
+

@@ -1,0 +1,10 @@
+#!/bin/bash
+
+cd $(dirname $0)
+cd ..
+
+echo > ./urls.txt
+
+bin/allbrands build
+bin/allbrands mkzipfiles
+bin/allbrands get_IT_urls > ./urls.txt

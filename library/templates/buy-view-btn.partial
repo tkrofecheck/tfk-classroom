@@ -1,0 +1,28 @@
+
+{{#if isPurchasable}}
+    data-action="buy">
+    {{#setting}}{{storeBuyIssueBtn}}{{/setting}}
+{{else}}{{#if isViewable}}
+    data-action="view">
+    {{#setting}}{{storeViewIssueBtn}}{{/setting}}
+{{else}}{{#if isDownloadable}}
+    data-action="download">
+    {{#setting}}{{storeDownloadIssueBtn}}{{/setting}}
+{{else}}{{#if isFree}}
+    data-action="downloadfree">
+    {{#setting}}{{storeDownloadIssueBtn}}{{/setting}}
+{{else}}
+
+    data-action="unavailable">
+
+    {{#ifequal state=101}}
+      {{#setting}}{{progressStarting}}{{/setting}}
+    {{else}}{{#ifequal state=201}}
+      {{#setting}}{{progressDownloading}}{{/setting}}
+    {{else}}{{#ifequal state=50}}
+      {{#setting}}{{storeUnavailableIssueBtn}}{{/setting}}
+    {{else}}
+      {{#setting}}{{storeUnavailableIssueBtn}}{{/setting}}
+    {{/ifequal}}{{/ifequal}}{{/ifequal}}
+
+{{/if}}{{/if}}{{/if}}{{/if}}

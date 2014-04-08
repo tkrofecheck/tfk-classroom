@@ -1,0 +1,6 @@
+#!/bin/bash
+
+npm install -g handlebars@1.0.12 uglify-js@2.3.0
+gem install sass -v 3.2.12
+gem install compass -v 0.12.2
+

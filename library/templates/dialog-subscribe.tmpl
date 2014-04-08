@@ -1,0 +1,12 @@
+<div id='subscribe-dialog' class='dialog'>
+  <p id='description'>Select a digital subscription option below. Your digital subscription starts with the most recent issue.</p>
+  {{#each subscriptions}}
+        <div class='subscribe-button' id='{{ productId }}'>
+            {{ duration }} subscription for {{ price }}
+            {{#if isActive}}
+                <div class='your-subscription'>{{settings.subscribeYourSubscription}}<div class='arrow'>&rarr;</div></div>
+            {{/if}}
+        </div>
+    {{/each}}
+  <div class='subscribe-dialog-button' id='cancel'>Cancel</div>
+</div>

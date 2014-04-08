@@ -1,0 +1,171 @@
+#!/usr/bin/env bash
+
+################################################################################
+# NOTE: This build script starts with utility functions... you probably 
+#     want to scroll down to the "name the files to include" section 
+################################################################################
+
+# This will eventually be replaced with $1 so you can specify which title
+# to build at the command line
+TITLE="TK"
+
+cd $(dirname $0)
+cd ..
+
+BUILDROOT=$(pwd)
+
+# JSFILES are arrays of javascript files that are used in the site we're
+# currently building. when we generate the site, this array is used to 
+# concatenate/minify the javascript.
+dev_js_file() {
+  DEVJSFILES=("${DEVJSFILES[@]}" $1)
+}
+prod_js_file() {
+  PRODJSFILES=("${PRODJSFILES[@]}" $1)
+}
+js_file() {
+  dev_js_file $1
+  prod_js_file $1
+}
+js_files() {
+  cd $DEVDIR
+  for JSFILE in $(ls $1); do
+    js_file $JSFILE
+  done
+  cd $BUILDROOT
+}
+js_lib() {
+  cp "lib/$1" "$DEVDIR/lib/$1"
+  js_file "lib/$1"
+}
+dev_lib() {
+  cp "lib/$1" "$DEVDIR/lib/$1"
+  dev_js_file "lib/$1"
+}
+prod_lib() {
+  cp "lib/$1" "$DEVDIR/lib/$1"
+  prod_js_file "lib/$1"
+}
+template() {
+  handlebars "$1" --output "$1.js"
+  js_file "$1.js"
+}
+templates() {
+  cd $DEVDIR
+  for TMPL in $(ls $1); do
+    template $TMPL 
+  done
+  cd $BUILDROOT
+}
+partial() {
+  handlebars "$1" --partial --output "$1.js"
+  js_file "$1.js"
+}
+partials() {
+  cd $DEVDIR
+  for PARTIAL in $(ls $1); do
+    partial $PARTIAL 
+  done
+  cd $BUILDROOT
+}
+building() {
+  BUILDING=$1
+  REMOTE_ASSET_PREFIX="http://subscription-assets.timeinc.com/prod/assets/appstorefronts-jq/$TITLE/adobe/apple/ipad/classroom/"
+  DEVDIR="./-$TITLE-$BUILDING-dev"
+  DEPLOYDIR="./-$TITLE-$BUILDING-deploy"
+  DEVJSFILES=()
+  PRODJSFILES=()
+  rm -r $DEVDIR
+  rm -r $DEPLOYDIR
+  cp -a $BUILDING $DEVDIR
+  mkdir $DEVDIR/lib
+}
+render_in_place() {
+  MAG_CODE=$TITLE REMOTE_ASSET_PREFIX=$REMOTE_ASSET_PREFIX python bin/render_index.py "$1" "$1"
+}
+compile() {
+  (cd "$DEVDIR/styles" && compass compile *.scss)
+  mv "$DEVDIR/css/$TITLE-library.css" "$DEVDIR/css/main.css"
+  
+  # render the index.html.tmpl file
+  MAG_CODE=$TITLE python bin/render_index.py "$DEVDIR/index.html.tmpl" "$DEVDIR/index.mockapi.dev.html" ${DEVJSFILES[@]}
+  MAG_CODE=$TITLE python bin/render_index.py "$DEVDIR/index.html.tmpl" "$DEVDIR/index.dev.html" "lib/AdobeLibraryAPI.js" ${DEVJSFILES[@]}
+
+  mv $DEVDIR/index.dev.html $DEVDIR/index.html
+
+  mkdir $DEPLOYDIR
+  
+  # minify src
+  cd $DEVDIR
+python - ${PRODJSFILES[@]} <<END | uglifyjs > $BUILDROOT/$DEPLOYDIR/main.min.js
+import sys
+for f in sys.argv[1:]:
+    sys.stdout.write(open(f).read());
+    sys.stdout.write("\n;\n")
+END
+
+  cd $BUILDROOT
+
+  # copy css and assets
+  mkdir $DEPLOYDIR/css
+  cp $DEVDIR/css/main.css $DEPLOYDIR/css/main.css
+
+  mkdir $DEPLOYDIR/images
+  cp $DEVDIR/images/*.* $DEPLOYDIR/images
+    
+  MAG_CODE=$TITLE CSS_HASH=$(md5 -q $BUILDROOT/$DEPLOYDIR/css/main.css) python bin/render_index.py "$DEVDIR/index.html.tmpl" "$DEVDIR/index.prod.html" "main.min.js?v=$(md5 -q $BUILDROOT/$DEPLOYDIR/main.min.js)"
+  cp $DEVDIR/index.prod.html $DEPLOYDIR/index.html
+
+  cp -r lib $DEPLOYDIR/lib
+
+  mkdir $DEPLOYDIR/settings
+  cp -r $DEVDIR/settings/${TITLE}.js $DEPLOYDIR/settings
+}
+
+################################################################################
+# name the files to include
+################################################################################
+
+building 'library'
+
+prod_lib 'AdobeLibraryAPI.js'
+dev_lib 'MockAPI.js'
+
+js_lib 'jquery-1.10.2.min.js'
+js_lib 'md5.js'
+js_lib 'async.js'
+js_lib 'jquery.transit.js'
+js_lib 'jquery.hammer.js'
+js_lib 'moment.js'
+js_lib 'underscore.js'
+js_lib 'backbone.js'
+js_lib 'handlebars.runtime.js'
+js_lib 'spin.min.js'
+
+dev_lib 'tcm_devtools.js'
+
+#partials 'templates/*.partial'
+templates 'templates/*.tmpl'
+
+# app specific
+js_file "settings/$TITLE.js"
+
+# depends on settings
+js_lib 'libBanner.js'
+
+# creates App object (which is just a namespace)
+js_file "src/app.js"
+
+js_files "src/controls/*.js"
+js_files "src/model/*.js"
+js_files "src/views/archive/*.js"
+js_files "src/views/dialogs/*.js"
+js_files "src/views/folioitems/*.js"
+js_files "src/views/section/*.js"
+js_files "src/views/*.js"
+
+# kicks off the app
+js_file "src/main.js"
+
+compile
+

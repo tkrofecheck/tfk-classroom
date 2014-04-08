@@ -1,0 +1,26 @@
+{{#setting}}
+  {{#if IS_ENTITLEMENT_VIEWER}}
+    {{#if library_show_banner}}
+    <!--
+     Displays the entitlement banner if this is
+     an entitlement viewer. Code should be added
+     to allow a user to register. Keep in mind
+     that <a> tags open in the current window.
+    -->
+    <div id='banner'></div>
+    {{/if}}
+  {{/if}}
+  {{#if IS_ENTITLEMENT_VIEWER}}
+    <div id="grid">
+  {{else}}
+    <!--
+      Entitlement banner isn't displayed so add
+      spacing.
+    -->
+    <div id='grid' style='margin-top: 82px;'>
+  {{/if}}
+      <div id='loading'>Loading...</div>
+    </div>
+    <div class='text-link' id='show-more'>Show More</div>
+{{/setting}}
+  

@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+
+# NOTE: REQUIRES CVSROOT TO BE IN BASH ENVIRONMENT
+# probably looks like:
+#   CVSROOT=:pserver:username:password@ecom-build01.usdlls2.savvis.net:/subs3
+
+if [ -z "$1" ]; then
+  echo "YOU MUST SPECIFY AN ENVIRONMENT TO DEPLOY TO [cmdev, qa, prod]"
+  exit 1
+else
+  DEPLOYTO="$1"
+fi
+
+git diff --quiet && git diff --cached --quiet
+if [[ $? -ne 0 ]]; then
+  echo "You have uncomitted changes. Please commit, stash, or discard all local changes before deploying."
+  exit 1
+fi
+
+CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+if [[ ($DEPLOYTO == "qa") || ($DEPLOYTO == "prod") ]]; then
+  git checkout $DEPLOYTO
+  git pull https://git.timeinc.net/git/tcm/storefront25.git $DEPLOYTO:$DEPLOYTO
+  if [[ $? -ne 0 ]]; then
+    exit 1
+  fi
+fi
+
+if [ -z "$2" ]; then
+  echo "YOU MUST SPECIFY A TITLE TO DEPLOY (2-letter brand code)"
+  exit 1
+else
+  TITLE="$2"
+fi
+
+cd $(dirname $0)
+cd ..
+
+bin/build $TITLE
+
+rm -rf /tmp/v25/$TITLE
+mkdir -p /tmp/v25/$TITLE
+
+pushd /tmp/v25
+cvs -q checkout -d $TITLE assets/appstorefronts-jq/${TITLE}/adobe/apple/ipad/v25
+
+popd
+cp -R ./-${TITLE}-store-deploy/ /tmp/v25/${TITLE}
+
+pushd /tmp/v25/${TITLE}
+
+# CLEAN OUT VIM SWAP FILES
+find . -iname "*.swp" | xargs rm
+
+# COMMIT ANY FILES THAT ARE CHANGED
+cvs -qn update | while read F; do
+
+  # First char is the status, then a space, then the filename
+  STATUS="${F:0:1}"
+  FILE="${F:2}"
+
+  if [[ "$STATUS" == "?" ]]; then
+    cvs add "$FILE"
+  fi
+  
+  cvs commit -m "deploy" "$FILE"
+done
+
+cvs tag -F -R $DEPLOYTO ./
+
+popd
+
+if [[ $CURRENT_BRANCH != $(git rev-parse --abbrev-ref HEAD) ]]; then
+  git checkout $CURRENT_BRANCH
+fi

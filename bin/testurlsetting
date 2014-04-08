@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cd $(dirname $0)
+cd ..
+
+open $(bin/allbrands bin/getsetting "$1")

@@ -1,0 +1,13 @@
+#!/bin/bash
+
+cd $(dirname $0)
+cd ..
+
+SETTING="$1"
+BRAND="$2"
+
+SCRIPT="window=global;"
+SCRIPT="${SCRIPT};$(cat library/settings/${BRAND}.js)"
+SCRIPT="${SCRIPT};console.log(window.settings.${1});"
+
+echo "${SCRIPT}" | node
