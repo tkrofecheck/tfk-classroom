@@ -11,7 +11,8 @@ App.views.dialogs.PreviewDialog = Backbone.View.extend({
 	events: {
 		"click"                 : "clickHandler",
 		"tap #preview-button"   : "onPreviewButton",
-		"tap #download-button"  : "onDownloadButton"
+		"tap #download-button"  : "onDownloadButton",
+		"tap #subscribe-button" : "onSubscribeButton"
 	},
 	
 	// The container that holds the header and image.
@@ -56,7 +57,7 @@ App.views.dialogs.PreviewDialog = Backbone.View.extend({
     		};
 		
 		this.$el.html(this.template(cx));
-		
+    
 		this.$contentContainer = this.$("#preview-dialog-content-container");
 
 		if (this.model.isPurchasable && !this.model.hasSections) {
@@ -143,14 +144,12 @@ App.views.dialogs.PreviewDialog = Backbone.View.extend({
     }
 	},
 	
-	showSubscribeButton: function() {
-		var $subscribeButton = $("<div class='blue-button button'>Subscribe</div>");
-		$subscribeButton.appendTo(this.$("#preview-dialog-header-button-container"));
-		
-		var scope = this;
-		$subscribeButton.on("click", function() {
-			scope.$el.trigger("subscribeButtonClicked");
-		});
+	onSubscribeButton: function(e) {
+	  console.log("App.views.dialogs.PreviewDialog() subscribe");
+    
+    e.preventDefault();
+    
+    this.$el.trigger("subscribeButtonClicked");
 	},
 	
 	showPreviewButton: function() {

@@ -16,6 +16,11 @@ App.views.LibraryChrome = Backbone.View.extend({
   
   initialize: function() {
     console.log("App.views.LibraryChrome.initialize()");
+    
+    $("body").on("subscriptionPurchased", function() {// Triggered from the dialog when a purchase is successful.
+      that.$("#subscribe").css("display", "none");
+      $("body").off("subscriptionPurchased");
+    });
   },
   
   render: function(cb) {

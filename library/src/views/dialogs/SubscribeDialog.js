@@ -9,7 +9,7 @@ App.views.dialogs.SubscribeDialog = Backbone.View.extend({
 	template: Handlebars.templates["dialog-subscribe.tmpl"],
 	
 	events: {
-		"click"                    : "clickHandler",
+		//"click"                    : "clickHandler",
 		"click #cancel"            : "cancel_clickHandler",
 		"click .subscribe-button"  : "subscribe_clickHandler" // The handler for the individual subscription buttons.
 	},

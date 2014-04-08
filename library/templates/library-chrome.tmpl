@@ -18,9 +18,11 @@
       if the user doesn't own the latest folio
       and doesn't have an active subscription.
     -->
+    {{#if settings.library_show_subscribe}}
     {{#unless model.isSubscriptionActive}}
     <div class='text-link' id='subscribe'>Subscribe</div>
     {{/unless}}
+    {{/if}}
   {{/unless}}
 
   {{#if settings.IS_HEADER_TEXT}}

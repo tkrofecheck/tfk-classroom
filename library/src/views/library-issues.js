@@ -20,6 +20,8 @@ App.views.LibraryIssues = Backbone.View.extend({
   isSubscriptionActive: false,
   
   previewDialog: null,
+  
+  subscribeDialog: null,
     
 	events: {
 	  "tap #banner"        : "banner_tap",
@@ -126,9 +128,8 @@ App.views.LibraryIssues = Backbone.View.extend({
       return;
     }
 
-    $("body").on("subscriptionPurchased", function() {// Triggered from the dialog when a purchase is successful.
-      this.$("#subscribe").css("display", "none");
-      $("body").off("subscriptionPurchased");
+    $("body").on("subscribeButtonClicked", function(e){
+      that.display_subscribeDialog(e);
     });
     $("body").on("folioThumbClicked", function(e, folio, elementId){
       that.display_previewDialog(e, folio, elementId);
@@ -329,6 +330,20 @@ App.views.LibraryIssues = Backbone.View.extend({
     } else {
       this.previewDialog = null;
       return false;
+    }
+  },
+  
+  display_subscribeDialog: function(e) {
+    console.log("App.views.LibraryIssues.display_subscribeDialog()");
+    e.stopPropagation();
+    
+    if (!this.subscribeDialog) {
+      this.subscribeDialog = new App.views.dialogs.SubscribeDialog();
+
+      var that = this;
+      this.subscribeDialog.$el.on("subscribeDialogClosed", function() {
+        that.subscribeDialog = null;
+      });
     }
   },
   

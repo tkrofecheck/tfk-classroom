@@ -9,6 +9,11 @@
         </div>
         <div id='preview-dialog-header-button-container'>
           <div class='blue-button button' id='download-button'>{{price}}</div>
+          {{#if settings.library_show_subscribe}}
+          {{#unless model.isSubscriptionActive}}
+          <div id="subscribe-button" class='blue-button button'>Subscribe</div>
+          {{/unless}}
+          {{/if}}
         </div>
       </div>
     </div>
