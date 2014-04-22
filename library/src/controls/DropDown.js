@@ -16,6 +16,7 @@ $.fn.dropDown = function(method) {
 			var selectedIndex;
 			var $this = $(this);
 			var verticalGap = method.verticalGap; // The gap between the triangle and the button that opens/closes the menu.
+			var menuNumber = method.menuNumber;
 			
 			var isRedraw;
 			
@@ -114,7 +115,7 @@ $.fn.dropDown = function(method) {
 				
 						var height = ITEM_HEIGHT * numItems + BACKGROUND_PADDING * 2 - 8; // Subtract 8 from the height to offset padding.
 		
-						var html  = "<div class='drop-down-menu'>";
+						var html  = "<div id='menu-" + menuNumber + "' class='drop-down-menu'>";
 						    html +=    "<canvas id='dropDownCanvas' width='" + WIDTH + "' height='" + TRIANGLE_HEIGHT + "'>";
 						    html +=    "</canvas>";
 						    html +=    "<div class='drop-down-menu-background' style='width:" + (WIDTH - 10) + "px;height:" + height + "px'>"; // subtract 10 from the width to offset padding.
@@ -125,7 +126,7 @@ $.fn.dropDown = function(method) {
 						$menu = $(html).appendTo("body");
 						
 						// Create a modal background to stop clicks.
-						$modal = $("<div class='modal-background-grey'></div>").appendTo("body");
+						$modal = $("<div id='modal-" + menuNumber + "' class='modal-background-grey'></div>").appendTo("body");
 						$modal.css("display", "inline");
 						
 						$modal.on("click", modalBackground_clickHandler);
@@ -181,13 +182,23 @@ $.fn.dropDown = function(method) {
 			}
 			
 			function close() {
-				console.log("dropdown close");
+				var menu = $("#menu-" + menuNumber),
+				    modal = $("#modal-" + menuNumber),
+				    removeMenu;
+				
 				isOpen = false;
-				
-				$menu.detach();
-				$modal.detach();
-				
-				$(window).off("resize", updateLayout);
+				isRedraw = true;
+				  
+				removeMenu = window.setInterval(function() {
+				  $(menu).detach();
+				  $(modal).detach();
+				  
+				  if (!$('html').has(menu).length && !$('html').has(modal).length) {
+            window.clearInterval(removeMenu);
+            $(window).off("resize", updateLayout);
+            console.log("menu-" + menuNumber + " removed\nmodal-" + menuNumber + " removed");
+          }
+        }, 0);
 			}
 			
 			/**
