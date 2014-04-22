@@ -23,6 +23,7 @@
     $grid: null, // Displays the 'library' grid of folios.
     $sectionsgrid: null, // Displays the 'sections' grid of folios.
     $archivegrid: null, // Displays the 'archive' grid of folios.
+    folioThumbTimestamp: (+new Date()),
 
     spinnerOpts: {
       lines: 13, // The number of lines to draw

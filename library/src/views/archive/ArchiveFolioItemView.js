@@ -30,7 +30,7 @@ App.views.archive.ArchiveFolioItemView = Backbone.View.extend({
 
 		cx = {
 		  model: this.model,
-		  cover_img: "http://edge.adobe-dcfs.com/ddp/issueServer/issues/" + this.model.id + "/libraryPreview/portrait/" + (+new Date())
+		  cover_img: "http://edge.adobe-dcfs.com/ddp/issueServer/issues/" + this.model.id + "/libraryPreview/portrait/" + App.folioThumbTimestamp
 		};
 		
 		this.$el.html(this.template(cx));
@@ -77,7 +77,7 @@ App.views.archive.ArchiveFolioItemView = Backbone.View.extend({
 	getPreviewImageHandler: function(transaction) {
 		if (transaction.state == App.api.transactionManager.transactionStates.FINISHED && transaction.previewImageURL != null) {
 			//this.$(".folio-thumb").attr("src", transaction.previewImageURL);
-			console.log(transaction);
+			//console.log(transaction);
 		} else if (transaction.previewImageURL == null) { // Sometimes previewImageURL is null so attempt another reload.
 			var that = this;
 			setTimeout(function() {
