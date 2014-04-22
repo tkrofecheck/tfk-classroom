@@ -32,6 +32,9 @@ App.views.LibraryIssues = Backbone.View.extend({
 		console.log("App.views.LibraryIssues.initialize()");
 		this.$el.addClass("scrollable");
 		this.foliosPerPage = settings.num_folios_displayed;
+		
+		this._debounce_render = _.throttle(_.bind(this.render, this, $.noop), 500);
+		App.api.libraryService.updatedSignal.add(this._debounce_render);
 	},
 	
 	render: function(cb) {
@@ -49,7 +52,7 @@ App.views.LibraryIssues = Backbone.View.extend({
     App.$grid = this.$("#grid");
     this.showMore = this.$("#show-more");
     
-    setTimeout(function() { that.updateLibrarySpinner(); }, 0);
+    window.setTimeout(function() { that.updateLibrarySpinner(); return; }, 0);
     
     $(window).on("resize", function(){
       that.setGridHeight();
@@ -87,10 +90,11 @@ App.views.LibraryIssues = Backbone.View.extend({
 		window.spinner.stop();
 		$("#header #title .spinner").remove();
 		App.$headerTitle.html("Library");
-
-		$("#header-drop-down-filter").dropDown({verticalGap: -20});
+    
+    //Having multiple dropdowns, we need to specify a number for each via 'menuNumber' for events to be bound correctly
+    $("#header-drop-down-filter").dropDown({verticalGap: -20, menuNumber: 1});
 		
-		$("#header-drop-down").dropDown({verticalGap: -20});
+		$("#header-drop-down").dropDown({verticalGap: -20, menuNumber: 2});
 		
 
     App.isOnline = App.api.deviceService.isOnline;
@@ -143,14 +147,15 @@ App.views.LibraryIssues = Backbone.View.extend({
 
     // The collection creates a clone of the folio objects so addFolios() passes a reference to the object.
     // Since the folios are not on a server we don't need to load anything so pass the folios to the constructor.
-    window.showFoliosInt = window.setInterval(function() {
+    var showFoliosInt = window.setInterval(function() {
       if (that.folios) {
         if (!App.libraryCollection) {
           App.libraryCollection = new App.model.LibraryCollection(that.folios);
         }
         
         if (App.libraryCollection) {
-          window.clearInterval(window.showFoliosInt);
+          window.clearInterval(showFoliosInt);
+          console.log("interval cleared");
           // Add the folios which are currently available. On the first launch this
           // does not guarentee that all folios are immediately available. The callback
           // below for folioMap.addedSignal will handle folios which are added after
@@ -167,11 +172,11 @@ App.views.LibraryIssues = Backbone.View.extend({
           return;
         }
       }
-    }, 0);
+    }, 200);
 	},
 	
   addFolios: function() {		
-		var startIndex, endIndex, view, el;
+		var startIndex, endIndex, folioThumbTS, view, el;
 		
 		if (App.libraryCollection.length > 0) {
 			$("#loading").remove();
@@ -181,18 +186,15 @@ App.views.LibraryIssues = Backbone.View.extend({
 			
 		startIndex = this.getNumFoliosVisible();
 		endIndex = Math.min(startIndex + this.foliosPerPage, App.libraryCollection.length);
+		folioThumbTS = (+new Date());
 		for (var i = startIndex; i < endIndex; i++) {
 			// When using the DPS api this is a clone of the original folio.
 			var folio = App.libraryCollection.at(i);
 			// Testing on the desktop so create the path to the image.
-			if (!App._using_adobe_api) {
-			  if (folio.attributes.libraryPreviewUrl) {
-				  folio.attributes.libraryPreviewUrl +=  "/portrait";
-				} else {
-				  folio.attributes.libraryPreviewUrl = "http://edge.adobe-dcfs.com/ddp/issueServer/issues/" + folio.attributes["id"] + "/libraryPreview/portrait";
-				}
+			if (!App._using_adobe_api && folio.attributes.libraryPreviewUrl) {
+				folio.attributes.libraryPreviewUrl +=  "/portrait";
 		  } else {
-		    folio.attributes.libraryPreviewUrl = "http://edge.adobe-dcfs.com/ddp/issueServer/issues/" + folio.attributes["id"] + "/libraryPreview/portrait"
+		    folio.attributes.libraryPreviewUrl = "http://edge.adobe-dcfs.com/ddp/issueServer/issues/" + folio.attributes["id"] + "/libraryPreview/portrait/" + App.folioThumbTimestamp;
 		  }
 				
 			view = new App.views.folioItems.FolioItemView({model: folio});

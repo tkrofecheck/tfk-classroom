@@ -17,9 +17,9 @@ App.views.Library = Backbone.View.extend({
     render = _.partial(_.delay, render, 50);
     render = _.debounce(render, 200);
     
+    //Update views when subscription receipt is available or when user signs into LUCIE
     App.api.receiptService.newReceiptsAvailableSignal.add(render);
     App.api.authenticationService.userAuthenticationChangedSignal.add(render);
-    App.api.libraryService.updatedSignal.add(render);
   },
   render: function(cb) {
     cb = cb || $.noop;

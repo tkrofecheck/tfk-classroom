@@ -61,6 +61,8 @@ App.views.LibraryChrome = Backbone.View.extend({
   header_dropDownChangeHandler: function(e) {   
     console.log("App.views.LibraryChrome.header_dropDownChangeHandler()");
     
+    console.log(this);
+    
     var selectedLabel = $(e.target).dropDown("getSelectedLabel");
     if (selectedLabel == settings.LBL_RESTORE_ALL_PURCHASES) {  // Display the restore dialog.
       this.display_restorePurchasesDialog();
@@ -68,7 +70,6 @@ App.views.LibraryChrome = Backbone.View.extend({
       this.display_archiveIssueView();
     } else { // filter folios by grade
       var grade = $(e.target).dropDown("getSelectedIndex");
-      $(e.target).addClass("dropdown-check");
       console.log(selectedLabel + ", index:" + grade);
     }
   },
