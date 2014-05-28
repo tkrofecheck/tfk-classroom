@@ -85,7 +85,7 @@ render_in_place() {
 }
 compile() {
   (cd "$DEVDIR/styles" && compass compile *.scss)
-  mv "$DEVDIR/css/$TITLE-library.css" "$DEVDIR/css/main.css"
+  mv "$DEVDIR/css/$TITLE.css" "$DEVDIR/css/main.css"
   
   # render the index.html.tmpl file
   MAG_CODE=$TITLE python bin/render_index.py "$DEVDIR/index.html.tmpl" "$DEVDIR/index.mockapi.dev.html" ${DEVJSFILES[@]}
@@ -136,10 +136,13 @@ js_lib 'md5.js'
 js_lib 'async.js'
 js_lib 'jquery.transit.js'
 js_lib 'jquery.hammer.js'
+js_lib 'jquery.plugin.js'
+js_lib 'jquery.countdown.js'
 js_lib 'moment.js'
 js_lib 'underscore.js'
 js_lib 'backbone.js'
 js_lib 'handlebars.runtime.js'
+js_lib 'slideshow.js'
 js_lib 'spin.min.js'
 
 dev_lib 'tcm_devtools.js'
@@ -162,6 +165,45 @@ js_files "src/views/archive/*.js"
 js_files "src/views/dialogs/*.js"
 js_files "src/views/folioitems/*.js"
 js_files "src/views/section/*.js"
+js_files "src/views/*.js"
+
+# kicks off the app
+js_file "src/main.js"
+
+compile
+
+
+building 'store'
+
+prod_lib 'AdobeLibraryAPI.js'
+dev_lib 'MockAPI.js'
+
+js_lib 'jquery-1.10.2.min.js'
+js_lib 'md5.js'
+js_lib 'async.js'
+js_lib 'jquery.transit.js'
+js_lib 'jquery.hammer.js'
+js_lib 'jquery.plugin.js'
+js_lib 'jquery.countdown.js'
+js_lib 'moment.js'
+js_lib 'underscore.js'
+js_lib 'backbone.js'
+js_lib 'handlebars.runtime.js'
+js_lib 'slideshow.js'
+js_lib 'spin.min.js'
+
+dev_lib 'tcm_devtools.js'
+
+#partials 'templates/*.partial'
+templates 'templates/*.tmpl'
+
+# app specific
+js_file "settings/$TITLE.js"
+
+# creates App object (which is just a namespace)
+js_file "src/app.js"
+
+js_files "src/views/dialogs/*.js"
 js_files "src/views/*.js"
 
 # kicks off the app
