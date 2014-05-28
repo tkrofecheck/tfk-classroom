@@ -1,0 +1,31 @@
+<div id="left_rail">
+  Left Rail
+  
+  <!--
+   Displays video or slideshow
+  -->
+  {{#if settings.IS_VIDEO}}
+    <div id="video">Video</div>
+  {{else}}
+    <div id="tutorial" class="slideshow carousel">
+      {{#if slides}}
+        <div class="slides">
+          {{#each slides}}
+          <div class='slide' style='background-image: url("http://edge.adobe-dcfs.com/ddp/issueServer/issues/{{this.id}}/libraryPreview/portrait");'><a href='#'></a></div>
+        {{/each}}
+        </div>
+      {{/if}}
+    </div>
+  {{/if}}
+  <div class="samples">Samples</div>
+</div>
+
+<div id="right_rail">
+  Right Rail
+  <div class="signin">
+    <div class="teacher"></div>
+    <div class="student"></div>
+  </div>
+  <div class="cover" style="background-image: url('{{cover_img}}');"></div>
+</div>
+  

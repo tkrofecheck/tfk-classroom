@@ -1,0 +1,26 @@
+<div id='preview-dialog-content-container'>
+  <div id='preview-dialog-header-container'>
+    <div id='preview-dialog-header-border'>
+      <div id='preview-dialog-header'>
+        <div id='preview-dialog-header-text-container'>
+          <div class='magazine-title'>{{model.title}}</div>
+          <div class='folio-number'>{{model.folioNumber}}</div>
+          <div class='description'>{{model.description}}</div>
+        </div>
+        <div id='preview-dialog-header-button-container'>
+          <div class='blue-button button' id='download-button'>{{price}}</div>
+          {{#if settings.library_show_subscribe}}
+          {{#unless model.isSubscriptionActive}}
+          <div id="subscribe-button" class='blue-button button'>Subscribe</div>
+          {{/unless}}
+          {{/if}}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id='preview-dialog-folio-cover-container-border'>
+    <div id='preview-dialog-folio-cover-container'>
+      <img id='preview-dialog-folio-cover'>
+    </div>
+  </div>
+</div>
