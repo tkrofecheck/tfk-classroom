@@ -1,4 +1,5 @@
 @import "_includes/_repl.scss";
+@import "_includes/_banner.scss";
 
 @-webkit-keyframes pop {
     0%   { -webkit-transform: scale(0); }
@@ -22,13 +23,6 @@ body {
 
 body, #archive-grid, #sections-grid {
     background-color: #F7F7F7;
-}
-
-#banner {
-    margin: 46px 0px 0px 0px;
-    height: 140px;
-    display: block;
-    border-bottom: 1px solid #B1B1B1;
 }
 
 /* The white header at the top. */
@@ -397,7 +391,8 @@ body, #archive-grid, #sections-grid {
     top: 1px;
     left: 1px;
 }
-
+  
+  
 .magazine-title {
     color: #555555;
     font-size: 15px;
@@ -825,12 +820,6 @@ input::-webkit-input-placeholder {
 }
 
 @media screen and (orientation:portrait) {
-    #banner {
-        background: url("../images/entitlement_banner_portrait.png") no-repeat;
-        background-size: 768px 140px;
-        width: 768px;
-    }
-
     #grid, #archive-grid, #sections-grid {
         width: 768px;
     }
@@ -913,13 +902,7 @@ input::-webkit-input-placeholder {
     }
 }
 
-@media screen and (orientation:landscape) {
-    #banner {
-        background: url("../images/entitlement_banner_landscape.png") no-repeat;
-        background-size: 1024px 140px;
-        width: 1024px;
-    }
-    
+@media screen and (orientation:landscape) {    
     #grid, #archive-grid, #sections-grid {
         width: 1024px;
     }

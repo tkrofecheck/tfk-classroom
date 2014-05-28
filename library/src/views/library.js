@@ -11,6 +11,7 @@ App.views.Library = Backbone.View.extend({
         render;
         
     this.library_chrome_view = new App.views.LibraryChrome();
+    this.library_banner_view = new App.views.LibraryBanner();
     this.library_issues_view = new App.views.LibraryIssues();
      
     render = _.bind(this.render, this, $.noop);
@@ -33,6 +34,10 @@ App.views.Library = Backbone.View.extend({
       },
       function(cb) {
         cb = _.partial(cb, null);
+        that.library_banner_view.render(cb).$el.appendTo(that.el);
+      },
+      function(cb) {
+        cb = _.partial(cb, null);
         that.library_issues_view.render(cb).$el.appendTo(that.el);
       }
     ], cb);
@@ -43,6 +48,7 @@ App.views.Library = Backbone.View.extend({
         cb = cb || $.noop;
     async.parallel([
         function(cb) { that.library_chrome_view.animate(cb) },
+        function(cb) { that.library_banner_view.animate(cb) },
         function(cb) { that.library_issues_view.animate(cb) }
     ], cb);
   }

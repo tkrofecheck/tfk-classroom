@@ -1,0 +1,18 @@
+{{#setting}}
+  {{#if IS_ENTITLEMENT_VIEWER}}
+    {{#if library_show_banner}}
+    <!--
+     Displays the entitlement banner if this is
+     an entitlement viewer. Code should be added
+     to allow a user to register. Keep in mind
+     that <a> tags open in the current window.
+    -->
+    <div id="libBanner" class="banner carousel">
+      <div class="slides">
+        <div class='slide signin student'><a href='#'>Student</a></div>
+        <div class='slide signin teacher'><a href='#'>Teacher</a></div>
+      </div>
+    </div>
+    {{/if}}
+  {{/if}}
+{{/setting}}

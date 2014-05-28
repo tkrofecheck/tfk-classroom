@@ -1,12 +1,12 @@
 /**
  * Displays the login dialog that includes two links, "Forgot Password" and "Sign in".
  */
-App.views.dialogs.LoginDialog = Backbone.View.extend({
+App.views.dialogs.TeacherLoginDialog = Backbone.View.extend({
 	tagName:  "div",
 	
 	className: "modal-background-grey",
 	
-	template: Handlebars.templates["dialog-login.tmpl"],
+	template: Handlebars.templates["dialog-login-teacher.tmpl"],
 	
 	events: {
 		"click"                   : "clickHandler",
@@ -17,13 +17,14 @@ App.views.dialogs.LoginDialog = Backbone.View.extend({
 	},
 	
 	initialize: function() {
-		console.log("App.views.dialogs.LoginDialog.initialize()");
+		console.log("App.views.dialogs.TeacherLoginDialog.initialize()");
 		this.render().$el.appendTo("body");
     this.open();
 	},
 	
 	render: function(e) {
-		console.log("App.views.dialogs.LoginDialog.render()");
+		console.log("App.views.dialogs.TeacherLoginDialog.render()");
+		console.log(e);
 		var that = this,
 		    cx = {};
 		

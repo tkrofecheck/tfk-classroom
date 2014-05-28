@@ -16,14 +16,17 @@ window.settings = {
     "library_show_subscribe"        : false,
     
     "IS_ENTITLEMENT_VIEWER"         : true,
-    "IS_HEADER_TEXT"                : true,
+    "IS_HEADER_TEXT"                : "Library",
     "IS_AUTO_OPEN_DOWNLOADED_FOLIO" : true,
+    "IS_UPDATING_TEXT"              : "Updating Library...",
     
     // ************************************************************
     // NAV BAR, LOGIN DIALOG, RESTORE
     // ************************************************************
     "LBL_SIGN_OUT"                  : "Sign Out",
     "LBL_SIGN_IN"                   : "Sign In",
+    "LBL_STUDENT_SIGN_IN"           : "Student",
+    "LBL_TEACHER_SIGN_IN"           : "Teacher",
     "LBL_SUBSCRIBE"                 : "Subscribe",
     "LBL_RESTORE_ALL_PURCHASES"     : "Restore All Purchases",
     "LBL_REMOVE_ISSUES_FROM_IPAD"   : "Remove Issues from iPad",

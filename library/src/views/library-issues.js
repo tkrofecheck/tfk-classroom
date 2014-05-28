@@ -24,7 +24,7 @@ App.views.LibraryIssues = Backbone.View.extend({
   subscribeDialog: null,
     
 	events: {
-	  "tap #banner"        : "banner_tap",
+	  "click .slide"       : "banner_tap",
     "click #show-more"   : "showMore_clickHandler"
   },
   
@@ -33,7 +33,11 @@ App.views.LibraryIssues = Backbone.View.extend({
 		this.$el.addClass("scrollable");
 		this.foliosPerPage = settings.num_folios_displayed;
 		
-		this._debounce_render = _.throttle(_.bind(this.render, this, $.noop), 500);
+		$(window).on("resize orientationchange", function() {
+      that.render();
+    });
+    
+    this._debounce_render = _.throttle(_.bind(this.render, this, $.noop), 500);
 		App.api.libraryService.updatedSignal.add(this._debounce_render);
 	},
 	
@@ -54,14 +58,14 @@ App.views.LibraryIssues = Backbone.View.extend({
     
     window.setTimeout(function() { that.updateLibrarySpinner(); return; }, 0);
     
-    $(window).on("resize", function(){
-      that.setGridHeight();
-    });
-    
     var transaction = App.api.libraryService.updateLibrary();
     transaction.completedSignal.addOnce(function() {
       that.updateLibraryHandler();
     }, this);
+    
+    setTimeout(function() {
+      that.setup_sidescroller("libBanner");
+    });
     
     cb();
     return this;
@@ -76,7 +80,7 @@ App.views.LibraryIssues = Backbone.View.extend({
 	    spinnerLeft = "295px";
 	  }
 	  
-	  App.$headerTitle.text("Updating Library...");
+	  App.$headerTitle.html(settings.IS_UPDATING_TEXT);
     
     window.spinner = new Spinner(App.spinnerOpts).spin();
     $(window.spinner.el).insertBefore("#header #title span").css({'top':'23px','left':spinnerLeft});
@@ -89,7 +93,7 @@ App.views.LibraryIssues = Backbone.View.extend({
 		// Remove the div that contains the "updating library" message.
 		window.spinner.stop();
 		$("#header #title .spinner").remove();
-		App.$headerTitle.html("Library");
+		App.$headerTitle.html(settings.IS_HEADER_TEXT);
     
     //Having multiple dropdowns, we need to specify a number for each via 'menuNumber' for events to be bound correctly
     $("#header-drop-down-filter").dropDown({verticalGap: -20, menuNumber: 1});
@@ -352,24 +356,63 @@ App.views.LibraryIssues = Backbone.View.extend({
     }
   },
   
+  display_loginDialog: function(e, userType) {
+    console.log("App.views.LibraryIssues.display_loginDialog()");
+    e.stopPropagation();
+    
+    if (!App.api.authenticationService.isUserAuthenticated) {
+      var that = this,
+          loginDialog;
+      
+      loginDialog = (userType) ? new App.views.dialogs.TeacherLoginDialog() : new App.views.dialogs.LoginDialog();
+      
+      var loginScrollPosition = $(window).scrollTop();
+      
+      // Triggered from the dialog when a login is successful.
+      loginDialog.$el.on("loginSuccess", function() {
+        that.loginBtn.html(settings.LBL_SIGN_OUT);
+        $(window).scrollTop(loginScrollPosition); // set the scroll position back to what it was.
+      });
+    } else {
+      App.api.authenticationService.logout();
+      
+      this.loginBtn.html(settings.LBL_SIGN_IN);
+    }
+  },
+  
   showMore_clickHandler: function(e) {
     console.log("App.views.LibraryIssues.showMore_clickHandler()");
     e.stopPropagation();
     this.addFolios();
   },
   
-  banner_tap: function() {
+  banner_tap: function(e) {
     console.log("App.views.LibraryIssues.banner_tap()");
     
-    if (settings.store_banners_type == "subscribe") {
+    var element = $(e.currentTarget);
+    
+    if (element.hasClass("subscribe")) {
       console.log("Banner tap - subscribe");
       new App.dialogs.Subscribe();
-    } else if (settings.store_banners_type == "link") {
+    } else if (element.hasClass("link")) {
       console.log("Banner tap - " + settings.BANNER_TARGET_URL + " - this will only work with an R28 app or higher");
       App.api.dialogService.open(settings.BANNER_TARGET_URL);
+    } else if (element.hasClass("signin")) {
+      if (element.hasClass("teacher")) {
+        this.display_loginDialog(e, true);
+      } else {
+        this.display_loginDialog(e, false);
+      }
     } else {
       console.log("Banner tap - no action");
     }
     return false;
+  },
+  
+  setup_sidescroller: function(elementId) {
+    var $main_gallery = document.getElementById(elementId);
+
+    gallery = new libBanner.SlideshowGallery($main_gallery);
+    gallery.enableTouch().slideEvery(5000);
   }
 });

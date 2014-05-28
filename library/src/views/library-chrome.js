@@ -9,6 +9,7 @@ App.views.LibraryChrome = Backbone.View.extend({
   events: {
     "click #print-subscriber-login"   : "display_loginDialog",
     "click #subscribe"                : "display_subscribeDialog",
+    "click #go-to-store"              : "redirect_store",
     
     "change #header-drop-down"        : "header_dropDownChangeHandler",
     "change #header-drop-down-filter" : "header_dropDownChangeHandler",
@@ -98,7 +99,7 @@ App.views.LibraryChrome = Backbone.View.extend({
       transaction.completedSignal.addOnce(function() {
         window.spinner.stop();
         $("#header #title .spinner").remove();
-        App.$headerTitle.html("Library");
+        App.$headerTitle.html(settings.IS_HEADER_TEXT);
       }, this);
     });
   },
@@ -167,6 +168,10 @@ App.views.LibraryChrome = Backbone.View.extend({
     e.stopPropagation();
     
     App.api.settingsService.autoArchive.toggle(isOn);
+  },
+  
+  redirect_store: function() {
+    window.location.href = "http://ecom-dev01-app.usdlls2.savvis.net:10500/appstorefronts/tim/classroom/-TK-store-deploy/index.html?v=" + (+new Date);
   }
 });
 
