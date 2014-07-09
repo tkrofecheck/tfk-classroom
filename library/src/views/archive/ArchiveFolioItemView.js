@@ -9,8 +9,8 @@ App.views.archive.ArchiveFolioItemView = Backbone.View.extend({
 	template: Handlebars.templates["archive-folioitem.tmpl"],
 	
 	events: {
-	  "tap .archive-folio-thumb-container"  : "folioThumb_clickHandler",
-	  "tap .archive-view-selected"          : "folioThumb_clickHandler"
+	  "click .archive-folio-thumb-container"  : "folioThumb_clickHandler",
+	  "click .archive-view-selected"          : "folioThumb_clickHandler"
 	},
 	
 	// A reference to the original folio since the collection uses a cloned copy.
@@ -30,7 +30,7 @@ App.views.archive.ArchiveFolioItemView = Backbone.View.extend({
 
 		cx = {
 		  model: this.model,
-		  cover_img: "http://edge.adobe-dcfs.com/ddp/issueServer/issues/" + this.model.id + "/libraryPreview/portrait/" + App.folioThumbTimestamp
+		  cover_img: "http://edge.adobe-dcfs.com/ddp/issueServer/issues/" + this.model.id + "/libraryPreview/portrait" /*+ "/" + App.folioThumbTimestamp*/
 		};
 		
 		this.$el.html(this.template(cx));

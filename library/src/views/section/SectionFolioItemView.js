@@ -9,9 +9,9 @@ App.views.section.SectionFolioItemView = Backbone.View.extend({
 	template: Handlebars.templates["section-folioitem.tmpl"],
 	
 	events: {
-	  "tap #section-download-button"  : "downloadButton_clickHandler",
-	  "tap #update-dialog #no"        : "no_updateDialogHandler",
-	  "tap #update-dialog #yes"       : "yes_updateFolio"
+	  "click #section-download-button"  : "downloadButton_clickHandler",
+	  "click #update-dialog #no"        : "no_updateDialogHandler",
+	  "click #update-dialog #yes"       : "yes_updateFolio"
 	},
 	
 	// The dialog asking whether or not to update the folio if an update is available.
@@ -48,7 +48,7 @@ App.views.section.SectionFolioItemView = Backbone.View.extend({
 		
 		cx = {
       model: this.model,
-      cover_img: "http://edge.adobe-dcfs.com/ddp/issueServer/issues/" + this.model.id + "/libraryPreview/portrait/" + App.folioThumbTimestamp
+      cover_img: "http://edge.adobe-dcfs.com/ddp/issueServer/issues/" + this.model.id + "/libraryPreview/portrait" /*+ "/" + App.folioThumbTimestamp*/
     };
     
     this.$el.html(this.template(cx));

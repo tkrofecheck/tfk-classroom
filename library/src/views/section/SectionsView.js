@@ -82,7 +82,7 @@ App.views.section.SectionsView = Backbone.View.extend({
 		for (var i = 0; i < sortedSections.length; i++) {
 			var section = sortedSections[i];
 			var item = new App.views.section.SectionFolioItemView({model: section});
-			item.$el.on("folioInstalled", function() {
+			item.$el.off("folioInstalled").on("folioInstalled", function() {
 				that.folioInstalledHandler();
 			});
 			App.$sectionsgrid.append(item.render().el);

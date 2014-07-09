@@ -42,8 +42,8 @@ window.settings = {
     // ADOBE APP INFO
     // http://mageng.it.timeinc.com/twiki/bin/view/Main/DPS-MagazineXML-Urls
     // ************************************************************
-    "ACCOUNT_ID"                    : "47f9ab9c8b924d78867a8eabeb15446e",
-    "APP_ID"                        : "com.timeinc.time.ipad.inapp",
+    "ACCOUNT_ID"                    : "231d0c6f-f31c-52da-ae7a-76ebe92d2f07",
+    "APP_ID"                        : "com.timeinc.tfk.apple",
 
     // ************************************************************
     // SUPPORT INFO

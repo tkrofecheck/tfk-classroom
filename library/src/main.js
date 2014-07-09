@@ -16,8 +16,8 @@ window.onerror = function(err, lineNo, fileName) {
 // disable scrolling the body element (which shows the a white background 
 // outside the document and just generally feels, not-very-appy
 $(document)
-  .on("touchmove", function(evt) { evt.preventDefault() })
-  .on("touchmove", ".scrollable", function(evt) { evt.stopPropagation() });
+  .off("touchmove").on("touchmove", function(evt) { evt.preventDefault() })
+  .off("touchmove").on("touchmove", ".scrollable", function(evt) { evt.stopPropagation() });
 
 Handlebars.registerHelper('setting', function(options) {
   return options.fn(settings);
@@ -35,7 +35,7 @@ Handlebars.registerHelper('ifequal', function(options) {
 $(function() {
   console.log("dom ready");
   App.loading(true);
-
+  
   if (DEBUG && typeof adobeDPS == "undefined") {
     App._raw_api = MockAPI;
     App._using_adobe_api = false;
@@ -45,6 +45,10 @@ $(function() {
     App._using_adobe_api = true;
   }
 
+  App.grade = _.extend({}, Backbone.Events);
+  App.autosignout = _.extend({}, Backbone.Events);
+  App.library = _.extend({}, Backbone.Events);
+  
   App._raw_api.initializationComplete.addOnce(function() {
     console.log("init complete");
     App.api = App._raw_api;

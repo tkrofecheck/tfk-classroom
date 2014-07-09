@@ -34,16 +34,24 @@
   {{/if}}
   
     <div id="drop-down-container">
-      <div class='drop-down filter' id='header-drop-down-filter'>
-        <div class='grade' id='grade-k1'>Grade K-1</div>
-        <div class='grade' id='grade-2'>Grade 2</div>
-        <div class='grade' id='grade-34'>Grade 3-4</div>
-        <div class='grade' id='grade-56'>Grade 5-6</div>
-      </div>
       <div class='drop-down settings' id='header-drop-down'>
-        <div id='restore-all-purchases'>{{settings.LBL_RESTORE_ALL_PURCHASES}}</div>
+        <!--Only display filter if authenticated as teacher
+            and teacher has more than one grade level in entitlements
+        -->
+        <!--<div id='grade-level'><img src='images/filter_icon.png' width='18' height='18' border='0'/>Grade Level (filter)</div>-->
+        <!--
+          <div id='restore-all-purchases'>{{settings.LBL_RESTORE_ALL_PURCHASES}}</div>
+        -->
         <div id='remove-issues-from-ipad'>{{settings.LBL_REMOVE_ISSUES_FROM_IPAD}}</div>
     
+        {{#if model.autosignout_support}}
+        <!--
+          If testing on desktop then include the
+          switch otherwise make sure it is supported.
+        -->
+        <div id='auto-signout' class='flip-switch' {{#if model.autosignout_enabled}}state='on'{{else}}state='off'{{/if}}>{{settings.LBL_AUTO_SIGNOUT}}<br/><span style="font-size: 10px; color: grey;">(after 10 minutes of inactivity)</span></div>
+        {{/if}}
+        
         {{#if model.autoarchive_support}}
         <!--
           If testing on desktop then include the

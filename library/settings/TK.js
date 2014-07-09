@@ -31,15 +31,17 @@ window.settings = {
     "LBL_RESTORE_ALL_PURCHASES"     : "Restore All Purchases",
     "LBL_REMOVE_ISSUES_FROM_IPAD"   : "Remove Issues from iPad",
     "LBL_AUTO_ARCHIVE"              : "Auto Archive",
+    "LBL_AUTO_SIGNOUT"              : "Auto Sign-out",
     "LBL_SELECT_ALL"                : "Select All",
     "LBL_DESELECT_ALL"              : "Deselect All",
+    "LBL_LOGOUT_MESSAGE"            : "No activity. Logging out in:",
     
     // ************************************************************
     // ADOBE APP INFO
     // http://mageng.it.timeinc.com/twiki/bin/view/Main/DPS-MagazineXML-Urls
     // ************************************************************
-    "ACCOUNT_ID"                    : "47f9ab9c8b924d78867a8eabeb15446e",
-    "APP_ID"                        : "com.timeinc.time.ipad.inapp",
+    "ACCOUNT_ID"                    : "231d0c6f-f31c-52da-ae7a-76ebe92d2f07",
+    "APP_ID"                        : "com.timeinc.tfk.apple",
 
     // ************************************************************
     // SUPPORT INFO

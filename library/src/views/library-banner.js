@@ -19,8 +19,15 @@ App.views.LibraryBanner = Backbone.View.extend({
     console.log("App.views.LibraryBanner.initialize()");
     var that = this;
     
+    this._debounce_render = _.throttle(_.bind(this.render, this, $.noop), 500);
+    
+    App.grade.on("level:updated", function() {
+      console.log("grade level updated - fix banner");
+      that._debounce_render();
+    });
+    
     $(window).on("resize orientationchange", function() {
-      that.render();
+      that._debounce_render();
     });
   },
   
@@ -53,7 +60,7 @@ App.views.LibraryBanner = Backbone.View.extend({
       this.$el.append(this.previewDialog.render().el);
       this.previewDialog.setImageProperties($(e.target), elementId);
       
-      this.previewDialog.$el.on("previewDialogClosed", function() {
+      this.previewDialog.$el.off("previewDialogClosed").on("previewDialogClosed", function() {
         this.previewDialog = null;
       });
       // Only show the subscribe button if testing on the desktop or
@@ -82,7 +89,7 @@ App.views.LibraryBanner = Backbone.View.extend({
       this.subscribeDialog = new App.views.dialogs.SubscribeDialog();
 
       var that = this;
-      this.subscribeDialog.$el.on("subscribeDialogClosed", function() {
+      this.subscribeDialog.$el.off("subscribeDialogClosed").on("subscribeDialogClosed", function() {
         that.subscribeDialog = null;
       });
     }
@@ -101,7 +108,7 @@ App.views.LibraryBanner = Backbone.View.extend({
       var loginScrollPosition = $(window).scrollTop();
       
       // Triggered from the dialog when a login is successful.
-      loginDialog.$el.on("loginSuccess", function() {
+      loginDialog.$el.off("loginSuccess").on("loginSuccess", function() {
         that.loginBtn.html(settings.LBL_SIGN_OUT);
         $(window).scrollTop(loginScrollPosition); // set the scroll position back to what it was.
       });

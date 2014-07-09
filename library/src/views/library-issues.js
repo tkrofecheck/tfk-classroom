@@ -22,23 +22,57 @@ App.views.LibraryIssues = Backbone.View.extend({
   previewDialog: null,
   
   subscribeDialog: null,
+  
+  filter: null,
     
 	events: {
-	  "click .slide"       : "banner_tap",
-    "click #show-more"   : "showMore_clickHandler"
+	  "click .slide"             : "banner_tap",
+    "click #show-more"         : "showMore_clickHandler",
+    "change #grid-drop-down"   : "grid_dropDownChangeHandler"
   },
   
-  initialize: function() {
+  initialize: function(options) {
 		console.log("App.views.LibraryIssues.initialize()");
-		this.$el.addClass("scrollable");
-		this.foliosPerPage = settings.num_folios_displayed;
+		var that = this;
 		
-		$(window).on("resize orientationchange", function() {
-      that.render();
-    });
+		this.foliosPerPage = settings.num_folios_displayed;
     
     this._debounce_render = _.throttle(_.bind(this.render, this, $.noop), 500);
-		App.api.libraryService.updatedSignal.add(this._debounce_render);
+    App.api.libraryService.updatedSignal.add(this._debounce_render);
+    this.$el.addClass("scrollable");
+
+    App.grade.on("level:updated", function() {
+      console.log("grade level updated");
+      
+      if (localStorage.getItem("gradeLevel")) {
+        localStorage.setItem("lastGradeLevel", localStorage.getItem("gradeLevel"));
+      }
+      
+      $.each(App.gradeLevels, function( index, value ) {
+        console.log("index:" + index + "\nApp.gradeLevel:" + App.gradeLevel);
+        if (index == App.gradeLevel) {
+          if (value !== localStorage.getItem("lastGradeLevel")) {
+            localStorage.setItem("gradeLevel",value);
+            $(".modal-background-grey").each(function() {
+              $(this).remove();
+            });
+            
+            that._debounce_render();
+            return false;
+            //location.reload();
+          }
+        }
+        if (index == App.gradeLevels.length-1) {
+          that._debounce_render();
+          return false;
+        }
+      });
+      App.grade.trigger("refresh:banner");
+    });
+    
+    /*$(window).on("resize orientationchange", function() {
+      that._debounce_render();
+    });*/
 	},
 	
 	render: function(cb) {
@@ -50,6 +84,8 @@ App.views.LibraryIssues = Backbone.View.extend({
 	  cx = {
 	    settings: settings
 	  };
+    
+    $("body").remove("#grid-drop-down");
     
     this.$el.html(this.template(cx));
     
@@ -63,11 +99,32 @@ App.views.LibraryIssues = Backbone.View.extend({
       that.updateLibraryHandler();
     }, this);
     
-    setTimeout(function() {
-      that.setup_sidescroller("libBanner");
-    });
+    this.$("#grid-drop-down").dropDown({verticalGap: -20, className: "grid-drop-down-menu", menuWidth: 170, triangleMarginLeft: 70});
+    
+    var glClass = (localStorage.getItem("gradeLevel")) ? localStorage.getItem("gradeLevel") : localStorage.getItem("lastGradeLevel");
+
+    switch (glClass) {
+      case "k1":
+        this.$("#grid-drop-down").prepend("Editions K-1");
+        break;
+      case "22":
+        this.$("#grid-drop-down").prepend("Editions 2");
+        break;
+      case "34":
+        this.$("#grid-drop-down").prepend("Editions 3-4");
+        break;
+      case "56":
+        this.$("#grid-drop-down").prepend("Editions 5-6");
+        break;
+      default:
+        this.$("#grid-drop-down").prepend("All Editions");
+        break;
+    }
+    
+    this.$("#grid-drop-down").append("<span class='arrow-up'></span><span class='arrow-down'></span>");
     
     cb();
+    
     return this;
 	},
 	
@@ -88,17 +145,30 @@ App.views.LibraryIssues = Backbone.View.extend({
 	
 	updateLibraryHandler: function() {
     console.log("App.views.LibraryIssues.updateLibraryHandler()");
-    var that = this;
-		
+    
+    var that = this,
+        filterRegEx,
+        folioFilter;
+        
+    if (localStorage.getItem("gradeLevel")) {
+      this.filter = localStorage.getItem("gradeLevel");
+      
+      if (this.filter != "all") {
+        filterRegEx = new RegExp(this.filter, 'gi');
+      } else {
+        filterRegEx = null;
+      }
+    }
+
 		// Remove the div that contains the "updating library" message.
 		window.spinner.stop();
 		$("#header #title .spinner").remove();
 		App.$headerTitle.html(settings.IS_HEADER_TEXT);
     
     //Having multiple dropdowns, we need to specify a number for each via 'menuNumber' for events to be bound correctly
-    $("#header-drop-down-filter").dropDown({verticalGap: -20, menuNumber: 1});
+    //$("#header-drop-down-filter").dropDown({verticalGap: -20, menuWidth: 130, menuNumber: 1});
 		
-		$("#header-drop-down").dropDown({verticalGap: -20, menuNumber: 2});
+		//$("#header-drop-down").dropDown({verticalGap: -20, menuWidth: 230, menuNumber: 2});
 		
 
     App.isOnline = App.api.deviceService.isOnline;
@@ -114,38 +184,48 @@ App.views.LibraryIssues = Backbone.View.extend({
       } else {
         return 0;
       }
-    });
-   
-    // list is an associative array so put them in a regular array.
-    for (var i in list) {
-      var folio = list[i];
-      if (App.isOnline) { // User is online so display all the folios.
-        this.folios.push(folio);
-      } else {      // User is offline so only display the installed folios.
-        if (folio.state == App.api.libraryService.folioStates.INSTALLED)
-          this.folios.push(folio);
+    });    
+    
+    // filter list based on dropdown in chrome
+    this.folios = _.filter(list, function(folio) {      
+      if (that.filter == 'all') {
+        return true;
+      } else {
+        var folioGradeLevel = folio.productId.split(".")[5]; // should be 2 char grade level [k1, 22, 34, 56]
+        return folioGradeLevel.match(filterRegEx);
       }
-    }
+    });
       
     // If the latest folio is not purchasable then the user is entitled to it.
     // If true then do not display the subscription button.
     if (this.folios.length > 0) {
+      //console.log("filtered folios",this.folios);
+      
       var latestFolio = this.folios[0];
       this.userOwnsLatestFolio = !(latestFolio.state == App.api.libraryService.folioStates.PURCHASABLE ||
                                    latestFolio.state == App.api.libraryService.folioStates.UNAVAILABLE ||
                                    latestFolio.state == App.api.libraryService.folioStates.INVALID);
     } else if (!App.isOnline) { // Folio list is empty and user is not online.
-      //$("#loading").html("Please connect to the internet to download issues.");
+      $("#loading").html("Please connect to the internet to download issues.");
+      return;
+    } else {
+      $("#loading").html("There are currently no issues to download.");
       return;
     }
 
-    $("body").on("subscribeButtonClicked", function(e){
+    $("body")
+      .off("subscribeButtonClicked")
+      .on("subscribeButtonClicked", function(e){
       that.display_subscribeDialog(e);
     });
-    $("body").on("folioThumbClicked", function(e, folio, elementId){
+    $("body")
+      .off("folioThumbClicked")
+      .on("folioThumbClicked", function(e, folio, elementId){      
       that.display_previewDialog(e, folio, elementId);
     });
-    $("body").on("displaySectionsClicked", function(e, folio){
+    $("body")
+      .off("displaySectionsClicked")
+      .on("displaySectionsClicked", function(e, folio){
       that.displaySectionsView(folio);
     });
 
@@ -153,9 +233,9 @@ App.views.LibraryIssues = Backbone.View.extend({
     // Since the folios are not on a server we don't need to load anything so pass the folios to the constructor.
     var showFoliosInt = window.setInterval(function() {
       if (that.folios) {
-        if (!App.libraryCollection) {
+        //if (!App.libraryCollection) { //commented out in order for new collection be built from filtered list of folios
           App.libraryCollection = new App.model.LibraryCollection(that.folios);
-        }
+        //}
         
         if (App.libraryCollection) {
           window.clearInterval(showFoliosInt);
@@ -196,9 +276,11 @@ App.views.LibraryIssues = Backbone.View.extend({
 			var folio = App.libraryCollection.at(i);
 			// Testing on the desktop so create the path to the image.
 			if (!App._using_adobe_api && folio.attributes.libraryPreviewUrl) {
-				folio.attributes.libraryPreviewUrl +=  "/portrait";
+				//folio.attributes.libraryPreviewUrl +=  "/portrait";
+				//alert(0 + " - " + folio.attributes.libraryPreviewUrl);
 		  } else {
-		    folio.attributes.libraryPreviewUrl = "http://edge.adobe-dcfs.com/ddp/issueServer/issues/" + folio.attributes["id"] + "/libraryPreview/portrait/" + App.folioThumbTimestamp;
+		    folio.attributes.libraryPreviewUrl = "http://edge.adobe-dcfs.com/ddp/issueServer/issues/" + folio.attributes["id"] + "/libraryPreview/portrait" /*+ "/" + App.folioThumbTimestamp*/;
+		    //alert(1 + " - " + folio.attributes.libraryPreviewUrl);
 		  }
 				
 			view = new App.views.folioItems.FolioItemView({model: folio});
@@ -294,7 +376,28 @@ App.views.LibraryIssues = Backbone.View.extend({
 		});
 	},
 	
-	displaySectionsView: function(folio) {
+	grid_dropDownChangeHandler: function(e) {
+    console.log("App.views.LibraryChrome.grid_dropDownChangeHandler");
+    
+    e.stopPropagation();
+
+    App.gradeLevel = $(e.target).dropDown("getSelectedId");
+
+    console.log(App.gradeLevel);
+    App.grade.trigger("level:updated");
+    
+    /*var gradeLevelDialog = new App.views.dialogs.GradeLevelDialog();
+    gradeLevelDialog.$el.off("gradeSelected").on("gradeSelected", function(e, transaction) {
+      var gradeScrollPosition = $(window).scrollTop();
+      
+      // Triggered from the dialog when a grade selected.
+      gradeLevelDialog.$el.off("gradeSelectionSuccess").on("gradeSelectionSuccess", function() {
+        $(window).scrollTop(gradeScrollPosition); // set the scroll position back to what it was.
+      });
+    });*/
+  },
+  
+  displaySectionsView: function(folio) {
     console.log("App.views.LibraryChrome.displaySectionsView()");
     
     var sectionsView = new App.views.section.SectionsView({model: folio});
@@ -316,13 +419,15 @@ App.views.LibraryIssues = Backbone.View.extend({
     console.log("App.views.LibraryIssues.display_previewDialog()");
     e.preventDefault();
     
+    var that = this;
+    
     if (!this.previewDialog) {
       this.previewDialog = new App.views.dialogs.PreviewDialog({model: folio});
       this.$el.append(this.previewDialog.render().el);
       this.previewDialog.setImageProperties($(e.target), elementId);
       
-      this.previewDialog.$el.on("previewDialogClosed", function() {
-        this.previewDialog = null;
+      this.previewDialog.$el.off("previewDialogClosed").on("previewDialogClosed", function() {
+        that.previewDialog = null;
       });
       // Only show the subscribe button if testing on the desktop or
       // if the user doesn't own the latest folio and does not have an active subscription.
@@ -350,7 +455,7 @@ App.views.LibraryIssues = Backbone.View.extend({
       this.subscribeDialog = new App.views.dialogs.SubscribeDialog();
 
       var that = this;
-      this.subscribeDialog.$el.on("subscribeDialogClosed", function() {
+      this.subscribeDialog.$el.off("subscribeDialogClosed").on("subscribeDialogClosed", function() {
         that.subscribeDialog = null;
       });
     }

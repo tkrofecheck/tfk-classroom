@@ -24,6 +24,21 @@
     $sectionsgrid: null, // Displays the 'sections' grid of folios.
     $archivegrid: null, // Displays the 'archive' grid of folios.
     folioThumbTimestamp: (+new Date()),
+    gradeLevel: null,
+    
+    // grade levels that will appear in productIds, change value to match on here if product Id format changes
+    userTypes: {
+      0: "student",
+      1: "teacher"
+    },
+    
+    gradeLevels: {
+      0: "all",
+      1: "k1",
+      2: "22",
+      3: "34",
+      4: "56"
+    },
 
     spinnerOpts: {
       lines: 13, // The number of lines to draw
@@ -42,6 +57,11 @@
       zIndex: 2e9, // The z-index (defaults to 2000000000)
       top: 'auto', // Top position relative to parent in px
       left: 'auto' // Left position relative to parent in px
+    },
+    
+    autoSignout: {
+      isSupported: true,
+      isEnabled: false,
     },
     
     debug: {

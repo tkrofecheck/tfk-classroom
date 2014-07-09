@@ -146,7 +146,7 @@ App.views.archive.ArchiveView = Backbone.View.extend({
 						var transaction = folio.currentStateChangingTransaction().cancel();
 						transaction.completedSignal.addOnce(function() {
 							folio.archive();
-						}, this)
+						}, this);
 					} else if (folio.isArchivable) {
 						folio.archive();
 					}

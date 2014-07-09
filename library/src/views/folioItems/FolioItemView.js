@@ -10,8 +10,8 @@ App.views.folioItems.FolioItemView = Backbone.View.extend({
 	
 	events: {
 	  "click #buy-button"        : "buyButton_clickHandler",
-	  "tap #update-dialog #yes"  : "yes_updateFolio",
-	  "tap #update-dialog #no"   : "no_updateDialogHandler"
+	  "click #update-dialog #yes"  : "yes_updateFolio",
+	  "click #update-dialog #no"   : "no_updateDialogHandler"
 	},
 	
 	// The dialog asking whether or not to update the folio if an update is available.

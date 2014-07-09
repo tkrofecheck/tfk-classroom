@@ -92,7 +92,7 @@
 						targetX = leftBound;
 					}
 				} else {
-				  isOn = !isOn;
+					isOn = !isOn;
 					// User tapped the control so toggle the state.
 					targetX = isOn ? width - thumbWidth - 2 : 0;
 				}
@@ -120,6 +120,6 @@
 			}
 			
 			return this;
-		});
-	};
+		})
+	}
 })(jQuery);

@@ -24,7 +24,6 @@ App.views.dialogs.TeacherLoginDialog = Backbone.View.extend({
 	
 	render: function(e) {
 		console.log("App.views.dialogs.TeacherLoginDialog.render()");
-		console.log(e);
 		var that = this,
 		    cx = {};
 		

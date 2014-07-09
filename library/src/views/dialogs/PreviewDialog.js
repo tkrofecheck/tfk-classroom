@@ -43,7 +43,7 @@ App.views.dialogs.PreviewDialog = Backbone.View.extend({
 		});
 		
 		// Triggered from the dialog when a purchase is successful.
-		$("body").on("subscriptionPurchased", function() {
+		$("body").off("subscriptionPurchased").on("subscriptionPurchased", function() {
 			scope.close();
 		});
 	},
@@ -180,7 +180,7 @@ App.views.dialogs.PreviewDialog = Backbone.View.extend({
 		this.$("#preview-dialog-header-border").css({"-webkit-transform" : "rotateX(0deg)"});
 		
 		
-		this.$contentContainer.on("webkitTransitionEnd", function() {
+		this.$contentContainer.off("webkitTransitionEnd").on("webkitTransitionEnd", function() {
 			that.folioCoverOpen_transitionEndHandler();
 		});
 		
@@ -240,7 +240,7 @@ App.views.dialogs.PreviewDialog = Backbone.View.extend({
 		}
 		
 		var scope = this;
-		this.$contentContainer.on("webkitTransitionEnd", function() {
+		this.$contentContainer.off("webkitTransitionEnd").on("webkitTransitionEnd", function() {
 			scope.$el.remove();
 			scope.remove();
 		});

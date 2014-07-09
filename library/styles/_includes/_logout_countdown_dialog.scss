@@ -1,0 +1,28 @@
+
+#logout-countdown-dialog {
+    width: 330px;
+    margin-left: -177px;
+    top: 200px;
+    color: #000000;
+
+    #counter {
+      height: 0px !important;
+      width: 0px !important;
+      visibility: hidden;
+    }
+    
+    #title {
+      text-align: center;
+      font-weight: bolder;
+      padding:8px;
+    }
+    
+    #monitor {
+      text-align: center;
+      font-weight: normal;
+      padding: 8px;
+      font-size: 2em !important;
+      color: #0000ff;
+    }
+}
+ 

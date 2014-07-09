@@ -13,7 +13,7 @@ App.views.Library = Backbone.View.extend({
     this.library_chrome_view = new App.views.LibraryChrome();
     this.library_banner_view = new App.views.LibraryBanner();
     this.library_issues_view = new App.views.LibraryIssues();
-     
+    
     render = _.bind(this.render, this, $.noop);
     render = _.partial(_.delay, render, 50);
     render = _.debounce(render, 200);

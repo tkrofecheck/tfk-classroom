@@ -1,4 +1,19 @@
 {{#setting}}
+    <div style="float: right;">
+      <p class="viewing">Viewing:</p>
+      <div class='drop-down grade-label' id='grid-drop-down'>
+        <!--Only display filter if authenticated as teacher
+            and teacher has more than one grade level in entitlements
+        -->
+        <!--<div id='grade-level'><img src='images/filter_icon.png' width='18' height='18' border='0'/>Grade Level (filter)</div>-->
+        <div class='grade' id='0'>All Editions</div>
+        <div class='grade' id='1'>Editions K-1</div>
+        <div class='grade' id='2'>Editions 2</div>
+        <div class='grade' id='3'>Editions 3-4</div>
+        <div class='grade' id='4'>Editions 5-6</div>
+      </div>
+    </div>
+   
   {{#if IS_ENTITLEMENT_VIEWER}}
     <div id="grid">
   {{else}}
