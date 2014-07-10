@@ -7,7 +7,13 @@
       desktop so show the button, otherwise only
       if this is an entitlement viewer.
     -->
-    <div class='text-link' id='print-subscriber-login'>{{model.loginLbl}}</div>
+    <div class='text-link' id='print-subscriber-login'>
+      {{#if model.loginLbl}}
+        {{settings.LBL_SIGN_OUT}}
+      {{else}}
+        {{settings.LBL_SIGN_IN}}
+      {{/if}}
+    </div>
   {{/if}}
     
     <!-- for development only (do not use this in live app) -->

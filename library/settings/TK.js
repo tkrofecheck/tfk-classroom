@@ -20,6 +20,9 @@ window.settings = {
     "IS_AUTO_OPEN_DOWNLOADED_FOLIO" : true,
     "IS_UPDATING_TEXT"              : "Updating Library...",
     
+    "TIME_BEFORE_SIGNOUT_COUNTDOWN_SECONDS"     : 5,
+    "SIGNOUT_COUNTDOWN_SECONDS"     : 10,
+    
     // ************************************************************
     // NAV BAR, LOGIN DIALOG, RESTORE
     // ************************************************************

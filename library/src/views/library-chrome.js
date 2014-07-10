@@ -54,6 +54,7 @@ App.views.LibraryChrome = Backbone.View.extend({
     this.toggle_autoSignout();
 
     App.api.authenticationService.updatedSignal.add(this._debounce_render);
+    
     App.api.authenticationService.userAuthenticationChangedSignal.add(this._debounce_render);
   },
   
@@ -66,7 +67,7 @@ App.views.LibraryChrome = Backbone.View.extend({
     loginLbl = App.api.authenticationService.isUserAuthenticated ? settings.LBL_SIGN_OUT : settings.LBL_SIGN_IN;
     
     model = {
-      loginLbl: loginLbl,
+      loginLbl: App.api.authenticationService.isUserAuthenticated,
       autoarchive_support: /*App.api.settingsService.autoArchive.isSupported*/ false,
       autoarchive_enabled: /*App.api.settingsService.autoArchive.isEnabled*/ false,
       autosignout_support: App.autoSignout.isSupported,
@@ -165,7 +166,7 @@ App.views.LibraryChrome = Backbone.View.extend({
     var previewScrollPosition = $(window).scrollTop(); // get the current scroll position
     App.$grid.hide();
     
-    archiveView.$el.off("archiveViewClosed").on("archiveViewClosed", function() {
+    archiveView.$el.on("archiveViewClosed", function() {
       $(window).scrollTop(previewScrollPosition); // set the scroll position back to what it was.
       App.$grid.show();
       
@@ -184,16 +185,15 @@ App.views.LibraryChrome = Backbone.View.extend({
       var loginScrollPosition = $(window).scrollTop();
       
       // Triggered from the dialog when a login is successful.
-      loginDialog.$el.off("loginSuccess").on("loginSuccess", function() {
+      loginDialog.$el.on("loginSuccess", function() {
         that.loginBtn.html(settings.LBL_SIGN_OUT);
         $(window).scrollTop(loginScrollPosition); // set the scroll position back to what it was.
+        
+        loginDialog.$el.off("loginSuccess");
       });
     } else {
-      App.api.authenticationService.logout();
-      App.api.authenticationService.isUserAuthenticated = false;
       this.endLogoutCountdown();
-      
-      this.loginBtn.html(settings.LBL_SIGN_IN);
+      this.removeAllIssues();
     }
   },
 
@@ -205,8 +205,10 @@ App.views.LibraryChrome = Backbone.View.extend({
       this.subscribeDialog = new App.views.dialogs.SubscribeDialog();
 
       var that = this;
-      this.subscribeDialog.$el.off("subscribeDialogClosed").on("subscribeDialogClosed", function() {
+      this.subscribeDialog.$el.on("subscribeDialogClosed", function() {
         that.subscribeDialog = null;
+        
+        that.subscribeDialog.$el.off("subscribeDialogClosed")
       });
     }
   },
@@ -217,7 +219,10 @@ App.views.LibraryChrome = Backbone.View.extend({
   },
 
   startLogoutCountdownPrompt: function(){
-    var that = this;
+    var that = this,
+        timer = null;
+    
+    timer = 1000 * (settings.TIME_BEFORE_SIGNOUT_COUNTDOWN_SECONDS + .5);
     
     if (this.logoutTimeout || this.$("#logout-countdown-dialog").length > 0) {
       return;
@@ -225,14 +230,19 @@ App.views.LibraryChrome = Backbone.View.extend({
       this.logoutTimeout = window.setTimeout(function() {
         var logoutDialog = new App.views.dialogs.LogoutCountdown();
         
-        logoutDialog.$el.off("autoLogoutCancel").on("autoLogoutCancel", function() {
+        logoutDialog.$el.on("autoLogoutCancel", function() {
           that.endLogoutCountdown();
+          logoutDialog.$el.off("autoLogoutCancel");
         });
         
-        logoutDialog.$el.off("signout:true").on("signout:true", function() {
+        logoutDialog.$el.on("signout:true", function() {
+          if (DEBUG) {
+            App.api.authenticationService.isUserAuthenticated = false; // be sure to set this to false for desktop testing
+          }
           $("#print-subscriber-login").html(settings.LBL_SIGN_IN);
+          logoutDialog.$el.off("signout:true");
         });
-      }, 10000); // display prompt if no activity detected in time-delay-defined
+      }, timer); // display prompt if no activity detected in time-delay-defined
     }
   },
   
@@ -264,6 +274,7 @@ App.views.LibraryChrome = Backbone.View.extend({
       this.endLogoutCountdown();
       window.clearInterval(this.logoutInterval);
       this.logoutInterval = null;
+      return;
     }
   },
   
@@ -286,6 +297,61 @@ App.views.LibraryChrome = Backbone.View.extend({
   
   redirect_store: function() {
     window.location.href = "http://ecom-dev01-app.usdlls2.savvis.net:10500/appstorefronts/tim/classroom/-TK-store-deploy/index.html?v=" + (+new Date);
-  }
+  },
+  
+  removeAllIssues: function() {
+    var that = this;
+
+    this.foliosToArchive = [];
+    
+    // Sort the folios descending.
+    var list = App.api.libraryService.folioMap.sort(function (a, b) {
+      if (a.publicationDate < b.publicationDate) {
+        return 1;
+      } else if (a.publicationDate > b.publicationDate) {
+        return -1;
+      } else {
+        return 0;
+      }
+    });
+    
+    console.log("list of folios:", list);
+    
+    // filter list based on dropdown in chrome
+    this.foliosToArchive = _.filter(list, function(folio) {      
+      return (folio.isArchivable || folio.isViewable);
+    });
+    
+    if (this.foliosToArchive.length > 0) {
+      console.log("folios to archive: ", this.foliosToArchive);
+      
+      this.$el.unbind("click"); //disable closing dialog by tapping modal - must dismiss itself
+      this.$("#title").html("Removing all downloaded issues.");
+      this.$("#counter").remove();
+      this.$("#monitor").html("Please wait...");
+      this.$("#signout").remove();
+      this.$("#cancel").remove();
+      
+      if (App._using_adobe_api) {
+        $.each(this.foliosToArchive, function(index, element) {
+          //console.log("element:" + element + ", index:" + index + "productID:", element.productId);
+          var folio = App.api.libraryService.folioMap.getByProductId(element.productId);
+          
+          folio.archive();
+          console.log("folio archived", folio);
+        });
+      }
+    } else {
+      console.log("no folios to archive");
+    }
+    setTimeout(function() {
+      App.api.authenticationService.logout();
+      if (DEBUG) {
+        App.api.authenticationService.isUserAuthenticated = false; // desktop testing purposes
+      }
+      that.loginBtn.html(settings.LBL_SIGN_IN);
+      console.log("Logged out!");
+    }, 1000);
+  },
 });
 
