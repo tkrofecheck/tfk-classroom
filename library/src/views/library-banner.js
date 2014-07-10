@@ -29,6 +29,9 @@ App.views.LibraryBanner = Backbone.View.extend({
     $(window).on("resize orientationchange", function() {
       that._debounce_render();
     });
+    
+    App.api.authenticationService.updatedSignal.add(this._debounce_render);
+    App.api.authenticationService.userAuthenticationChangedSignal.add(this._debounce_render);
   },
   
   render: function(cb) {
@@ -128,7 +131,7 @@ App.views.LibraryBanner = Backbone.View.extend({
       console.log("Banner tap - subscribe");
       new App.dialogs.Subscribe();
     } else if (element.hasClass("link")) {
-      console.log("Banner tap - " + settings.BANNER_TARGET_URL + " - this will only work with an R28 app or higher");
+      console.log("Banner tap - " + settings.BANNER_TARGET_URL + " - this will only work with an R30 app or higher");
       App.api.dialogService.open(settings.BANNER_TARGET_URL);
     } else if (element.hasClass("signin")) {
       if (element.hasClass("teacher")) {
