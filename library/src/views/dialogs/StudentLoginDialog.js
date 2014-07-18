@@ -1,29 +1,32 @@
 /**
  * Displays the login dialog that includes two links, "Forgot Password" and "Sign in".
  */
-App.views.dialogs.LoginDialog = Backbone.View.extend({
+App.views.dialogs.StudentLoginDialog = Backbone.View.extend({
 	tagName:  "div",
 	
 	className: "modal-background-grey",
 	
-	template: Handlebars.templates["dialog-login.tmpl"],
+	template: Handlebars.templates["dialog-login-student.tmpl"],
 	
 	events: {
-		"click"                   : "clickHandler",
+		//"click"                   : "clickHandler",
 		"click #close"            : "cancel_clickHandler",
 		"click #submit"           : "submit_clickHandler",
 		"click #forgot-password"  : "forgotPassword_clickHandler",
-		"click #create-account"   : "createAccount_clickHandler"
+		"click #create-account"   : "createAccount_clickHandler",
+		"submit form"             : "submit_clickHandler"
 	},
 	
 	initialize: function() {
-		console.log("App.views.dialogs.LoginDialog.initialize()");
+		console.log("App.views.dialogs.StudentLoginDialog.initialize()");
 		this.render().$el.appendTo("body");
     this.open();
+    
+    var that = this;
 	},
 	
 	render: function(e) {
-		console.log("App.views.dialogs.LoginDialog.render()");
+		console.log("App.views.dialogs.StudentLoginDialog.render()");
 		var that = this,
 		    cx = {};
 		
@@ -32,7 +35,12 @@ App.views.dialogs.LoginDialog = Backbone.View.extend({
 		};
 		
 		this.$el.html(this.template(cx));
-
+    
+    $('#login').on('submit', function(e) {
+      e.preventDefault();
+      that.$("#submit").trigger("click");
+    });
+    
 		return this;
 	},
 	
@@ -56,12 +64,15 @@ App.views.dialogs.LoginDialog = Backbone.View.extend({
 	},
 	
 	submit_clickHandler: function(e) {
-		e.stopPropagation();
+		e.preventDefault();
 		
 		var that = this,
 		    $username = this.$("#username"),
 		    $password = this.$("#password"),
 		    $error = this.$("#login .error");
+		
+		$("#username").blur();
+		$("#password").blur();
 		
 		$error.html("");
 		
@@ -99,6 +110,7 @@ App.views.dialogs.LoginDialog = Backbone.View.extend({
 						}
 					}
 					
+					localStorage.setItem("assessmentPIN", $username.val());
 					that.$el.trigger("loginSuccess");
 					that.close();
 				}

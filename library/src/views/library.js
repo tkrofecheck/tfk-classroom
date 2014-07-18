@@ -20,12 +20,17 @@ App.views.Library = Backbone.View.extend({
     
     //Update views when subscription receipt is available or when user signs into LUCIE
     App.api.receiptService.newReceiptsAvailableSignal.add(render);
-    App.api.authenticationService.userAuthenticationChangedSignal.add(render);
   },
   render: function(cb) {
     cb = cb || $.noop;
     var that = this,
         cx = {};
+    
+    // Do not render library (chrome, banner, issues) unless user is authenticated.
+    if (!App.api.authenticationService.isUserAuthenticated) {
+      return;
+    }
+    
     this.$el.html(this.template(cx));
     async.parallel([
       function(cb) {

@@ -1,0 +1,85 @@
+/* The white header at the top. */
+#header {
+    background-color: #F7F7F7;
+    width: 100%;
+    height: 46px;
+    position: fixed;
+    opacity: 0.94;
+    z-index: 7;
+    display: table;
+    padding: 0px;
+    top: 0px;
+    white-space: nowrap;
+    border-bottom: 1px solid #B1B1B1;
+}
+
+#print-subscriber-login, #subscribe  {
+    float: left;
+    margin-right: 10px;
+    padding-top: 13px;
+    margin-left: 17px;
+    font-size: 17px;
+    font-weight: 500;
+}
+
+.text-link, .text-link-red {
+    -webkit-user-select: none;
+    cursor: default;
+    font-size: 14px;
+}
+
+.text-link {
+    color: #00A9DF;
+}
+
+.text-link:active {
+    color: rgba(0,169,223, .5);
+}
+
+.text-link-red {
+    color: #FF0000;
+}
+
+.text-link-red:active {
+    color: rgba(255,0,0,.5);
+}
+
+.text-link.disabled, .text-link-red.disabled {
+    color: #c4c4c4;
+}
+
+.text-link.disabled:active, .text-link-red.disabled:active {
+    color: #c4c4c4;
+}
+
+#header-left-column-container {
+    width: 100%;
+    height: 46px;
+    float: left;
+    display: inline-block;
+    position: absolute;
+}
+
+#header-right-column-container {
+    width: 200px;
+    float: right;
+    display: inline-block;
+    text-align: right;
+}
+
+#title, #spinner-title {
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    width: 400px;
+    display: block;
+    margin: auto;
+    padding-top: 14px;
+    color: #000000;
+}
+
+#title-image {
+    display:block;
+    margin: 0 auto;
+    position: relative;
+}

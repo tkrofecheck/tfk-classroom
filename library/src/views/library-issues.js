@@ -69,10 +69,6 @@ App.views.LibraryIssues = Backbone.View.extend({
       });
       App.grade.trigger("refresh:banner");
     });
-    
-    /*$(window).on("resize orientationchange", function() {
-      that._debounce_render();
-    });*/
 	},
 	
 	render: function(cb) {
@@ -80,7 +76,7 @@ App.views.LibraryIssues = Backbone.View.extend({
 	  cb = cb || $.noop;
 	  
 	  var that = this, cx;
-	  
+
 	  cx = {
 	    settings: settings
 	  };
@@ -188,11 +184,13 @@ App.views.LibraryIssues = Backbone.View.extend({
     
     // filter list based on dropdown in chrome
     this.folios = _.filter(list, function(folio) {      
-      if (that.filter == 'all') {
-        return true;
-      } else {
-        var folioGradeLevel = folio.productId.split(".")[5]; // should be 2 char grade level [k1, 22, 34, 56]
-        return folioGradeLevel.match(filterRegEx);
+      if (!folio.isPurchasable && (folio.isDownloadable || folio.isViewable)) {
+        if (that.filter == 'all') {
+          return true;
+        } else {
+          var folioGradeLevel = folio.productId.split(".")[5]; // should be 2 char grade level [k1, 22, 34, 56]
+          return folioGradeLevel.match(filterRegEx);
+        }
       }
     });
       
@@ -469,7 +467,7 @@ App.views.LibraryIssues = Backbone.View.extend({
       var that = this,
           loginDialog;
       
-      loginDialog = (userType) ? new App.views.dialogs.TeacherLoginDialog() : new App.views.dialogs.LoginDialog();
+      loginDialog = (userType) ? new App.views.dialogs.TeacherLoginDialog() : new App.views.dialogs.StudentLoginDialog();
       
       var loginScrollPosition = $(window).scrollTop();
       

@@ -1,0 +1,184 @@
+@media screen and (orientation:portrait) {
+    #grid, #archive-grid, #sections-grid {
+        width: 768px;
+    }
+    
+    .folio-item-view {
+        width: 216px;
+        height: 367px;
+        margin-left: 27px;
+    }
+    
+    .folio-item-view #buy-button {
+        top: 303px;
+    }
+    
+    .folio-item-view #section-download-button {
+        top: 288px;
+    }
+    
+    .folio-item-view .text, .folio-item-view .folio-number, .folio-item-view .magazine-title, .folio-item-view .state {
+        width: 150px;
+    }
+    
+    .folio-item-view .download-status {
+        width: 216px;
+        height: 288px;
+    }
+    
+    /* The background track of the download status. */
+    .folio-item-view .progress-track {
+        width: 216px;
+        top: 288px;
+    }
+    
+    .folio-item-view .folio-thumb {
+        width: 216px;
+        height: 288px;
+        margin-bottom: 10px;
+    }
+
+    .folio-item-view #folio-section-shadow {
+        background: url("../images/folio_section_shadow_portrait.png") no-repeat;
+        background-size: 10px 272px;
+        width: 10px;
+        height: 272px;
+        position: absolute;
+        left: 216px;
+        top: 8px;
+    }
+    
+    .folio-item-view #purchasing-spinner {
+        position: absolute;
+        right: 14px;
+        bottom: 57px;
+    }
+    
+    .folio-item-view #toggle-download-button {
+        right: 0px;
+        top: 303px;
+    }
+    
+    .archive-view-selected {
+        width: 216px;
+        height: 288px;
+    }
+    
+    #preview-dialog-folio-cover {
+        width: 488px;
+        height: 650px;
+        border-left: 3px solid rgba(255,255,255,.4);
+        border-bottom: 3px solid rgba(255,255,255,.4);
+        border-right: 3px solid rgba(255,255,255,.4);
+    }
+
+    #preview-dialog-header {
+        width: 458px;
+    }
+    
+    #preview-dialog-header-text-container {
+        width: 355px;
+    }
+}
+
+@media screen and (orientation:landscape) {    
+    #grid, #archive-grid, #sections-grid {
+        width: 1024px;
+    }
+    
+    .folio-item-view {
+        width: 300px;
+        height: 285px;
+        margin-left: 30px;
+    }
+    
+    .folio-item-view #buy-button {
+        top: 236px;
+    }
+    
+     .folio-item-view #section-download-button {
+        top: 225px;
+    }
+    
+    .folio-item-view .text, .folio-item-view .folio-number, .folio-item-view .magazine-title, .folio-item-view .state {
+        width: 240px;
+    }
+    
+    .folio-item-view .download-status {
+        width: 300px;
+        height: 225px;
+    }
+    
+    /* The background track of the download status. */
+    .folio-item-view .progress-track {
+        width: 300px;
+        top: 225px;
+    }
+    
+    .folio-item-view .folio-thumb {
+        width: 168px;
+        height: 225px;
+        margin-bottom: 10px;
+    }
+
+    .folio-item-view #folio-section-shadow {
+        background: url("../images/folio_section_shadow_landscape.png") no-repeat;
+        background-size: 10px 209px;
+        width: 10px;
+        height: 209px;
+        position: absolute;
+        left: 300px;
+        top: 8px;
+    }
+    
+    .folio-item-view #purchasing-spinner {
+        position: absolute;
+        right: 14px;
+        bottom: 40px;
+    }
+    
+    .folio-item-view #toggle-download-button {
+        right: 0px;
+        top: 240px;
+    }
+    
+    /* The folio preview is centered in this container. */
+    .folio-thumb-container, .archive-folio-thumb-container {
+        width: 300px;
+        height: 225px;
+        background-color: #eeeeee;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+    
+    .archive-view-selected {
+        width: 300px;
+        height: 225px;
+    }
+    
+    #preview-dialog-folio-cover {
+        width: 326px;
+        height: 427px;
+    }
+
+    #preview-dialog-header {
+        width: 540px;
+    }
+    
+    #preview-dialog-folio-cover-container-border {
+        border-left: 3px solid rgba(255,255,255,.4);
+        border-bottom: 3px solid rgba(255,255,255,.4);
+        border-right: 3px solid rgba(255,255,255,.4);
+    }
+    
+    #preview-dialog-folio-cover-container {
+        width: 570px;
+        height: 427px;
+        text-align: center;
+        background-color: #eeeeee;
+    }
+    
+    #preview-dialog-header-text-container {
+        width: 435px;
+    }
+}

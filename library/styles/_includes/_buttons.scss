@@ -1,0 +1,39 @@
+@import "compass";
+
+@mixin big-button {
+    height: 45px;
+    color: #fff;
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
+    -webkit-border-radius: 25px;
+    border: 1px solid rgba(0,0,0,0.65);
+    text-transform: uppercase;
+    font-size: 14px;
+    font-weight: bold;
+    -webkit-box-shadow: 
+        0 0 3px rgba(0,0,0,0.2),
+        inset 0 2px 0 -1px rgba(255,255,255,.2),
+        inset 0 -2px 3px -1px rgba(0,0,0,.5);
+}
+@mixin big-button-primary {
+    $BUTTON_PRIMARY_GRADIENT: linear-gradient(saturate(lighten($ACCENT_COLOR, 20%), 40%), saturate(darken($ACCENT_COLOR, 5%), 15%)) !default;
+    @include big-button;
+    @include background-image($BUTTON_PRIMARY_GRADIENT);
+}
+@mixin big-button-secondary {
+    $BUTTON_SECONDARY_GRADIENT: linear-gradient(#999, #606060) !default;
+    @include big-button;
+    @include background-image($BUTTON_SECONDARY_GRADIENT);
+}
+@mixin big-button-light {
+    $BUTTON_LIGHT_GRADIENT: linear-gradient(#f6f6f6, #cccccc) !default;
+    @include big-button;
+    @include background-image($BUTTON_LIGHT_GRADIENT);
+    text-shadow: 0 1px 0 rgba(255,255,255,0.5);
+    color: #333;
+    border: 1px solid rgba(0,0,0,0.25);
+    -webkit-box-shadow:
+        0 0 3px rgba(0,0,0,0.1),
+        inset 0 2px 0 -1px rgba(255,255,255,.8),
+        inset 0 -2px 3px -1px rgba(0,0,0,.2);
+
+}

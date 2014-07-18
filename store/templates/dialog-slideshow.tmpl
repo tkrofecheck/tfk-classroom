@@ -1,0 +1,19 @@
+<!--
+   Displays video or slideshow
+  -->
+<div id="tutorial" class="dialog">
+  <div class="close">&times;</div>
+  {{#if settings.IS_VIDEO}}
+    <div class="video">Video</div>
+  {{else}}
+    <div class="slideshow carousel">
+      {{#if slides}}
+        <div class="slides">
+        {{#each slides}}
+          <div class='slide' style='background-image: url("http://edge.adobe-dcfs.com/ddp/issueServer/issues/{{this.id}}/libraryPreview/portrait");'><a href='#'></a></div>
+        {{/each}}
+        </div>
+      {{/if}}
+    </div>
+  {{/if}}
+</div>

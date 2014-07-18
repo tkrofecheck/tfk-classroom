@@ -1,0 +1,46 @@
+/* Styles for the dialogs. */
+.dialog {
+    position: fixed;
+    width: 240px;
+    padding: 10px 10px 10px 10px;
+    z-index: 10;
+    background: rgba(255, 255, 255, .92);
+    color: #FFFFFF;
+    text-align: center;
+    -webkit-border-radius: 5px;
+    opacity: .92;
+    left: 50%;
+    top: 200px;
+}
+
+.dialog #title {
+    margin: 0;
+    margin-bottom: 10px;
+    font-size: 16px;
+    text-align:left;
+    font-weight: bold;
+    text-align: center;
+    width: 330px;
+}
+
+.dialog #description {
+    font-size: 13px;
+    margin: 0px 0px 20px;
+    text-align:left;
+    text-align: center;
+    line-height: 120%;
+    color: #000000;
+}
+
+.dialog button {
+    color:#157EFB;
+    height: 35px;
+    font-style: bold;
+    white-space: nowrap;
+    text-align: center;
+    font: bold 16px;
+}
+
+.dialog button:active {
+    color: rgba(21,126,251, .5);
+}

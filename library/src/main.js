@@ -16,8 +16,8 @@ window.onerror = function(err, lineNo, fileName) {
 // disable scrolling the body element (which shows the a white background 
 // outside the document and just generally feels, not-very-appy
 $(document)
-  .off("touchmove").on("touchmove", function(evt) { evt.preventDefault() })
-  .off("touchmove").on("touchmove", ".scrollable", function(evt) { evt.stopPropagation() });
+  .on("touchmove", function(evt) { evt.preventDefault() })
+  .on("touchmove", ".scrollable", function(evt) { evt.stopPropagation() });
 
 Handlebars.registerHelper('setting', function(options) {
   return options.fn(settings);

@@ -58,7 +58,7 @@ window.settings = {
     "FULFILLMENT_URL"               : "http://www.dpsapps.com/dps/v2_library_store_templates/fulfillment_proxy.php?accountId=",
     "BANNER_TARGET_URL"             : "http://www.google.com",
     "CREATE_ACCOUNT_URL"            : "",
-    "FORGOT_PASSWORD_URL"           : "",
+    "FORGOT_PASSWORD_URL"           : "https://subscription.timeforkids.com/storefront/universalForgotPassword.ep?magcode=TK",
     "PRIVACY_POLICY_URL"            : "http://www.timeinc.net/subs/privacy/eula/tk/tk-familyed-index.html",
     
     "lucie_server_root": "https://lucie.timeinc.com/webservices/adobews/",

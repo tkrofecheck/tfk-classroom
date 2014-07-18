@@ -24,7 +24,8 @@ App.views.StoreContainer = Backbone.View.extend({
   subscribeDialog: null,
     
 	events: {
-	  "click .signin > div"        : "display_loginDialog"
+	  "click .signin > div"        : "display_loginDialog",
+	  "click #slideshow"           : "display_slideshowDialog"
   },
   
   initialize: function() {
@@ -75,9 +76,9 @@ App.views.StoreContainer = Backbone.View.extend({
       this.$("#right_rail").css("top","0px");
     }
     
-    setTimeout(function() {
+    /*setTimeout(function() {
       that.setup_sidescroller("tutorial");
-    });
+    });*/
     
     cb();
     return this;
@@ -118,6 +119,19 @@ App.views.StoreContainer = Backbone.View.extend({
       
       this.loginBtn.html(settings.LBL_SIGN_IN);
     }
+  },
+  
+  display_slideshowDialog: function(e) {
+    console.log("App.views.StoreContainer.display_loginDialog()");
+    e.stopPropagation();
+    
+    var that = this,
+        slideshowScrollPosition = $(window).scrollTop(),
+        slideshowDialog = new App.views.dialogs.SlideshowDialog();
+    
+    slideshowDialog.$el.on("closeSlideshow", function() {
+      $(window).scrollTop(slideshowScrollPosition); // set the scroll position back to what it was.
+    });
   },
   
   sortDatesDescending: function (a, b) {

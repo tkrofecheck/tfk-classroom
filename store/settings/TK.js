@@ -17,7 +17,7 @@ window.settings = {
     
     "IS_STORE_SHOW_CHROME"          : true,
     "IS_ENTITLEMENT_VIEWER"         : true,
-    "IS_HEADER_TEXT"                : "Store",
+    "IS_HEADER_TEXT"                : "Learn More",
     "IS_AUTO_OPEN_DOWNLOADED_FOLIO" : true,
     "IS_UPDATING_TEXT"              : "Updating Store...",
     
@@ -63,6 +63,15 @@ window.settings = {
     "lucie_server_root": "https://lucie.timeinc.com/webservices/adobews/",
     "dev_asset_root": "./",
     "prod_asset_root": "./",
+    
+    // ************************************************************  
+    // SLIDESHOW SLIDES
+    // ************************************************************
+    "slides": {
+      0 : "",
+      1 : "",
+      2 : ""
+    },
     
 "ihatethelastcomma": true};
 })();

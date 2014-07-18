@@ -8,29 +8,47 @@ App.views.Main = Backbone.View.extend({
   },
   initialize: function() {
     console.log("App.views.Main.initialize()");
-    var that = this;
-
+    var that = this, render;
+    
     App.api.authenticationService.updatedSignal.add(function() {
       App.api.libraryService.updateLibrary();
     });
 
     this.library_view = new App.views.Library;
-
+    
     this.$el.hammer();
     if (typeof localStorage.app_view_count == "undefined") {
       localStorage.app_view_count = 0;
     }
+      
+    render = _.bind(this.render, this, $.noop);
+    render = _.partial(_.delay, render, 50);
+    render = _.debounce(render, 200);
+      
+    App.api.authenticationService.userAuthenticationChangedSignal.add(render);
     
-    this.subview = this.library_view;
     localStorage.app_view_count = +localStorage.app_view_count + 1;
   },
   render: function(cb) {
     var that = this;
     this.$el.html(this.template({DEBUG:DEBUG}));
-
-    this.subview.render(function() {
-      that.subview.$el.appendTo(that.el);
+    
+    this.showWelcome();
+    
+    this.library_view.render(function() {
+      that.library_view.$el.appendTo(that.el);
     });
+  },
+  showWelcome: function() {
+    var that = this;
+    if (App.api.authenticationService.isUserAuthenticated) {
+      return;
+    } else {
+      if (localStorage.getItem("assessmentPIN")) {
+        localStorage.removeItem("assessmentPIN");
+      }
+      new App.views.Welcome;
+    }
   },
   launch_repl: function() {
     App.debug.launch_repl();

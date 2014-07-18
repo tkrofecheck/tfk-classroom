@@ -28,10 +28,7 @@ App.views.LibraryBanner = Backbone.View.extend({
     
     $(window).on("resize orientationchange", function() {
       that._debounce_render();
-    });
-    
-    App.api.authenticationService.updatedSignal.add(this._debounce_render);
-    App.api.authenticationService.userAuthenticationChangedSignal.add(this._debounce_render);
+    }); 
   },
   
   render: function(cb) {
@@ -106,7 +103,7 @@ App.views.LibraryBanner = Backbone.View.extend({
       var that = this,
           loginDialog;
       
-      loginDialog = (userType) ? new App.views.dialogs.TeacherLoginDialog() : new App.views.dialogs.LoginDialog();
+      loginDialog = (userType) ? new App.views.dialogs.TeacherLoginDialog() : new App.views.dialogs.StudentLoginDialog();
       
       var loginScrollPosition = $(window).scrollTop();
       

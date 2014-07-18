@@ -1,0 +1,79 @@
+.archive-view, .sections-view {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 8;
+}
+
+#archive-grid, #sections-grid {
+    padding-top: 81px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+}
+
+#archive-view-msg {
+    color: #000000;
+    font-size: 18px;
+    text-align: center;
+    margin-top: 150px;
+}
+
+#archive-view-left-column, #sections-view-left-column {
+    float: left;
+    display: inline-block;
+    width: 200px;
+}
+
+#archive-view-right-column, #sections-view-right-column {
+    float: right;
+    display: inline-block;
+    margin-right: 10px;
+    width: 200px;
+    text-align: right;
+}
+
+.archive-view #title, .sections-view #title {
+    position: absolute;
+    margin-left:auto;
+    margin-right:auto;
+    left:0;
+    right:0;
+    font-weight: normal;
+}
+
+.archive-view .text-link, .archive-view .text-link-red, .sections-view .text-link {
+    display: inline-block;
+    margin: 15px 0px 0px 15px;
+}
+
+.sections-view .button {
+    width: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.archive-view-selected {
+    border: 2px solid #B52517;
+    position: absolute;
+    top: -2px;
+    left: -2px;
+}
+
+.archive-view-selected-check-icon-container {
+    background-color: #B31B18;
+    -webkit-border-radius:16px;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    width: 21px;
+    height: 20px;
+    padding: 8px 0px 0px 7px;
+}
+
+.archive-view-selected-check-icon {
+    background: url("../images/icon_check.png") no-repeat;
+    background-size: 16px 12px;
+    width: 16px;
+    height: 12px;
+}

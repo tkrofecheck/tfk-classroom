@@ -9,15 +9,19 @@ App.views.dialogs.TeacherLoginDialog = Backbone.View.extend({
 	template: Handlebars.templates["dialog-login-teacher.tmpl"],
 	
 	events: {
-		"click"                   : "clickHandler",
+		//"click"                   : "clickHandler",
 		"click #close"            : "cancel_clickHandler",
 		"click #submit"           : "submit_clickHandler",
 		"click #forgot-password"  : "forgotPassword_clickHandler",
-		"click #create-account"   : "createAccount_clickHandler"
+		"click #create-account"   : "createAccount_clickHandler",
+		"submit form"             : "submit_clickHandler"
 	},
 	
 	initialize: function() {
 		console.log("App.views.dialogs.TeacherLoginDialog.initialize()");
+		
+		var that = this;
+		
 		this.render().$el.appendTo("body");
     this.open();
 	},
@@ -32,6 +36,11 @@ App.views.dialogs.TeacherLoginDialog = Backbone.View.extend({
 		};
 		
 		this.$el.html(this.template(cx));
+		
+		$('#login').on('submit', function(e) {
+      e.preventDefault();
+      that.$("#submit").trigger("click");
+    });
 
 		return this;
 	},
@@ -56,12 +65,15 @@ App.views.dialogs.TeacherLoginDialog = Backbone.View.extend({
 	},
 	
 	submit_clickHandler: function(e) {
-		e.stopPropagation();
+		e.preventDefault();
 		
 		var that = this,
 		    $username = this.$("#username"),
 		    $password = this.$("#password"),
 		    $error = this.$("#login .error");
+		
+		$("#username").blur();
+		$("#password").blur();
 		
 		$error.html("");
 		

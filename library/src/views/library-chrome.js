@@ -45,23 +45,18 @@ App.views.LibraryChrome = Backbone.View.extend({
     $("body").on("change", "#auto-archive", function(e, isOn) {
       that.autoArchive_changeHandler(e, isOn);
     });
-    
-    
+        
     if (localStorage.autoSignout) {
       App.autoSignout.isEnabled = (localStorage.autoSignout=="true") ? true : false;
     }
-    
-    this.toggle_autoSignout();
-
-    App.api.authenticationService.updatedSignal.add(this._debounce_render);
-    
-    App.api.authenticationService.userAuthenticationChangedSignal.add(this._debounce_render);
   },
   
   render: function(cb) {
     console.log("App.views.LibraryChrome.render()");
     var that = this, loginLbl, model, cx;
     cb = cb || $.noop;
+    
+    this.toggle_autoSignout();
     
     // Determine the login label for the drop down menu.
     loginLbl = App.api.authenticationService.isUserAuthenticated ? settings.LBL_SIGN_OUT : settings.LBL_SIGN_IN;
@@ -180,7 +175,7 @@ App.views.LibraryChrome = Backbone.View.extend({
     
     if (!App.api.authenticationService.isUserAuthenticated) {
       var that = this,
-          loginDialog = new App.views.dialogs.LoginDialog();
+          loginDialog = new App.views.dialogs.StudentLoginDialog();
       
       var loginScrollPosition = $(window).scrollTop();
       

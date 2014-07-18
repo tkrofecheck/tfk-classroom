@@ -1,0 +1,23 @@
+.welcome-signin-popup {
+  @include welcome-signin-popup(620px, 520px, "../images/welcome-signin-popup.png");
+  a.sign-in-btn.student {
+    height: 55px; 
+    width: 394px;
+    top: 209px;
+    right: 113px;
+  }
+  
+  a.sign-in-btn.teacher {
+    height: 55px; 
+    width: 394px;
+    top: 409px;
+    right: 113px;
+  }
+  
+  .learnmore {
+    height: 55px; 
+    width: 394px;
+    top: 609px;
+    right: 113px;
+  }
+}

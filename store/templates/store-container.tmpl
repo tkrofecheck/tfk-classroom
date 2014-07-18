@@ -2,20 +2,12 @@
   Left Rail
   
   <!--
-   Displays video or slideshow
+   CTA for video or slideshow
   -->
   {{#if settings.IS_VIDEO}}
-    <div id="video">Video</div>
+    <div id="video">Tap for Video</div>
   {{else}}
-    <div id="tutorial" class="slideshow carousel">
-      {{#if slides}}
-        <div class="slides">
-          {{#each slides}}
-          <div class='slide' style='background-image: url("http://edge.adobe-dcfs.com/ddp/issueServer/issues/{{this.id}}/libraryPreview/portrait");'><a href='#'></a></div>
-        {{/each}}
-        </div>
-      {{/if}}
-    </div>
+    <div id="slideshow">Tap for Slideshow</div>
   {{/if}}
   <div class="samples">Samples</div>
 </div>
