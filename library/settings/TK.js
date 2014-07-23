@@ -21,7 +21,14 @@ window.settings = {
     "IS_UPDATING_TEXT"              : "Updating Library...",
     
     "TIME_BEFORE_SIGNOUT_COUNTDOWN_SECONDS"     : 5,
-    "SIGNOUT_COUNTDOWN_SECONDS"     : 10,
+    "SIGNOUT_COUNTDOWN_SECONDS"     : 600,
+    
+    // ************************************************************
+    // OMNITURE
+    // ************************************************************
+    "omniture_account"           : "timagtimekidsall",
+    "omniture_server"            : "metrics.time.com",
+    "omniture_ssl_server"        : "smetrics.time.com",
     
     // ************************************************************
     // NAV BAR, LOGIN DIALOG, RESTORE
@@ -64,6 +71,16 @@ window.settings = {
     "lucie_server_root": "https://lucie.timeinc.com/webservices/adobews/",
     "dev_asset_root": "./",
     "prod_asset_root": "./",
+    
+    // ************************************************************  
+    // SLIDESHOW SLIDES
+    // ************************************************************
+    "slides": [
+      {"image":"001.png", "clickthrough":false},
+      {"image":"002.png", "clickthrough":false},
+      {"image":"003.png", "clickthrough":false},
+      {"image":"004.png", "clickthrough":true, "class":"samples"}
+    ],
     
 "ihatethelastcomma": true};
 })();

@@ -1,6 +1,6 @@
 
 App.views.dialogs.Loading = Backbone.View.extend({
-  className: "modal-background",
+  className: "modal-background-black",
   template: Handlebars.templates['loading.tmpl'],
   events: {
   },

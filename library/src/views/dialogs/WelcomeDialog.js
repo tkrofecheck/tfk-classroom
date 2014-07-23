@@ -1,17 +1,15 @@
 
 App.views.Welcome = Backbone.View.extend({
-  className: "modal-background",
+  className: "modal-background-black",
   template: Handlebars.templates['dialog-welcome.tmpl'],
   events: {
-    "click a": function(evt) { evt.preventDefault(); },
     "click .sign-in-btn": "getLoginType",
-    "click .learnmore": "goto_learnmore_tab"
+    "click .learnmore": "open_slideshow",
+    "click .samples": "goto_home_tab"
   },
   initialize: function() {
     console.log("App.views.Welcome.initialize()");
     var that = this;
-    
-    this.$el.addClass("black");
     
     this.render(function() {
       that.$el.appendTo("body"); 
@@ -77,9 +75,25 @@ App.views.Welcome = Backbone.View.extend({
       this.loginBtn.html(settings.LBL_SIGN_IN);
     }
   },
-  goto_learnmore_tab: function(e) {
-    console.log("Leaving Library... Switching to tab: Learn More");
+  open_slideshow: function(e) {
+    console.log("Starting slideshow");
     
-    App.api.configurationService.gotoState("Help");
+    e.preventDefault();
+    e.stopPropagation();
+    
+    var that = this,
+        slideshowScrollPosition = $(window).scrollTop(),
+        slideshowDialog = new App.views.dialogs.SlideshowDialog();
+    
+    slideshowDialog.$el.on("closeSlideshow", function() {
+      $(window).scrollTop(slideshowScrollPosition); // set the scroll position back to what it was.
+    });
+  },
+  
+  goto_home_tab: function(e) {
+    console.log("Leaving Library... Switching to tab: Home");
+    
+    e.preventDefault();
+    App.api.configurationService.gotoState("Home");
   }
 });

@@ -1,4 +1,5 @@
 @import "_includes/_repl.scss";
+@import "_includes/_loading.scss";
 @import "_includes/_dialogs.scss";
 @import "_includes/_mixins.scss";
 @import "_includes/_welcome_signin_popup.scss";
@@ -7,6 +8,7 @@
 @import "_includes/_countdown.scss";
 @import "_includes/_archive_sections.scss";
 @import "_includes/_library_chrome.scss";
+@import "_includes/_tutorial.scss";
 
 @-webkit-keyframes pop {
     0%   { -webkit-transform: scale(0); }
@@ -455,8 +457,14 @@ div.item.extra-tall {
     z-index: 9;
 }
 
-.modal-background.black {
-    background: rgba(0, 0, 0, 1) !important;
+.modal-background-black {
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 1);
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    z-index: 9;
 }
 
 .modal-background-grey {

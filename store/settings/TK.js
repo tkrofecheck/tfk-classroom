@@ -15,13 +15,23 @@ window.settings = {
     
     "library_show_subscribe"        : false,
     
+    "DISPLAY_HEADER_TEXT"           : false, // displays logo image if false otherwise IS_HEADER_TEXT (below)
+    
     "IS_STORE_SHOW_CHROME"          : true,
     "IS_ENTITLEMENT_VIEWER"         : true,
-    "IS_HEADER_TEXT"                : "Learn More",
+    "IS_HEADER_TEXT"                : "",
+    "IS_SUBHEADER_TEXT"             : "Download a Sample",
     "IS_AUTO_OPEN_DOWNLOADED_FOLIO" : true,
     "IS_UPDATING_TEXT"              : "Updating Store...",
     
     "IS_VIDEO"                      : false,
+    
+    // ************************************************************
+    // OMNITURE
+    // ************************************************************
+    "omniture_account"           : "timagtimekidsall",
+    "omniture_server"            : "metrics.time.com",
+    "omniture_ssl_server"        : "smetrics.time.com",
     
     // ************************************************************
     // NAV BAR, LOGIN DIALOG, RESTORE
@@ -65,13 +75,42 @@ window.settings = {
     "prod_asset_root": "./",
     
     // ************************************************************  
-    // SLIDESHOW SLIDES
-    // ************************************************************
-    "slides": {
-      0 : "",
-      1 : "",
-      2 : ""
-    },
+    // SAMPLE ISSUES
+    // ************************************************************        
+    "samples": [
+      {
+        "gradeLevel":"K-1",
+        "issues":[
+          {"type":"Teacher", "productId":"", "id":""},
+          {"type":"Student", "productId":"", "id":""}
+        ],
+        "description":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam a vestibulum tortor. Pellentesque sed urna mauris. Vestibulum magna libero, feugiat vitae vehicula non, tristique in orci. Quisque auctor lorem non bibendum euismod. Nulla facilisi. Vivamus aliquet urna ac augue sagittis. "
+      },
+      {
+        "gradeLevel":"2",
+        "issues":[
+          {"type":"Teacher", "productId":"", "id":""},
+          {"type":"Student", "productId":"", "id":""}
+        ],
+        "description":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam a vestibulum tortor. Pellentesque sed urna mauris. Vestibulum magna libero, feugiat vitae vehicula non, tristique in orci. Quisque auctor lorem non bibendum euismod. Nulla facilisi. Vivamus aliquet urna ac augue sagittis. "
+      },
+      {
+        "gradeLevel":"3-4",
+        "issues":[
+          {"type":"Teacher", "productId":"", "id":""},
+          {"type":"Student", "productId":"", "id":""}
+        ],
+        "description":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam a vestibulum tortor. Pellentesque sed urna mauris. Vestibulum magna libero, feugiat vitae vehicula non, tristique in orci. Quisque auctor lorem non bibendum euismod. Nulla facilisi. Vivamus aliquet urna ac augue sagittis. "
+      },
+      {
+        "gradeLevel":"5-6",
+        "issues":[
+          {"type":"Teacher", "productId":"", "id":""},
+          {"type":"Student", "productId":"", "id":""}
+        ],
+        "description":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam a vestibulum tortor. Pellentesque sed urna mauris. Vestibulum magna libero, feugiat vitae vehicula non, tristique in orci. Quisque auctor lorem non bibendum euismod. Nulla facilisi. Vivamus aliquet urna ac augue sagittis. "
+      }
+    ],
     
 "ihatethelastcomma": true};
 })();

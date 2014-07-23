@@ -1,7 +1,13 @@
 console.log("----------  STARTING APP  ----------");
 
 if (DEBUG) {
-  settings.asset_root = settings.dev_asset_root;  
+  settings.asset_root = settings.dev_asset_root;
+  window.openDatabase = function() {
+    return {
+      transaction: function(){},
+      readTransaction: function(){}
+    };
+  }
 }
 else {
   settings.asset_root = settings.prod_asset_root;  
@@ -45,20 +51,27 @@ $(function() {
     App._using_adobe_api = true;
   }
 
+  App.preloader = _.extend({}, Backbone.Events);
   App.grade = _.extend({}, Backbone.Events);
   App.autosignout = _.extend({}, Backbone.Events);
   App.library = _.extend({}, Backbone.Events);
+
+  // launch the app when everything has initialized / preloaded (APIs and images)
+  App.preloader.on("finish:loading", function() {
+    window.setTimeout(function() {
+      new App.views.Main().render(function() {
+        App.loading(false);
+        Backbone.trigger("AppReady");
+      });
+    }, 2000); // wait 2 seconds before removing 'loading' dots
+  });
   
+  // initialize Adobe APIs and preload images
   App._raw_api.initializationComplete.addOnce(function() {
     console.log("init complete");
     App.api = App._raw_api;
     Backbone.trigger("ApiReady");
-
-    // launch the app
-    new App.views.Main().render(function() {
-      App.loading(false);
-      Backbone.trigger("AppReady");
-    });
+    App.preload();
   });
 });
 

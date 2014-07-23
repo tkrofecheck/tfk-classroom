@@ -1,3 +1,7 @@
+@import "compass";
+
+$HEADER_HEIGHT: 62px;
+
 @-webkit-keyframes pop {
     0%   { -webkit-transform: scale(0); }
     70%  { -webkit-transform: scale(1.1); }
@@ -31,16 +35,15 @@ body, #archive-grid, #sections-grid {
 
 /* The white header at the top. */
 #header {
-    background-color: #F7F7F7;
+    background-color: #E22E2D;
     width: 100%;
-    height: 46px;
+    height: $HEADER_HEIGHT;
     position: fixed;
     z-index: 7;
     display: table;
     padding: 0px;
     top: 0px;
     white-space: nowrap;
-    border-bottom: 1px solid #B1B1B1;
 }
 
 #print-subscriber-login, #subscribe  {
@@ -108,8 +111,13 @@ body, #archive-grid, #sections-grid {
 
 #title-image {
     display:block;
-    margin: 0 auto;
     position: relative;
+    background-image: url(../images/logo.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    height: $HEADER_HEIGHT;
+    width: 100%;
 }
 
 .archive-view, .sections-view {

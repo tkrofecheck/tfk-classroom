@@ -32,30 +32,19 @@
   height: 100%;
 }
 
-@media screen and (orientation:portrait) {
-  .signin {
-    background-image: url("../images/entitlement_banner_portrait.png");
-  }
-  
-  .other {
-    background-image: url("../images/entitlement_banner_portrait.png");
-  }
-  
+.signout {
+  background-image: url("../images/entitlement_banner_portrait.png");
+  background-color: #000000;
+}
+
+@media only screen and (min-width:768px) { 
   #libBanner {
-    height: 140px;
+    height: 237px;
   }
 }
 
-@media screen and (orientation:landscape) {
-  .signin {
-    background-image: url("../images/entitlement_banner_landscape.png");
-  }
-  
-  .other {
-    background-image: url("../images/entitlement_banner_landscape.png");
-  }
-  
+@media only screen and (min-width:1024px) {
   #libBanner {
-      height: 140px;
+      height: 177px;
   }
 }

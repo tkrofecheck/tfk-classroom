@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title></title>
+  <meta name="ROBOTS" content="NOINDEX,NOFOLLOW,NOARCHIVE" />
+  <style>
+    html, body {
+      height: 100%;
+      width: 100%;
+      background: #eee;
+      margin: 0; padding: 0;
+      font-family: "Helvetica Neue", Helvetica, sans-serif;
+      font-size: 20px;
+      line-height: 26px;
+      text-shadow: 0px 1px 0px #fff;
+      color: #666;
+      font-weight: normal;
+    }
+    .main-message {
+      width: 350px;
+      position: absolute;
+      top: 50%; left: 50%;
+      margin-top: -100px;
+      margin-left: -205px;
+      box-shadow: 1px 2px 15px rgba(0,0,0,0.1);
+      background: #fcfcfc;
+      text-align: center;
+      padding: 30px;
+      border-radius: 10px;
+    }
+    .secondary-message {
+      position: absolute;
+      top: 5px;
+      left: 20px;
+      line-height: 35px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="main-message">
+    You are being redirected to the App&nbsp;Store&hellip;
+  </div>
+  <div class="secondary-message">
+    &nbsp;&nbsp;&#9650;<br>
+    Tap “Done” to return to the Library
+  </div>
+
+  <script type="text/javascript">
+    // from: http://stackoverflow.com/questions/2090551/parse-query-string-in-javascript
+    function getQueryVariable(variable) {
+      var query = window.location.search.substring(1);
+      var vars = query.split('&');
+      for (var i = 0; i < vars.length; i++) {
+        var pair = vars[i].split('=');
+        if (decodeURIComponent(pair[0]) == variable) {
+          return decodeURIComponent(pair[1]);
+        }
+      }
+    }
+
+    var destination = getQueryVariable("link");
+
+    setTimeout("window.history.back()", 1000);
+    setTimeout("window.close()", 1000);
+
+    if (destination) {
+      var ifr = document.createElement("iframe");
+      ifr.style.display = "none";
+      ifr.src = destination;
+      document.body.appendChild(ifr);
+      //location.href = destination;
+    }
+  </script>
+
+</body>
+</html>
+

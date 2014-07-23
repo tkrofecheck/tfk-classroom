@@ -112,6 +112,9 @@ END
 
   mkdir $DEPLOYDIR/images
   cp $DEVDIR/images/*.* $DEPLOYDIR/images
+  
+  mkdir $DEPLOYDIR/appstore_links
+  cp $DEVDIR/appstore_links/*.* $DEPLOYDIR/appstore_links
     
   MAG_CODE=$TITLE CSS_HASH=$(md5 -q $BUILDROOT/$DEPLOYDIR/css/main.css) python bin/render_index.py "$DEVDIR/index.html.tmpl" "$DEVDIR/index.prod.html" "main.min.js?v=$(md5 -q $BUILDROOT/$DEPLOYDIR/main.min.js)"
   cp $DEVDIR/index.prod.html $DEPLOYDIR/index.html
@@ -142,7 +145,6 @@ js_lib 'moment.js'
 js_lib 'underscore.js'
 js_lib 'backbone.js'
 js_lib 'handlebars.runtime.js'
-js_lib 'slideshow.js'
 js_lib 'spin.min.js'
 
 dev_lib 'tcm_devtools.js'
@@ -154,10 +156,20 @@ templates 'templates/*.tmpl'
 js_file "settings/$TITLE.js"
 
 # depends on settings
-js_lib 'libBanner.js'
+js_lib 'lucie_entitlements.js'
+
+# depends on settings
+js_lib 'slideshow.js'
 
 # creates App object (which is just a namespace)
 js_file "src/app.js"
+
+# requires App object and for settings to be loaded
+js_lib 's_code.js'
+js_lib 'tcm_omniture.js'
+
+# preloads static assets (images, etc) 
+js_file 'src/preloader.js'
 
 js_files "src/controls/*.js"
 js_files "src/model/*.js"
@@ -189,7 +201,6 @@ js_lib 'moment.js'
 js_lib 'underscore.js'
 js_lib 'backbone.js'
 js_lib 'handlebars.runtime.js'
-js_lib 'slideshow.js'
 js_lib 'spin.min.js'
 
 dev_lib 'tcm_devtools.js'
@@ -200,8 +211,18 @@ templates 'templates/*.tmpl'
 # app specific
 js_file "settings/$TITLE.js"
 
+# depends on settings
+js_lib 'lucie_entitlements.js'
+
 # creates App object (which is just a namespace)
 js_file "src/app.js"
+
+# requires App object and for settings to be loaded
+js_lib 's_code.js'
+js_lib 'tcm_omniture.js'
+
+# preloads static assets (images, etc) 
+js_file 'src/preloader.js'
 
 js_files "src/views/dialogs/*.js"
 js_files "src/views/*.js"

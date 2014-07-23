@@ -1,23 +1,28 @@
-<div id="left_rail">
-  Left Rail
-  
-  <!--
-   CTA for video or slideshow
-  -->
-  {{#if settings.IS_VIDEO}}
-    <div id="video">Tap for Video</div>
-  {{else}}
-    <div id="slideshow">Tap for Slideshow</div>
-  {{/if}}
-  <div class="samples">Samples</div>
-</div>
-
-<div id="right_rail">
-  Right Rail
-  <div class="signin">
-    <div class="teacher"></div>
-    <div class="student"></div>
+{{#settings}}
+{{#if IS_SUBHEADER_TEXT}}
+  <div id='subheader'>
+    <p>{{IS_SUBHEADER_TEXT}}</p>
   </div>
-  <div class="cover" style="background-image: url('{{cover_img}}');"></div>
-</div>
-  
+{{/if}}
+
+<ul class='flex-container wrap'>
+  {{#each samples}}
+    <li class='flex-item'>
+      <div class="flex-item-container">
+        <div class='title'>Edition {{gradeLevel}}</div>
+        <div class="img-container">
+          <img class="cover-img" src="images/cover_spacer.gif" />
+        </div>
+        <div class="cta-container">
+          <div class='btns'>
+            {{#each issues}}
+              <button data-productid='{{productId}}' data-id='{{id}}'>{{type}} View</button>
+            {{/each}}
+          </div>
+        </div>
+        <div class='description'>{{description}}</div>
+      </div>
+    </li>
+  {{/each}}
+</ul>
+{{/settings}}

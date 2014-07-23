@@ -1,0 +1,17 @@
+<!--
+   Displays video or slideshow
+  -->
+{{#settings}}
+<div id="tutorial" class="dialog">
+  <div class="close"></div>
+  <div class="slideshow carousel">
+    {{#if slides}}
+      <div class="slides">
+      {{#each slides}}
+        <div class='slide' style='background-image: url(images/{{image}});'>{{#if clickthrough}}<a {{#if class}}class='{{class}}'{{/if}} href="{{#if url}}{{url}}{{else}}#{{/if}}"></a>{{/if}}</div>
+      {{/each}}
+      </div>
+    {{/if}}
+  </div>
+</div>
+{{/settings}}
