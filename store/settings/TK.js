@@ -36,7 +36,7 @@ window.settings = {
     // ************************************************************
     // NAV BAR, LOGIN DIALOG, RESTORE
     // ************************************************************
-    "LBL_SIGN_OUT"                  : "Sign Out",
+    "LBL_SIGN_OUT"                  : "&laquo; Library",
     "LBL_SIGN_IN"                   : "Sign In",
     "LBL_STUDENT_SIGN_IN"           : "Student",
     "LBL_TEACHER_SIGN_IN"           : "Teacher",

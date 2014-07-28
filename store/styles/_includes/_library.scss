@@ -37,20 +37,22 @@ body, #archive-grid, #sections-grid {
 #header {
     background-color: #E22E2D;
     width: 100%;
-    height: $HEADER_HEIGHT;
+    height: $HEADER_HEIGHT - 5px;
     position: fixed;
-    z-index: 7;
+    z-index: 100;
     display: table;
     padding: 0px;
     top: 0px;
     white-space: nowrap;
 }
 
-#print-subscriber-login, #subscribe  {
-    float: left;
-    margin-right: 10px;
-    padding-top: 15px;
-    margin-left: 15px;
+#print-subscriber-login, #subscribe, #go-to-library  {
+    position: absolute;
+    line-height: $HEADER_HEIGHT - 5px;
+    left: 17px;
+    font-size: 20px;
+    font-weight: 500;
+    z-index: 100;
 }
 
 .text-link, .text-link-red {
@@ -60,7 +62,8 @@ body, #archive-grid, #sections-grid {
 }
 
 .text-link {
-    color: #00A9DF;
+    /*color: #00A9DF;*/
+   color: #FFFFFF;
 }
 
 .text-link:active {
@@ -112,7 +115,7 @@ body, #archive-grid, #sections-grid {
 #title-image {
     display:block;
     position: relative;
-    background-image: url(../images/logo.png);
+    background-image: url(../images/logo-white.png);
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;

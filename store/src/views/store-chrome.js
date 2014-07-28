@@ -3,49 +3,35 @@ App.views.StoreChrome = Backbone.View.extend({
   className: "store-chrome-view",
   template: Handlebars.templates["store-chrome.tmpl"],
   
-  logoutTimeout: null,
-  logoutInterval: null,
-  subscribeDialog: null,
-  stopDropDown: false,
-  
   events: {
-    "click #print-subscriber-login"   : "display_loginDialog",
-    "click #go-to-library"            : "redirect_library"
+    "click #go-to-library"            : "goto_library_tab"
   },
   
   initialize: function() {
-    console.log("App.views.LibraryChrome.initialize()");
-    var that = this,
-        render;
+    console.log("App.views.StoreChrome.initialize()");
+    var that = this;
+
+    this._debounce_render = _.throttle(_.bind(this.render, this, $.noop), 500);
     
-    $(window).on("click touchmove orientationchange resize scroll", function() {      
-      that.endLogoutCountdown();
+    App.autosignout.on("autosignout:toggle-complete", function() { // this is needed to redraw the menu in order for the flip-switch to display appropriately
+      that._debounce_render();
+      return false;
     });
     
-    this.logoutInterval = setInterval(function() {
-      if (App.api.authenticationService.isUserAuthenticated) {
-        if (!that.logoutTimeout) {
-          setTimeout(function() { that.startLogoutCountdownPrompt(); });
-        }
-      }
-    }); //while authenticated - set interval to check if auto-logout countdown has already started, or should be started
-    
-    render = _.bind(this.render, this, $.noop);
-    render = _.partial(_.delay, render, 50);
-    render = _.debounce(render, 200);
-    
-    //Update views when subscription receipt is available or when user signs into LUCIE
-    App.api.authenticationService.userAuthenticationChangedSignal.add(render);
+    if (localStorage.autoSignout) {
+      App.autoSignout.isEnabled = (localStorage.autoSignout=="true") ? true : false;
+    }
   },
   
   render: function(cb) {
-    console.log("App.views.LibraryChrome.render()");
+    console.log("App.views.StoreChrome.render()");
     var that = this, loginLbl, model, cx;
     cb = cb || $.noop;
     
     // Determine the login label for the drop down menu.
-    loginLbl = App.api.authenticationService.isUserAuthenticated ? settings.LBL_SIGN_OUT: settings.LBL_SIGN_IN;
+    //loginLbl = App.api.authenticationService.isUserAuthenticated ? settings.LBL_SIGN_OUT: settings.LBL_SIGN_IN;
     
+    loginLbl = settings.LBL_SIGN_OUT;
     model = {
       loginLbl: loginLbl
     };
@@ -72,7 +58,7 @@ App.views.StoreChrome = Backbone.View.extend({
   },
 
   display_loginDialog: function(e) {
-    console.log("App.views.LibraryChrome.display_loginDialog()");
+    console.log("App.views.StoreChrome.display_loginDialog()");
     e.stopPropagation();
     
     var that = this;
@@ -94,7 +80,10 @@ App.views.StoreChrome = Backbone.View.extend({
     }
   },
   startLogoutCountdownPrompt: function(){
-    var that = this;
+    var that = this,
+        timer = null;
+    
+    timer = 1000 * (settings.TIME_BEFORE_SIGNOUT_COUNTDOWN_SECONDS + .5);
     
     if (this.logoutTimeout || this.$("#logout-countdown-dialog").length > 0) {
       return;
@@ -104,10 +93,20 @@ App.views.StoreChrome = Backbone.View.extend({
         
         logoutDialog.$el.on("autoLogoutCancel", function() {
           that.endLogoutCountdown();
+          logoutDialog.$el.off("autoLogoutCancel");
         });
-      }, 10000); // display prompt if no activity detected in time-delay-defined
+        
+        logoutDialog.$el.on("signout:true", function() {
+          if (DEBUG) {
+            App.api.authenticationService.isUserAuthenticated = false; // be sure to set this to false for desktop testing
+          }
+          $("#print-subscriber-login").html(settings.LBL_SIGN_IN);
+          logoutDialog.$el.off("signout:true");
+        });
+      }, timer); // display prompt if no activity detected in time-delay-defined
     }
   },
+  
   endLogoutCountdown: function() {
     //remove logout counter
     if (this.logoutTimeout) {
@@ -117,13 +116,65 @@ App.views.StoreChrome = Backbone.View.extend({
     }
   },
   
+  removeAllIssues: function() {
+    var that = this;
+
+    this.foliosToArchive = [];
+    
+    // Sort the folios descending.
+    var list = App.api.libraryService.folioMap.sort(function (a, b) {
+      if (a.publicationDate < b.publicationDate) {
+        return 1;
+      } else if (a.publicationDate > b.publicationDate) {
+        return -1;
+      } else {
+        return 0;
+      }
+    });
+    
+    console.log("list of folios:", list);
+    
+    // filter list based on dropdown in chrome
+    this.foliosToArchive = _.filter(list, function(folio) {      
+      return (folio.isArchivable || folio.isViewable);
+    });
+    
+    if (this.foliosToArchive.length > 0) {
+      console.log("folios to archive: ", this.foliosToArchive);
+      
+      this.$el.unbind("click"); //disable closing dialog by tapping modal - must dismiss itsel
+      
+      if (App._using_adobe_api) {
+        $.each(this.foliosToArchive, function(index, element) {
+          //console.log("element:" + element + ", index:" + index + "productID:", element.productId);
+          var folio = App.api.libraryService.folioMap.getByProductId(element.productId);
+          
+          folio.archive();
+          console.log("folio archived", folio);
+        });
+      }
+    } else {
+      console.log("no folios to archive");
+    }
+    setTimeout(function() {
+      App.api.authenticationService.logout();
+      if (DEBUG) {
+        App.api.authenticationService.isUserAuthenticated = false; // desktop testing purposes
+      }
+      that.loginBtn.html(settings.LBL_SIGN_IN);
+      console.log("Logged out!");
+    }, 1000);
+  },
+  
   setHeaderWidth: function() {      
     // Need to explicitly set the width otherwise it doesn't always update if width=100% in css.
     this.$("#header").width($(window).width());
   },
   
-  redirect_library: function() {
-    window.location.href = "http://ecom-dev01-app.usdlls2.savvis.net:10500/appstorefronts/tim/classroom/-TK-library-deploy/index.html?v=" + (+new Date);
+  goto_library_tab: function() {
+    console.log("Leaving Samples... Switching to tab: Library");
+    
+    App.api.configurationService.gotoState("library");
   }
 });
 

@@ -4,7 +4,7 @@
     width: 240px;
     padding: 10px 10px 10px 10px;
     z-index: 10;
-    background: rgba(255, 255, 255, .92);
+    background: rgba(255, 255, 255, .94);
     color: #FFFFFF;
     text-align: center;
     -webkit-border-radius: 5px;
@@ -42,4 +42,312 @@
 
 .dialog button:active {
     color: rgba(21,126,251, .5);
+}
+
+.modal-background {
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0);
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    z-index: 101;
+}
+
+.modal-background-black {
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 1);
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    z-index: 101;
+}
+
+.modal-background-grey {
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, .3);
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    z-index: 101;
+}
+
+#restore-dialog, #update-dialog {
+    margin-left: -127px;
+}
+
+#restore-dialog .text-link, #update-dialog .text-link {
+    display: inline-block;
+    margin: 15px;
+    font-size: 15px;
+}
+
+/* Subscribe Dialog */
+#subscribe-dialog {
+    width: 330px;
+    margin-left: -175px;
+    top: 150px;
+    padding: 0px;
+}
+
+#subscribe-dialog #description {
+    padding: 15px;
+    margin-bottom: 10px;    
+}
+
+#subscribe-dialog .subscribe-button {
+    border-top: 1px solid #9BA0A3;
+    color:#157EFB;
+    font-size:16px;
+    display:block;
+    padding: 12px;
+}
+
+#subscribe-dialog .subscribe-button:active {
+    color: rgba(21,126,251, .5);
+}
+
+#subscribe-dialog .subscribe-dialog-button {
+    color:#157EFB;
+    font: bold 16px;
+    border-top: 1px solid #9BA0A3;
+    padding: 12px;
+}
+
+#subscribe-dialog .subscribe-dialog-button:active {
+    color: rgba(21,126,251, .5);
+}
+
+/* Grade Level dialog. */
+#gradelevel {
+    width: 410px;
+    position: absolute;
+    left: 50%;
+    margin-left: -210px;
+    top: 150px;
+    background-color: rgba(255, 255, 255, .92);
+    -webkit-box-shadow: 0 0 20px rgba(0,0,0,.2);
+    color: #ffffff;
+}
+
+#gradelevel .title {
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 10px;
+    height: 37px;
+    padding-top: 20px;
+    color: #000000;
+    letter-spacing: 1px;
+}
+
+#gradelevel .description {
+    font-size: 15px;
+    margin: 15px 0px 20px 20px;
+    color: #999999;
+}
+
+#gradelevel .grade {
+  text-align: center;
+  font-size: 22px;
+  height: 40px;
+  color: #00A9DF;
+}
+
+#gradelevel .link {
+    margin: 5px 0px 20px 20px;
+    color: #33CCFF;
+    text-decoration: none;
+    font-size: 15px;
+}
+
+#gradelevel #close {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    top: 28px;
+    right: 12px;
+    font-size: 16px;
+    color: #00A9DF;
+    letter-spacing: 0px;
+}
+
+#gradelevel .link:active, #gradelevel #close:active, #gradelevel #submit:active {
+    color: rgba(0,169,223, .5);
+}
+
+/* The login dialog. */
+#login {
+    width: 410px;
+    position: absolute;
+    left: 50%;
+    margin-left: -210px;
+    top: 150px;
+    background-color: rgba(255, 255, 255, .94);
+    -webkit-box-shadow: 0 0 20px rgba(0,0,0,.2);
+    color: #ffffff;
+}
+
+#login .title {
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 10px;
+    height: 37px;
+    padding-top: 20px;
+    color: #000000;
+    letter-spacing: 1px;
+}
+
+#login .description {
+    font-size: 15px;
+    margin: 15px 0px 20px 20px;
+    color: #999999;
+}
+
+#login .link {
+    margin: 5px 0px 20px 20px;
+    color: #33CCFF;
+    text-decoration: none;
+    font-size: 15px;
+}
+
+#login #close {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    top: 28px;
+    right: 12px;
+    font-size: 16px;
+    color: #00A9DF;
+    letter-spacing: 0px;
+}
+
+#login .link:active, #login #close:active, #login #submit:active {
+    color: rgba(0,169,223, .5);
+}
+
+input[type="text"], input[type="email"], input[type="password"] {
+    -webkit-appearance: none;
+    background-color: rgba(255,255,255,0);
+    border-color: #BBBBBB;
+    border-style: solid;
+    border-width: 1px;
+    color: #000000;
+    font-size: 12px;
+    outline-color: black;
+    outline-style: none;
+    outline-width: 0px;
+    padding: 0px 4px 4px 4px;
+    margin-left: 20px;
+    width: 370px;
+    height: 31px;
+    -webkit-appearance: none;
+    margin: 0px 0px 15px 20px;
+    border-radius: 0px;
+}
+
+input::-webkit-input-placeholder {
+    font-size: 12px;
+    font-family: helvetica neue;
+    color: #bbbbbb;
+}
+
+#login .required {
+    position: relative;
+    top: -5px;
+    left: 3px;
+}
+
+#login #submit {
+    margin-left: 20px;
+    font-size: 20px;
+    color: #00A9DF;
+}
+
+#login #submit:active {
+    background-position: 0px -36px;
+}
+
+#login .error {
+    color: #ff0000;
+    font-size: 15px;
+    margin: 10px 10px 10px 20px;
+    height: 15px;
+}
+
+.form-button {
+    text-shadow: 0px 1px 0px rgb(0, 0, 0);
+    width:123px;
+    height:30px;
+    border-color:rgb(51,51,51);
+    border-width:1px;
+    border-radius:4%/12%;
+    border-style:solid;
+    text-align: center;
+    color: #ffffff;
+    font-weight: bold;
+    padding-top: 9px;
+}
+
+#loading {
+    margin: 20px 30px;
+    color: #000000;
+    font-size: 17px;
+}
+
+#preview-dialog-folio-cover {
+    position: relative;
+}
+
+#preview-dialog-content-container {
+    position: absolute;
+}
+
+/* entire container, keeps perspective */
+#preview-dialog-header-container {
+    -webkit-perspective: 1000;
+}
+
+#preview-dialog-header-border {
+    border-top: 3px solid rgba(255,255,255,.4);
+    border-left: 3px solid rgba(255,255,255,.4);
+    border-right: 3px solid rgba(255,255,255,.4);
+    -webkit-transform: rotateX(180deg);
+    -webkit-transition: .4s;
+    -webkit-transform-style: preserve-3d;
+    -webkit-backface-visibility: hidden;
+    -webkit-transform-origin: 100% 128px;
+}
+
+#preview-dialog-header {
+    height: 98px;
+    padding: 15px;
+    background-color: rgba(255,255,255,.94);
+}
+
+#preview-dialog-header-text-container {
+    float: left;
+    height: 100px;
+}
+
+#preview-dialog-header .folio-number {
+    margin-top: 3px;
+}
+
+#preview-dialog-header .description {
+    color: #000000;
+    font-size: 12;
+    margin-top: 10px;
+}
+
+#preview-dialog-header-button-container {
+    float: right;
+}
+
+#preview-dialog-header .button {
+    width: 80px;
+    height: 15px;
+    padding: 6px;
+    margin-bottom: 8px;
 }

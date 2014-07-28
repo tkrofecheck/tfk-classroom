@@ -86,6 +86,10 @@ App.views.LibraryChrome = Backbone.View.extend({
     
     this.$("#header-drop-down").dropDown({verticalGap: -20, className: "drop-down-menu", menuWidth: 250});
     
+    if (App.userType == "student"){
+      this.$("#header-drop-down").hide();
+    }
+    
     cb();
     
     return this;
@@ -321,11 +325,6 @@ App.views.LibraryChrome = Backbone.View.extend({
       console.log("folios to archive: ", this.foliosToArchive);
       
       this.$el.unbind("click"); //disable closing dialog by tapping modal - must dismiss itself
-      this.$("#title").html("Removing all downloaded issues.");
-      this.$("#counter").remove();
-      this.$("#monitor").html("Please wait...");
-      this.$("#signout").remove();
-      this.$("#cancel").remove();
       
       if (App._using_adobe_api) {
         $.each(this.foliosToArchive, function(index, element) {

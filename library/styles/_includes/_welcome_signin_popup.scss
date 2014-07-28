@@ -3,6 +3,10 @@ $BUTTON_WIDTH: 356px;
   
   .welcome-signin-popup {
   @include welcome-signin-popup(768px, 893px, "../images/welcome-signin-popup.jpg");
+  top: 0px !important;
+  left: 0px !important;
+  margin: 0px !important;
+
   .logo {
     position: relative;
     top: 60px;

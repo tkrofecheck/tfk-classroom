@@ -12,6 +12,7 @@ App.views.dialogs.TeacherLoginDialog = Backbone.View.extend({
 		//"click"                   : "clickHandler",
 		"click #close"            : "cancel_clickHandler",
 		"click #submit"           : "submit_clickHandler",
+		"click #privacy-policy"   : "privacyPolicy_clickHandler",
 		"click #forgot-password"  : "forgotPassword_clickHandler",
 		"click #create-account"   : "createAccount_clickHandler",
 		"submit form"             : "submit_clickHandler"
@@ -82,7 +83,7 @@ App.views.dialogs.TeacherLoginDialog = Backbone.View.extend({
 		// Make sure username and password are not blank.
 		if ($username.val() == "" || $password.val() == "") {
 			if ($username.val() == "")
-				$error.html("Please enter your username.");
+				$error.html("Please enter your email.");
 			else if ($password.val() == "")
 				$error.html("Please enter a valid password.");
 		} else {
@@ -111,6 +112,8 @@ App.views.dialogs.TeacherLoginDialog = Backbone.View.extend({
 						}
 					}
 					
+					App.userType = "teacher";
+					localStorage.setItem("assessmentEmail", $username.val());
 					that.$el.trigger("loginSuccess");
 					that.close();
 				}
@@ -119,12 +122,17 @@ App.views.dialogs.TeacherLoginDialog = Backbone.View.extend({
 	},
 	
 	forgotPassword_clickHandler: function(e) {
-	  e.stopPropagation();
-	  App.api.dialogService.open(settings.FORGOT_PASSWORD_URL);
-	},
-	
-	createAccount_clickHandler: function(e) {
-    e.stopPropagation();
+    e.preventDefault();
+    App.api.dialogService.open(settings.FORGOT_PASSWORD_URL);
+  },
+  
+  privacyPolicy_clickHandler: function(e) {
+    e.preventDefault();
+    App.api.dialogService.open(settings.PRIVACY_POLICY_URL);
+  },
+  
+  createAccount_clickHandler: function(e) {
+    e.preventDefault();
     App.api.dialogService.open(settings.CREATE_ACCOUNT_URL);
   },
 	

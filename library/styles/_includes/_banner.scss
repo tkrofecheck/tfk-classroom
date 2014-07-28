@@ -7,7 +7,7 @@
 
 #libBanner {
   width: 100%;
-  margin-top: 47px;
+  margin-top: $HEADER_HEIGHT - 5px;
 }
 .carousel {
   overflow: hidden;
@@ -25,7 +25,7 @@
   background-color: transparent;
   background-position: top center;
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: contain; /*default: cover (using contain for testing) */
 }
 .banner {
   width: 100%;
@@ -33,13 +33,20 @@
 }
 
 .signout {
-  background-image: url("../images/entitlement_banner_portrait.png");
+  background-image: url(../images/signout_banner_portrait.png);
   background-color: #000000;
+}
+
+#banner a {
+  position: absolute;
+  top: 0; bottom: 0;
+  left: 0; right: 0;
 }
 
 @media only screen and (min-width:768px) { 
   #libBanner {
-    height: 237px;
+    /*height: 237px*/
+    height: 144px;
   }
 }
 

@@ -41,7 +41,7 @@ App.views.LibraryIssues = Backbone.View.extend({
     App.api.libraryService.updatedSignal.add(this._debounce_render);
     this.$el.addClass("scrollable");
 
-    App.grade.on("level:updated", function() {
+    App.grade.on("level:updated", function(e) {
       console.log("grade level updated");
       
       if (localStorage.getItem("gradeLevel")) {
@@ -60,6 +60,8 @@ App.views.LibraryIssues = Backbone.View.extend({
             that._debounce_render();
             return false;
             //location.reload();
+          } else {
+            App.stopPreview = true; // no update (can't prevent bubbling event without this)
           }
         }
         if (index == App.gradeLevels.length-1) {
@@ -119,6 +121,10 @@ App.views.LibraryIssues = Backbone.View.extend({
     
     this.$("#grid-drop-down").append("<span class='arrow-up'></span><span class='arrow-down'></span>");
     
+    if (App.userType == "student"){
+      this.$("#grade-selector").hide();
+    }
+    
     cb();
     
     return this;
@@ -144,7 +150,8 @@ App.views.LibraryIssues = Backbone.View.extend({
     
     var that = this,
         filterRegEx,
-        folioFilter;
+        folioGradeLevel,
+        folioUserType;
         
     if (localStorage.getItem("gradeLevel")) {
       this.filter = localStorage.getItem("gradeLevel");
@@ -184,13 +191,25 @@ App.views.LibraryIssues = Backbone.View.extend({
     
     // filter list based on dropdown in chrome
     this.folios = _.filter(list, function(folio) {      
-      if (!folio.isPurchasable && (folio.isDownloadable || folio.isViewable)) {
-        if (that.filter == 'all') {
+      folioUserType = folio.productId.split(".")[4]; // should be 'student' or 'teacher'
+      folioGradeLevel = folio.productId.split(".")[5]; // should be 2 char grade level [k1, 22, 34, 56]
+      
+      if (folioUserType == "student" && App.userType == "student") {
+        // Return all student folios in good download/view state (or everything in TEST_MODE)
+        if (settings.TEST_MODE || (!folio.isPurchasable && (folio.isDownloadable || folio.isViewable))) {
           return true;
-        } else {
-          var folioGradeLevel = folio.productId.split(".")[5]; // should be 2 char grade level [k1, 22, 34, 56]
-          return folioGradeLevel.match(filterRegEx);
         }
+      } else if (folioUserType == "teacher" && App.userType == "teacher") {
+        // Return 'all' teacher folios in good download/view state (or everything in TEST_MODE)
+        if (settings.TEST_MODE || (!folio.isPurchasable && (folio.isDownloadable || folio.isViewable))) {
+          if (that.filter == 'all') {
+            return true;
+          } else { // Return 'selected grade' teacher folios in good download/view state
+            return folioGradeLevel.match(filterRegEx);
+          }
+        }
+      } else { // folio product Id has incorrect format
+        console.log("Do not display: " + folio.productId);
       }
     });
       
@@ -416,6 +435,11 @@ App.views.LibraryIssues = Backbone.View.extend({
 	display_previewDialog: function(e, folio, elementId) {
     console.log("App.views.LibraryIssues.display_previewDialog()");
     e.preventDefault();
+    
+    if (App.stopPreview) {
+      App.stopPreview = false;
+      return false;
+    }
     
     var that = this;
     

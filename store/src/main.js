@@ -34,7 +34,6 @@ Handlebars.registerHelper('ifequal', function(options) {
 });
 $(function() {
   console.log("dom ready");
-  App.loading(true);
 
   if (DEBUG && typeof adobeDPS == "undefined") {
     App._raw_api = MockAPI;
@@ -45,6 +44,10 @@ $(function() {
     App._using_adobe_api = true;
   }
 
+  App.preloader = _.extend({}, Backbone.Events);
+  App.autosignout = _.extend({}, Backbone.Events);
+  App.store = _.extend({}, Backbone.Events);
+  
   App._raw_api.initializationComplete.addOnce(function() {
     console.log("init complete");
     App.api = App._raw_api;
@@ -52,7 +55,6 @@ $(function() {
 
     // launch the app
     new App.views.Main().render(function() {
-      App.loading(false);
       Backbone.trigger("AppReady");
     });
   });

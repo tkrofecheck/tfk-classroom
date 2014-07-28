@@ -9,23 +9,23 @@ $COVER_IMG_HEIGHT: 235px;
     width: 100%;
     z-index: 7;
     display: table;
-    top: $HEADER_HEIGHT;
+    top: $HEADER_HEIGHT - 5px;
 }
 
 #subheader p {
     font-family: Helvetica Neue;
-    font-size: 2em;
+    font-size: 1.75em;
     font-weight: bold;
     color: #FFFFFF;
     text-align: center;
     text-transform: uppercase;
-    padding: 10px;
+    padding: 5px;
     margin: 0px;
 }
 
 .flex-container {
   position: absolute;
-  top: 110px;
+  top: 94px;
   padding: 0;
   margin: 0;
   list-style: none;
@@ -45,14 +45,12 @@ li:nth-child(1) {
 }
 li:nth-child(2) {
   border-bottom: 1px solid #CFCFCF;
-  width: 354px;
 }
 li:nth-child(3) {
   border-right: 1px solid #CFCFCF;
 }
 li:nth-child(4) {
   border: 0px;
-  width: 354px;
 }
 
 .nowrap  { 
@@ -78,16 +76,16 @@ li:nth-child(4) {
 
 .flex-item {
   background: tomato;
-  width: 353px;
-  height: 385px;
-  padding: 15px;
+  width: 363px;
+  height: 406px;
+  padding: 10px;
   color: #000000;
   font-size: 1em;
   font-weight: normal;
   text-align: center;
   
   .flex-item-container {
-    margin-top: 20px;
+    margin-top: 10px;
     box-sizing: border-box;
   }
   

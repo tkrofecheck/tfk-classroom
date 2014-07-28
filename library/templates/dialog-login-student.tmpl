@@ -1,21 +1,21 @@
 <form id='login' onsubmit='return false;'>
   <div class='title'>{{settings.LBL_STUDENT_SIGN_IN}}<div id='close'>Cancel</div></div>
   <div class='description'>Please sign in to your account.</div>
-  <input id='username' type='email' name='username' placeholder='Username' tabindex='1'/></div>
+  <input id='username' type='email' name='username' placeholder='PIN' tabindex='1'/></div>
   <input id='password' type='password' name='password' placeholder='Password' tabindex='2'/></div>
   <div id='submit'>{{settings.LBL_SIGN_IN}}</div>
   <input type='submit' style='position: absolute; width: 1px; height: 1px; margin-left: -9999px;'/>
   <div class='error'></div>
   
   {{#if settings.FORGOT_PASSWORD_URL}}
-  <div style='margin-bottom: 15px;'><a class='link' href="{{settings.FORGOT_PASSWORD_URL}}">Forgot password?</a></div>
+  <div style='margin-bottom: 15px;'><a id="forgot-password" class='link' href="#">Forgot password?</a></div>
   {{/if}}
   
   {{#if settings.CREATE_ACCOUNT_URL}}
-  <div style='margin-bottom: 15px;'><a class='link' href="{{settings.CREATE_ACCOUNT_URL}}">Create an Account</a></div>
+  <div style='margin-bottom: 15px;'><a id="create-account" class='link' href="#">Create an Account</a></div>
   {{/if}}
   
   {{#if settings.PRIVACY_POLICY_URL}}
-  <div style='margin-bottom: 15px;'><a class='link' href="{{settings.PRIVACY_POLICY_URL}}">Privacy Policy</a></div>
+  <div style='margin-bottom: 15px;'><a id="privacy-policy" class='link' href="#">Privacy Policy</a></div>
   {{/if}}
 </form>

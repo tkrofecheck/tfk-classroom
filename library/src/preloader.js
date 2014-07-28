@@ -12,7 +12,7 @@ App.preload = function(cb) {
   img("images/003.png");
   img("images/004.png");
   img("images/x.png");
-  img("images/entitlement_banner_portrait.png");
+  img("images/signout_banner_portrait.png");
   
   App.preloader.trigger("finish:loading");
 

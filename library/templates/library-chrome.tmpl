@@ -15,9 +15,6 @@
       {{/if}}
     </div>
   {{/if}}
-    
-    <!-- for development only (do not use this in live app) -->
-    <div class='text-link' id="go-to-store" style="float:left;margin-top:15px;margin-left:20px;">Store</div>
   
   {{#unless model.userOwnsLatestFolio}}
     <!--
@@ -33,10 +30,12 @@
     {{/if}}
   {{/unless}}
 
-  {{#if settings.IS_HEADER_TEXT}}
-    <div id='title'><span style='margin:0;padding:0;border:0;'>{{settings.IS_HEADER_TEXT}}</span></div>
+  {{#if settings.DISPLAY_HEADER_TEXT}}
+    <div id='title'>
+      <span style='margin:0;padding:0;border:0;'>{{settings.IS_HEADER_TEXT}}</span>
+    </div>
   {{else}}
-    <img id='title-image' src=''>
+    <div id='title-image'></div>
   {{/if}}
   
     <div id="drop-down-container">

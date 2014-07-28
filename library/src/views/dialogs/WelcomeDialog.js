@@ -5,7 +5,7 @@ App.views.Welcome = Backbone.View.extend({
   events: {
     "click .sign-in-btn": "getLoginType",
     "click .learnmore": "open_slideshow",
-    "click .samples": "goto_home_tab"
+    "click .samples": "goto_samples_tab"
   },
   initialize: function() {
     console.log("App.views.Welcome.initialize()");
@@ -90,10 +90,10 @@ App.views.Welcome = Backbone.View.extend({
     });
   },
   
-  goto_home_tab: function(e) {
-    console.log("Leaving Library... Switching to tab: Home");
+  goto_samples_tab: function(e) {
+    console.log("Leaving Library... Switching to tab: Samples");
     
     e.preventDefault();
-    App.api.configurationService.gotoState("Home");
+    App.api.configurationService.gotoState("Samples");
   }
 });

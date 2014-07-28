@@ -1,25 +1,26 @@
 /* The white header at the top. */
+$HEADER_HEIGHT: 62px;
+
+/* The white header at the top. */
 #header {
-    background-color: #F7F7F7;
+    background-color: #E22E2D;
     width: 100%;
-    height: 46px;
+    height: $HEADER_HEIGHT - 5px;
     position: fixed;
-    opacity: 0.94;
-    z-index: 7;
+    z-index: 100;
     display: table;
     padding: 0px;
     top: 0px;
     white-space: nowrap;
-    border-bottom: 1px solid #B1B1B1;
 }
 
-#print-subscriber-login, #subscribe  {
-    float: left;
-    margin-right: 10px;
-    padding-top: 13px;
-    margin-left: 17px;
-    font-size: 17px;
+#print-subscriber-login, #subscribe, #go-to-library {
+    position: absolute;
+    line-height: $HEADER_HEIGHT - 5px;
+    left: 17px;
+    font-size: 20px;
     font-weight: 500;
+    z-index: 100;
 }
 
 .text-link, .text-link-red {
@@ -29,7 +30,8 @@
 }
 
 .text-link {
-    color: #00A9DF;
+    /*color: #00A9DF;*/
+   color: #FFFFFF;
 }
 
 .text-link:active {
@@ -80,6 +82,11 @@
 
 #title-image {
     display:block;
-    margin: 0 auto;
     position: relative;
+    background-image: url(../images/logo-white.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    height: $HEADER_HEIGHT;
+    width: 100%;
 }

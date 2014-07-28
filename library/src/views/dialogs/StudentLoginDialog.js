@@ -12,6 +12,7 @@ App.views.dialogs.StudentLoginDialog = Backbone.View.extend({
 		//"click"                   : "clickHandler",
 		"click #close"            : "cancel_clickHandler",
 		"click #submit"           : "submit_clickHandler",
+		"click #privacy-policy"   : "privacyPolicy_clickHandler",
 		"click #forgot-password"  : "forgotPassword_clickHandler",
 		"click #create-account"   : "createAccount_clickHandler",
 		"submit form"             : "submit_clickHandler"
@@ -81,9 +82,9 @@ App.views.dialogs.StudentLoginDialog = Backbone.View.extend({
 		// Make sure username and password are not blank.
 		if ($username.val() == "" || $password.val() == "") {
 			if ($username.val() == "")
-				$error.html("Please enter your username.");
+				$error.html("Please enter your PIN (ask your teacher).");
 			else if ($password.val() == "")
-				$error.html("Please enter a valid password.");
+				$error.html("Please enter a valid password (ask your teacher).");
 		} else {
 			// Login using the authenticationService.
 			var transaction = App.api.authenticationService.login($username.val(), $password.val());
@@ -92,7 +93,7 @@ App.views.dialogs.StudentLoginDialog = Backbone.View.extend({
 			  
 				var transactionStates = App.api.transactionManager.transactionStates;
 				if (transaction.state == transactionStates.FAILED) {
-					$error.html("Authentication Failed.");
+					$error.html("Authentication Failed. Please ask your teacher for help signing in.");
 				} else if (transaction.state == transactionStates.FINISHED){
 					console.log("Authentication Successful!");
 					// If a user is signing into direct entitlement it is recommended
@@ -110,6 +111,7 @@ App.views.dialogs.StudentLoginDialog = Backbone.View.extend({
 						}
 					}
 					
+					App.userType = "student";
 					localStorage.setItem("assessmentPIN", $username.val());
 					that.$el.trigger("loginSuccess");
 					that.close();
@@ -119,12 +121,17 @@ App.views.dialogs.StudentLoginDialog = Backbone.View.extend({
 	},
 	
 	forgotPassword_clickHandler: function(e) {
-	  e.stopPropagation();
-	  App.api.dialogService.open(settings.FORGOT_PASSWORD_URL);
+	  e.preventDefault();
+	  alert("Please ask your teacher how to login. Thank you!");
+	},
+	
+	privacyPolicy_clickHandler: function(e) {
+	  e.preventDefault();
+	  App.api.dialogService.open(settings.PRIVACY_POLICY_URL);
 	},
 	
 	createAccount_clickHandler: function(e) {
-    e.stopPropagation();
+    e.preventDefault();
     App.api.dialogService.open(settings.CREATE_ACCOUNT_URL);
   },
 	

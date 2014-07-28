@@ -3,6 +3,8 @@
 // is the ability to add comments
 window.settings = {
 
+    "TEST_MODE"                     : true, // true to show every issue in library / otherwise set to false
+    
     // General settings
     "BRAND_NAME"                    : "TIME FOR KIDS",
     "BRAND_CODE"                    : "TK",
@@ -14,6 +16,8 @@ window.settings = {
     "store_banners_type"            : "link", //(e.g. subscribe, link, '')
     
     "library_show_subscribe"        : false,
+    
+    "DISPLAY_HEADER_TEXT"           : false, // displays logo image if false otherwise IS_HEADER_TEXT (below)
     
     "IS_ENTITLEMENT_VIEWER"         : true,
     "IS_HEADER_TEXT"                : "Library",

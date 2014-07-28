@@ -17,6 +17,7 @@
       section: {}
     },
     
+    stopPreview: false,
     $headerTitle: null,
     isOnline: null,
     libraryCollection: null,
@@ -26,12 +27,7 @@
     folioThumbTimestamp: (+new Date()),
     gradeLevel: null,
     
-    // grade levels that will appear in productIds, change value to match on here if product Id format changes
-    userTypes: {
-      0: "student",
-      1: "teacher"
-    },
-    
+    // grade levels that will appear in productIds, change value to match on here if product Id format changes   
     gradeLevels: {
       0: "all",
       1: "k1",
@@ -39,6 +35,8 @@
       3: "34",
       4: "56"
     },
+    
+    userType: null,
 
     spinnerOpts: {
       lines: 13, // The number of lines to draw

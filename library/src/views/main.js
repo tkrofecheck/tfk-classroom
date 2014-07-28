@@ -14,9 +14,6 @@ App.views.Main = Backbone.View.extend({
       App.api.libraryService.updateLibrary();
     });
 
-    this.library_view = new App.views.Library;
-    
-    this.$el.hammer();
     if (typeof localStorage.app_view_count == "undefined") {
       localStorage.app_view_count = 0;
     }
@@ -31,7 +28,18 @@ App.views.Main = Backbone.View.extend({
   },
   render: function(cb) {
     var that = this;
+    
+    this.library_view = new App.views.Library;
+    
+    this.$el.hammer();
+    
     this.$el.html(this.template({DEBUG:DEBUG}));
+    
+    if (localStorage.getItem("assessmentPIN")) {
+      App.userType = "student";
+    } else if (localStorage.getItem("assessmentEmail")){
+      App.userType = "teacher";
+    }
     
     this.showWelcome();
     
@@ -44,9 +52,9 @@ App.views.Main = Backbone.View.extend({
     if (App.api.authenticationService.isUserAuthenticated) {
       return;
     } else {
-      if (localStorage.getItem("assessmentPIN")) {
-        localStorage.removeItem("assessmentPIN");
-      }
+      localStorage.removeItem("assessmentPIN");
+      localStorage.removeItem("assessmentEmail");
+      App.userType = null;
       new App.views.Welcome;
     }
   },

@@ -44,6 +44,11 @@
       left: 'auto' // Left position relative to parent in px
     },
     
+    autoSignout: {
+      isSupported: true,
+      isEnabled: false,
+    },
+    
     debug: {
       launch_repl: function() {
         if (!DEBUG) return;
