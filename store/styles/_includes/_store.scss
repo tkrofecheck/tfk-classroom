@@ -85,14 +85,14 @@ li:nth-child(4) {
   text-align: center;
   
   .flex-item-container {
-    margin-top: 10px;
+    margin-top: 0px;
     box-sizing: border-box;
   }
   
   .title {
     font-size: 2em;
     font-weight: bold  !important;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
   }
   
   .img-container {
@@ -133,7 +133,7 @@ li:nth-child(4) {
     text-align: left;
     margin-top: 15px;
     font-size: 1em;
-    font-weight: bold;
+    font-weight: normal;
   }
 }
 

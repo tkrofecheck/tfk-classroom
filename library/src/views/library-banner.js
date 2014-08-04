@@ -21,8 +21,7 @@ App.views.LibraryBanner = Backbone.View.extend({
     
     this._debounce_render = _.throttle(_.bind(this.render, this, $.noop), 500);
     
-    App.grade.on("level:updated", function() {
-      console.log("grade level updated - fix banner");
+    App.library.listenTo(App.grade, "refresh:banner", function() {
       that._debounce_render();
     });
     
@@ -147,5 +146,5 @@ App.views.LibraryBanner = Backbone.View.extend({
 
     gallery = new libBanner.SlideshowGallery($main_gallery);
     gallery.enableTouch().slideEvery(5000);
-  }
+  },
 });

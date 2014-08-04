@@ -103,8 +103,8 @@ App.views.archive.ArchiveView = Backbone.View.extend({
 	},
 	
 	close: function() {
-		this.$el.trigger("archiveViewClosed");
-		this.remove();
+		App.archive.trigger("view:closed");
+		this.$el.remove();
 	},
 	
 	selectAllButton_clickHandler: function() {

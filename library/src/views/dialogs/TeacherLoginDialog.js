@@ -94,7 +94,7 @@ App.views.dialogs.TeacherLoginDialog = Backbone.View.extend({
 			  
 				var transactionStates = App.api.transactionManager.transactionStates;
 				if (transaction.state == transactionStates.FAILED) {
-					$error.html("Authentication Failed.");
+					$error.html("The email address or the password that you entered does not match our records.");
 				} else if (transaction.state == transactionStates.FINISHED){
 					console.log("Authentication Successful!");
 					// If a user is signing into direct entitlement it is recommended

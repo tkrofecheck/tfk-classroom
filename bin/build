@@ -90,7 +90,7 @@ compile() {
   # render the index.html.tmpl file
   MAG_CODE=$TITLE python bin/render_index.py "$DEVDIR/index.html.tmpl" "$DEVDIR/index.mockapi.dev.html" ${DEVJSFILES[@]}
   MAG_CODE=$TITLE python bin/render_index.py "$DEVDIR/index.html.tmpl" "$DEVDIR/index.dev.html" "lib/AdobeLibraryAPI.js" ${DEVJSFILES[@]}
-
+  
   mv $DEVDIR/index.dev.html $DEVDIR/index.html
 
   mkdir $DEPLOYDIR
@@ -115,6 +115,9 @@ END
   
   mkdir $DEPLOYDIR/appstore_links
   cp $DEVDIR/appstore_links/*.* $DEPLOYDIR/appstore_links
+  
+  mkdir $DEPLOYDIR/faqs
+  cp $DEVDIR/faqs/*.* $DEPLOYDIR/faqs
     
   MAG_CODE=$TITLE CSS_HASH=$(md5 -q $BUILDROOT/$DEPLOYDIR/css/main.css) python bin/render_index.py "$DEVDIR/index.html.tmpl" "$DEVDIR/index.prod.html" "main.min.js?v=$(md5 -q $BUILDROOT/$DEPLOYDIR/main.min.js)"
   cp $DEVDIR/index.prod.html $DEPLOYDIR/index.html
@@ -123,6 +126,8 @@ END
 
   mkdir $DEPLOYDIR/settings
   cp -r $DEVDIR/settings/${TITLE}.js $DEPLOYDIR/settings
+  
+  render_in_place "$DEPLOYDIR/faqs/index.html"
 }
 
 ################################################################################
@@ -191,6 +196,7 @@ prod_lib 'AdobeLibraryAPI.js'
 dev_lib 'MockAPI.js'
 
 js_lib 'jquery-1.10.2.min.js'
+js_lib 'jquery-ui.min.js'
 js_lib 'md5.js'
 js_lib 'async.js'
 js_lib 'jquery.transit.js'

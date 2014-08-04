@@ -62,6 +62,11 @@
       isEnabled: false,
     },
     
+    preloader : null,
+    grade : null,
+    autosignout : null,
+    library : null,
+    
     debug: {
       launch_repl: function() {
         if (!DEBUG) return;

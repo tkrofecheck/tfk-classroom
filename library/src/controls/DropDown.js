@@ -87,7 +87,6 @@ $.fn.dropDown = function(method) {
 								itemHtml += "<div class='" + cssClass + "' id='" + child.attr('id') + "' >" + child.html() + "</div>";
 							}
 							
-							console.log(i + ":" + numItems);
 							if (i + 1 < numItems) {// add a divider for the items except for the last one.
                 itemHtml += "<hr>";
               }
@@ -211,7 +210,7 @@ $.fn.dropDown = function(method) {
 				
 				$(window).off("resize", updateLayout);
 				
-				App.autosignout.trigger("autosignout:toggle-complete");
+				App.autosignout.trigger("autosignout:toggled");
 			};
 			
 			/**

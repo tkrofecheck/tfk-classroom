@@ -82,9 +82,9 @@ App.views.dialogs.StudentLoginDialog = Backbone.View.extend({
 		// Make sure username and password are not blank.
 		if ($username.val() == "" || $password.val() == "") {
 			if ($username.val() == "")
-				$error.html("Please enter your PIN (ask your teacher).");
+				$error.html("Please enter your Student ID (ask your teacher if you do not know it).");
 			else if ($password.val() == "")
-				$error.html("Please enter a valid password (ask your teacher).");
+				$error.html("Please enter a valid Classroom Password (ask your teacher if you do not know it).");
 		} else {
 			// Login using the authenticationService.
 			var transaction = App.api.authenticationService.login($username.val(), $password.val());
@@ -93,7 +93,7 @@ App.views.dialogs.StudentLoginDialog = Backbone.View.extend({
 			  
 				var transactionStates = App.api.transactionManager.transactionStates;
 				if (transaction.state == transactionStates.FAILED) {
-					$error.html("Authentication Failed. Please ask your teacher for help signing in.");
+					$error.html("Please ask your teacher for help signing in.");
 				} else if (transaction.state == transactionStates.FINISHED){
 					console.log("Authentication Successful!");
 					// If a user is signing into direct entitlement it is recommended
@@ -122,7 +122,7 @@ App.views.dialogs.StudentLoginDialog = Backbone.View.extend({
 	
 	forgotPassword_clickHandler: function(e) {
 	  e.preventDefault();
-	  alert("Please ask your teacher how to login. Thank you!");
+	  new App.views.dialogs.Message({title:"Forgot your password?", message: "Please ask your teacher for help signing in. Thank you!"});
 	},
 	
 	privacyPolicy_clickHandler: function(e) {

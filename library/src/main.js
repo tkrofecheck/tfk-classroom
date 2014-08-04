@@ -50,12 +50,13 @@ $(function() {
     App._raw_api = adobeDPS;
     App._using_adobe_api = true;
   }
-
+  
   App.preloader = _.extend({}, Backbone.Events);
   App.grade = _.extend({}, Backbone.Events);
   App.autosignout = _.extend({}, Backbone.Events);
+  App.archive = _.extend({}, Backbone.Events);
   App.library = _.extend({}, Backbone.Events);
-
+  
   // launch the app when everything has initialized / preloaded (APIs and images)
   App.preloader.on("finish:loading", function() {
     window.setTimeout(function() {

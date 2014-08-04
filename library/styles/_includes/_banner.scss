@@ -33,8 +33,18 @@
 }
 
 .signout {
-  background-image: url(../images/signout_banner_portrait.png);
+  background-image: url(../images/signout_banner_text.png);
   background-color: #000000;
+}
+
+.arrow {
+  background-repeat: no-repeat;
+  background-image: url(../images/signout_banner_arrow.png);
+  background-size: contain;
+  background-position: top left;
+  width: 45%;
+  height: 45%;
+  margin-left: 55px;
 }
 
 #banner a {

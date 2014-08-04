@@ -84,7 +84,7 @@ window.settings = {
           {"type":"Teacher", "productId":"", "id":""},
           {"type":"Student", "productId":"", "id":""}
         ],
-        "description":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam a vestibulum tortor. Pellentesque sed urna mauris. Vestibulum magna libero, feugiat vitae vehicula non, tristique in orci. Quisque auctor lorem non bibendum euismod. Nulla facilisi. Vivamus aliquet urna ac augue sagittis. "
+        "description":"Help get your class excited about reading with <em>TIME For Kids’</em> <strong>interactive, multimedia features</strong> and <strong>engaging group reading activities</strong>, all while building early <strong>nonfiction</strong> literacy skills. Guide readers in identifying and describing important text features such as main topics, purpose, and supporting details. Each issue comes with <strong>teacher resources</strong> that help with lesson planning, prompting and student support."
       },
       {
         "gradeLevel":"2",
@@ -92,7 +92,7 @@ window.settings = {
           {"type":"Teacher", "productId":"", "id":""},
           {"type":"Student", "productId":"", "id":""}
         ],
-        "description":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam a vestibulum tortor. Pellentesque sed urna mauris. Vestibulum magna libero, feugiat vitae vehicula non, tristique in orci. Quisque auctor lorem non bibendum euismod. Nulla facilisi. Vivamus aliquet urna ac augue sagittis. "
+        "description":"Use <em>TIME For Kids’</em> <strong>informational text</strong> and <strong>multimedia activities</strong> to build skills such as reading comprehension and critical thinking. Help your class develop an understanding of main purpose and supporting details, while using various text features to locate key facts in a story. Each issue comes with <strong>teacher resources</strong> that help with lesson planning, prompting and student support."
       },
       {
         "gradeLevel":"3-4",
@@ -100,7 +100,7 @@ window.settings = {
           {"type":"Teacher", "productId":"", "id":""},
           {"type":"Student", "productId":"", "id":""}
         ],
-        "description":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam a vestibulum tortor. Pellentesque sed urna mauris. Vestibulum magna libero, feugiat vitae vehicula non, tristique in orci. Quisque auctor lorem non bibendum euismod. Nulla facilisi. Vivamus aliquet urna ac augue sagittis. "
+        "description":"Share the excitement of <strong>informational text</strong> with your students, using the <strong>interactive features and multimedia activities</strong> in <em>TIME For Kids</em>. Guide students as they develop reading comprehension skills such as summarization, determining main ideas, describing text structure and comprehending reasoning and evidence. <strong>Assessments</strong> in each issue measure comprehension and proficiency with <strong>Common Core State Standards</strong>."
       },
       {
         "gradeLevel":"5-6",
@@ -108,7 +108,7 @@ window.settings = {
           {"type":"Teacher", "productId":"", "id":""},
           {"type":"Student", "productId":"", "id":""}
         ],
-        "description":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam a vestibulum tortor. Pellentesque sed urna mauris. Vestibulum magna libero, feugiat vitae vehicula non, tristique in orci. Quisque auctor lorem non bibendum euismod. Nulla facilisi. Vivamus aliquet urna ac augue sagittis. "
+        "description":"Continue to build advanced nonfiction literacy skills using the <strong>engaging text</strong> and <strong>interactive, multimedia activities</strong> featured in <em>TIME For Kids</em>. Develop students’ abilities to identify multiple main ideas and supporting details, compare and contrast ideas, identify evidence and evaluate arguments. <strong>Assessments</strong> in each issue measure comprehension and proficiency with <strong>Common Core State Standards</strong>."
       }
     ],
     

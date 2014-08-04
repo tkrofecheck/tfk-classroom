@@ -9,7 +9,7 @@ App.views.dialogs.SlideshowDialog = Backbone.View.extend({
 	template: Handlebars.templates["dialog-slideshow.tmpl"],
 	
 	events: {
-		//"click"                   : "clickHandler",
+		"click"                   : "clickHandler",
 		"click .close"            : "close",
 		"click .samples"          : "goto_samples_tab"
 	},

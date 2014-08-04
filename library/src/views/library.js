@@ -7,19 +7,17 @@ App.views.Library = Backbone.View.extend({
   },
   initialize: function() {
     console.log("App.views.Library.initialize()");
-    var that = this,
-        render;
-        
+    var that = this;
+    
+    if (localStorage.getItem("assessmentPIN")) {
+      App.userType = "student";
+    } else if (localStorage.getItem("assessmentEmail")){
+      App.userType = "teacher";
+    }
+    
     this.library_chrome_view = new App.views.LibraryChrome();
     this.library_banner_view = new App.views.LibraryBanner();
     this.library_issues_view = new App.views.LibraryIssues();
-    
-    render = _.bind(this.render, this, $.noop);
-    render = _.partial(_.delay, render, 50);
-    render = _.debounce(render, 200);
-    
-    //Update views when subscription receipt is available or when user signs into LUCIE
-    App.api.receiptService.newReceiptsAvailableSignal.add(render);
   },
   render: function(cb) {
     cb = cb || $.noop;

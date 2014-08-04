@@ -6,7 +6,6 @@ App.views.LibraryChrome = Backbone.View.extend({
   logoutTimeout: null,
   logoutInterval: null,
   subscribeDialog: null,
-  stopDropDown: false,
   
   events: {
     "click #print-subscriber-login"   : "display_loginDialog",
@@ -21,22 +20,21 @@ App.views.LibraryChrome = Backbone.View.extend({
     
     var that = this;
     
+    this._debounce_render = _.throttle(_.bind(this.render, this, $.noop), 500);
+    
+    App.autoSignout.isEnabled = (localStorage.getItem("autoSignout")=="true") ? true : false;
+    
     $("body").on("subscriptionPurchased", function() {// Triggered from the dialog when a purchase is successful.
       that.$("#subscribe").css("display", "none");
       $("body").off("subscriptionPurchased");
     });
     
-    this._debounce_render = _.throttle(_.bind(this.render, this, $.noop), 500);
+    App.library.listenTo(App.autosignout, "toggled", this._debounce_render);
+
+    // User interaction detected, cancel countdown and remove from screen
+    App.library.listenTo(App.autosignout, "cancel", this.endLogoutCountdown);
     
-    App.grade.on("level:updated", function() { // this is needed to redraw the menu (Dropdown.js is buggy - provided by Adobe)
-      that._debounce_render();
-      return false;
-    });
-    
-    App.autosignout.on("autosignout:toggle-complete", function() { // this is needed to redraw the menu in order for the flip-switch to display appropriately
-      that._debounce_render();
-      return false;
-    });
+    App.library.listenTo(App.autosignout, "logout", this.logout_and_archive);
     
     $("body").on("change", "#auto-signout", function(e, isOn) {
       that.autoSignout_changeHandler(e, isOn);
@@ -45,10 +43,6 @@ App.views.LibraryChrome = Backbone.View.extend({
     $("body").on("change", "#auto-archive", function(e, isOn) {
       that.autoArchive_changeHandler(e, isOn);
     });
-        
-    if (localStorage.autoSignout) {
-      App.autoSignout.isEnabled = (localStorage.autoSignout=="true") ? true : false;
-    }
   },
   
   render: function(cb) {
@@ -56,7 +50,7 @@ App.views.LibraryChrome = Backbone.View.extend({
     var that = this, loginLbl, model, cx;
     cb = cb || $.noop;
     
-    this.toggle_autoSignout();
+    this.check_isAutoSignoutEnabled();
     
     // Determine the login label for the drop down menu.
     loginLbl = App.api.authenticationService.isUserAuthenticated ? settings.LBL_SIGN_OUT : settings.LBL_SIGN_IN;
@@ -159,17 +153,20 @@ App.views.LibraryChrome = Backbone.View.extend({
   display_archiveIssueView: function(e) {
     console.log("App.views.LibraryChrome.display_archiveIssueView()");
     
-    var archiveView = new App.views.archive.ArchiveView({model: App.libraryCollection});
+    new App.views.archive.ArchiveView({model: App.libraryCollection});
     
     // Need to remove the grid so it is not scrollable in the background.
-    var previewScrollPosition = $(window).scrollTop(); // get the current scroll position
     App.$grid.hide();
     
-    archiveView.$el.on("archiveViewClosed", function() {
-      $(window).scrollTop(previewScrollPosition); // set the scroll position back to what it was.
-      App.$grid.show();
+    // get the current scroll position
+    var scrollPosition = $(window).scrollTop();
+
+    App.library.listenTo(App.archive, "view:closed", function() {
+      // set the scroll position back to what it was.
+      $(window).scrollTop(scrollPosition);
       
-      archiveView.$el.off("archiveViewClosed");
+      // Display the grid again
+      App.$grid.show();
     });
   },
 
@@ -177,11 +174,14 @@ App.views.LibraryChrome = Backbone.View.extend({
     console.log("App.views.LibraryChrome.display_loginDialog()");
     e.stopPropagation();
     
+    var that = this;
+    
+    $("#print-subscriber-login .spinner").addClass("show-small-spinner");
+    
     if (!App.api.authenticationService.isUserAuthenticated) {
-      var that = this,
-          loginDialog = new App.views.dialogs.StudentLoginDialog();
+      new App.views.dialogs.StudentLoginDialog();
       
-      var loginScrollPosition = $(window).scrollTop();
+      var scrollPosition = $(window).scrollTop();
       
       // Triggered from the dialog when a login is successful.
       loginDialog.$el.on("loginSuccess", function() {
@@ -189,10 +189,11 @@ App.views.LibraryChrome = Backbone.View.extend({
         $(window).scrollTop(loginScrollPosition); // set the scroll position back to what it was.
         
         loginDialog.$el.off("loginSuccess");
+        $("#print-subscriber-login .spinner").removeClass("show-small-spinner");
       });
     } else {
       this.endLogoutCountdown();
-      this.removeAllIssues();
+      this.logout_and_archive();
     }
   },
 
@@ -217,74 +218,61 @@ App.views.LibraryChrome = Backbone.View.extend({
     this.$("#header").width($(window).width());
   },
 
-  startLogoutCountdownPrompt: function(){
-    var that = this,
-        timer = null;
-    
-    timer = 1000 * (settings.TIME_BEFORE_SIGNOUT_COUNTDOWN_SECONDS + .5);
-    
-    if (this.logoutTimeout || this.$("#logout-countdown-dialog").length > 0) {
-      return;
-    } else {
-      this.logoutTimeout = window.setTimeout(function() {
-        var logoutDialog = new App.views.dialogs.LogoutCountdown();
-        
-        logoutDialog.$el.on("autoLogoutCancel", function() {
-          that.endLogoutCountdown();
-          logoutDialog.$el.off("autoLogoutCancel");
-        });
-        
-        logoutDialog.$el.on("signout:true", function() {
-          if (DEBUG) {
-            App.api.authenticationService.isUserAuthenticated = false; // be sure to set this to false for desktop testing
-          }
-          $("#print-subscriber-login").html(settings.LBL_SIGN_IN);
-          logoutDialog.$el.off("signout:true");
-        });
-      }, timer); // display prompt if no activity detected in time-delay-defined
-    }
-  },
-  
-  endLogoutCountdown: function() {
-    //remove logout counter
-    if (this.logoutTimeout) {
-      console.log("clear logout timeout");
-      clearTimeout(this.logoutTimeout);
-      this.logoutTimeout = null;
-    }
-  },
-  
-  toggle_autoSignout: function() {
-    var that = this;
-    
-    App.autosignout.trigger("autosignout:toggled");
-    
-    if (App.autoSignout.isEnabled) {
-      this.logoutInterval = setInterval(function() {
-        if (App.api.authenticationService.isUserAuthenticated) {
-          if (!that.logoutTimeout) {
-            setTimeout(function() { that.startLogoutCountdownPrompt(); });
-          }
-        } else {
-          that.endLogoutCountdown();
-        }
-      }); //while authenticated - set interval to check if auto-logout countdown has already started, or should be started
-    } else {
-      this.endLogoutCountdown();
-      window.clearInterval(this.logoutInterval);
-      this.logoutInterval = null;
-      return;
-    }
-  },
-  
   // Handler for when a user changes the auto archive setting.
   autoSignout_changeHandler: function(e, isOn) {
     console.log("App.views.LibraryChrome.autoSignout_changeHandler()");
     e.stopPropagation();
+
+    App.autoSignout.isEnabled = isOn;
+    localStorage.setItem("autoSignout", isOn);
+  },
+  
+  check_isAutoSignoutEnabled: function() {
+    var that = this;
     
-    localStorage.autoSignout = App.autoSignout.isEnabled = isOn;
+    if (!App.autoSignout.isEnabled) {
+      clearInterval(this.logoutInterval);
+      return;
+    }
     
-    this.toggle_autoSignout();
+    
+    
+    this.logoutInterval = setInterval(function() {
+      if ($("#logout-countdown-dialog").length == 0) {
+        console.log("countdown not displayed, continue...");
+        if (App.api.authenticationService.isUserAuthenticated) {
+          console.log("user logged in, continue...");
+          if (that.logoutTimeout == null) {
+            console.log("logout timeout is null, continue...");
+            that.startLogoutCountdown();
+          }
+        } else {
+          console.log("user not logged in, end.");
+          clearInterval(that.logoutInterval);
+          that.endLogoutCountdown();
+        }
+      } else {
+        console.log("countdown displayed, do not continue...");
+      }
+    }, 1000);
+  },
+  
+  startLogoutCountdown: function() {
+    var that = this,
+        timer = 1000 * (settings.TIME_BEFORE_SIGNOUT_COUNTDOWN_SECONDS + .5);
+    
+    this.logoutTimeout = setTimeout(function() {
+      console.log("logout timeout created, continue...");
+      new App.views.dialogs.LogoutCountdown();
+      that.endLogoutCountdown();
+    }, timer); // display prompt if no activity detected in time-delay-defined
+  },
+  
+  endLogoutCountdown: function() {
+    //remove logout counter
+    clearTimeout(this.logoutTimeout);
+    this.logoutTimeout = null;
+    console.log("clear logout timeout");
   },
   
   autoArchive_changeHandler: function(e, isOn) {
@@ -294,13 +282,12 @@ App.views.LibraryChrome = Backbone.View.extend({
     App.api.settingsService.autoArchive.toggle(isOn);
   },
   
-  redirect_store: function() {
-    window.location.href = "http://ecom-dev01-app.usdlls2.savvis.net:10500/appstorefronts/tim/classroom/-TK-store-deploy/index.html?v=" + (+new Date);
-  },
-  
-  removeAllIssues: function() {
+  logout_and_archive: function() {
     var that = this;
 
+    // Clear autosignout countdown interval and timeout
+    clearInterval(this.logoutInterval);
+      
     this.foliosToArchive = [];
     
     // Sort the folios descending.
@@ -314,16 +301,12 @@ App.views.LibraryChrome = Backbone.View.extend({
       }
     });
     
-    console.log("list of folios:", list);
-    
     // filter list based on dropdown in chrome
     this.foliosToArchive = _.filter(list, function(folio) {      
       return (folio.isArchivable || folio.isViewable);
     });
     
     if (this.foliosToArchive.length > 0) {
-      console.log("folios to archive: ", this.foliosToArchive);
-      
       this.$el.unbind("click"); //disable closing dialog by tapping modal - must dismiss itself
       
       if (App._using_adobe_api) {
@@ -340,10 +323,7 @@ App.views.LibraryChrome = Backbone.View.extend({
     }
     setTimeout(function() {
       App.api.authenticationService.logout();
-      if (DEBUG) {
-        App.api.authenticationService.isUserAuthenticated = false; // desktop testing purposes
-      }
-      that.loginBtn.html(settings.LBL_SIGN_IN);
+     
       console.log("Logged out!");
     }, 1000);
   },

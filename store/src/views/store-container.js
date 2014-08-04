@@ -33,7 +33,7 @@ App.views.StoreContainer = Backbone.View.extend({
 		var that = this,
 		    render;
 		
-		this.$el.addClass("scrollable");
+		//this.$el.addClass("scrollable");
 		
 		$(window).on("resize orientationchange", function() {
       that.render();

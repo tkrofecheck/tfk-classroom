@@ -39,38 +39,8 @@ App.views.LibraryIssues = Backbone.View.extend({
     
     this._debounce_render = _.throttle(_.bind(this.render, this, $.noop), 500);
     App.api.libraryService.updatedSignal.add(this._debounce_render);
+    
     this.$el.addClass("scrollable");
-
-    App.grade.on("level:updated", function(e) {
-      console.log("grade level updated");
-      
-      if (localStorage.getItem("gradeLevel")) {
-        localStorage.setItem("lastGradeLevel", localStorage.getItem("gradeLevel"));
-      }
-      
-      $.each(App.gradeLevels, function( index, value ) {
-        console.log("index:" + index + "\nApp.gradeLevel:" + App.gradeLevel);
-        if (index == App.gradeLevel) {
-          if (value !== localStorage.getItem("lastGradeLevel")) {
-            localStorage.setItem("gradeLevel",value);
-            $(".modal-background-grey").each(function() {
-              $(this).remove();
-            });
-            
-            that._debounce_render();
-            return false;
-            //location.reload();
-          } else {
-            App.stopPreview = true; // no update (can't prevent bubbling event without this)
-          }
-        }
-        if (index == App.gradeLevels.length-1) {
-          that._debounce_render();
-          return false;
-        }
-      });
-      App.grade.trigger("refresh:banner");
-    });
 	},
 	
 	render: function(cb) {
@@ -205,7 +175,11 @@ App.views.LibraryIssues = Backbone.View.extend({
           if (that.filter == 'all') {
             return true;
           } else { // Return 'selected grade' teacher folios in good download/view state
-            return folioGradeLevel.match(filterRegEx);
+            this.retVal = folioGradeLevel.match(filterRegEx);
+            
+            if (!this.retVal) console.log("Do not display: " + folio.productId);
+            
+            return this.retVal;
           }
         }
       } else { // folio product Id has incorrect format
@@ -397,21 +371,33 @@ App.views.LibraryIssues = Backbone.View.extend({
     console.log("App.views.LibraryChrome.grid_dropDownChangeHandler");
     
     e.stopPropagation();
-
-    App.gradeLevel = $(e.target).dropDown("getSelectedId");
-
-    console.log(App.gradeLevel);
-    App.grade.trigger("level:updated");
     
-    /*var gradeLevelDialog = new App.views.dialogs.GradeLevelDialog();
-    gradeLevelDialog.$el.off("gradeSelected").on("gradeSelected", function(e, transaction) {
-      var gradeScrollPosition = $(window).scrollTop();
+    App.stopPreview = true; // prevent preview dialog from bubbling
+    var selectedId = $(e.target).dropDown("getSelectedId");
+    
+    var that = this;
+    
+    if (localStorage.getItem("gradeLevel")) {
+      localStorage.setItem("lastGradeLevel", localStorage.getItem("gradeLevel"));
+    }
+    
+    $.each(App.gradeLevels, function( index, value ) {
+      if (index == selectedId) {
+        console.log("index:" + index + "\nselectedId:" + selectedId);
+        if (value !== localStorage.getItem("lastGradeLevel")) {
+          localStorage.setItem("gradeLevel", value);
+          $(".modal-background-grey").each(function() {
+            $(this).remove();
+          });
+        }
+      }
+    });
       
-      // Triggered from the dialog when a grade selected.
-      gradeLevelDialog.$el.off("gradeSelectionSuccess").on("gradeSelectionSuccess", function() {
-        $(window).scrollTop(gradeScrollPosition); // set the scroll position back to what it was.
-      });
-    });*/
+    var transaction = App.api.libraryService.updateLibrary();
+    transaction.completedSignal.addOnce(function() {
+      that.updateLibraryHandler();
+      setTimeout(that._debounce_render,0);
+    }, this);
   },
   
   displaySectionsView: function(folio) {
@@ -438,7 +424,7 @@ App.views.LibraryIssues = Backbone.View.extend({
     
     if (App.stopPreview) {
       App.stopPreview = false;
-      return false;
+      return;
     }
     
     var that = this;

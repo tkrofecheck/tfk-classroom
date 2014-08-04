@@ -77,7 +77,7 @@ window.settings = {
     "prod_asset_root": "./",
     
     // ************************************************************  
-    // SLIDESHOW SLIDES
+    // LEARN MORE SLIDESHOW SLIDES
     // ************************************************************
     "slides": [
       {"image":"001.png", "clickthrough":false},
