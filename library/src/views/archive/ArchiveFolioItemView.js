@@ -55,9 +55,7 @@ App.views.archive.ArchiveFolioItemView = Backbone.View.extend({
 		return this;
 	},
 	
-	folioThumb_clickHandler: function(e) {
-		e.preventDefault();
-		
+	folioThumb_clickHandler: function(e) {		
 		this.setSelected(!this.selected); // Toggle the selected state.
 		
 		this.$el.trigger("folioArchiveChanged", [this.selected, this.model.productId]);

@@ -20,36 +20,36 @@
 }
 
 #archive-view-left-column, #sections-view-left-column {
-    width: 100%;
-    height: $HEADER_HEIGHT;
-    display: inline-block;
-    position: absolute;
+    float: left;
+    display: block;
+    width: auto;
+    text-align: left;
+    z-index: 100;
 }
 
 #archive-view-right-column, #sections-view-right-column {
     float: right;
     display: inline-block;
     margin-right: 20px;
-    width: 200px;
     text-align: right;
+    z-index: 100;
 }
 
 #close-button  {
-    position: absolute;
     line-height: $HEADER_HEIGHT - 5px;
-    left: 17px;
+    margin-left: 15px;
     font-size: 20px;
-    font-weight: 500;
-    z-index: 100;
 }
 
 .archive-view #title, .sections-view #title {
     position: absolute;
-    margin-left:auto;
-    margin-right:auto;
-    left:0;
-    right:0;
     font-weight: normal;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 0px !important;
+    line-height: $HEADER_HEIGHT - 5px;
+    width: 100%;
+    z-index: -1;
 }
 
 .archive-view .text-link, .archive-view .text-link-red, .sections-view .text-link {
@@ -88,6 +88,7 @@
 }
 
 #select-all-button, #remove-button {
-  margin: 15px 0px 0px 15px;
-  font-size: 20px;
+    line-height: $HEADER_HEIGHT - 5px;
+    margin-right: 15px;
+    font-size: 20px;
 }

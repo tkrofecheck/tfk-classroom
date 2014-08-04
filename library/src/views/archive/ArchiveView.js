@@ -109,6 +109,8 @@ App.views.archive.ArchiveView = Backbone.View.extend({
 	
 	selectAllButton_clickHandler: function() {
 		if (this.$selectAllBtn.html() == settings.LBL_SELECT_ALL) {
+			console.log("archive view items:", this.folioItemsViews);
+			
 			_.each(this.folioItemViews, function(element, index, list) {
 				element.setSelected(true);
 			});
