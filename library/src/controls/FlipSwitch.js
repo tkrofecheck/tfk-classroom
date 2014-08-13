@@ -101,6 +101,10 @@
 				
 				if (previousIsOn != isOn)
 					$this.trigger("change", isOn);
+					
+				if (!isOn) {
+				  App.autosignout.trigger("toggled");
+				}
 			}
 
 			function setThumbX(value, isAnimate, isOn) {
@@ -120,6 +124,6 @@
 			}
 			
 			return this;
-		})
-	}
+		});
+	};
 })(jQuery);

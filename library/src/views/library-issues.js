@@ -60,11 +60,14 @@ App.views.LibraryIssues = Backbone.View.extend({
     App.$grid = this.$("#grid");
     this.showMore = this.$("#show-more");
     
-    window.setTimeout(function() { that.updateLibrarySpinner(); return; }, 0);
-    
     var transaction = App.api.libraryService.updateLibrary();
     transaction.completedSignal.addOnce(function() {
-      that.updateLibraryHandler();
+      var intervalId = setInterval(function() {
+        if (App.userType != null) {
+          clearInterval(intervalId);
+          that.updateLibraryHandler();
+        }
+      });
     }, this);
     
     this.$("#grid-drop-down").dropDown({verticalGap: -20, className: "grid-drop-down-menu", menuWidth: 170, triangleMarginLeft: 70});
@@ -100,28 +103,14 @@ App.views.LibraryIssues = Backbone.View.extend({
     return this;
 	},
 	
-	updateLibrarySpinner: function() {
-	  var that = this,
-	      windowWidth = $(window).width(),
-	      spinnerLeft = "425px";
-	  
-	  if (windowWidth <= 768) {
-	    spinnerLeft = "295px";
-	  }
-	  
-	  App.$headerTitle.html(settings.IS_UPDATING_TEXT);
-    
-    window.spinner = new Spinner(App.spinnerOpts).spin();
-    $(window.spinner.el).insertBefore("#header #title span").css({'top':'23px','left':spinnerLeft});
-	},
-	
 	updateLibraryHandler: function() {
     console.log("App.views.LibraryIssues.updateLibraryHandler()");
     
     var that = this,
         filterRegEx,
         folioGradeLevel,
-        folioUserType;
+        folioUserType,
+        hiddenFolios = [];
         
     if (localStorage.getItem("gradeLevel")) {
       this.filter = localStorage.getItem("gradeLevel");
@@ -134,15 +123,7 @@ App.views.LibraryIssues = Backbone.View.extend({
     }
 
 		// Remove the div that contains the "updating library" message.
-		window.spinner.stop();
-		$("#header #title .spinner").remove();
-		App.$headerTitle.html(settings.IS_HEADER_TEXT);
-    
-    //Having multiple dropdowns, we need to specify a number for each via 'menuNumber' for events to be bound correctly
-    //$("#header-drop-down-filter").dropDown({verticalGap: -20, menuWidth: 130, menuNumber: 1});
-		
-		//$("#header-drop-down").dropDown({verticalGap: -20, menuWidth: 230, menuNumber: 2});
-		
+		App.$headerTitle.html(settings.IS_HEADER_TEXT);		
 
     App.isOnline = App.api.deviceService.isOnline;
     
@@ -177,15 +158,16 @@ App.views.LibraryIssues = Backbone.View.extend({
           } else { // Return 'selected grade' teacher folios in good download/view state
             this.retVal = folioGradeLevel.match(filterRegEx);
             
-            if (!this.retVal) console.log("Do not display: " + folio.productId);
+            if (!this.retVal) hiddenFolios.push(folio.productId);
             
             return this.retVal;
           }
         }
       } else { // folio product Id has incorrect format
-        console.log("Do not display: " + folio.productId);
+        hiddenFolios.push(folio.productId);
       }
     });
+    console.log("Folios hidden from view:", hiddenFolios);
       
     // If the latest folio is not purchasable then the user is entitled to it.
     // If true then do not display the subscription button.
@@ -431,7 +413,7 @@ App.views.LibraryIssues = Backbone.View.extend({
     
     if (!this.previewDialog) {
       this.previewDialog = new App.views.dialogs.PreviewDialog({model: folio});
-      this.$el.append(this.previewDialog.render().el);
+      $("body").append(this.previewDialog.render().el);
       this.previewDialog.setImageProperties($(e.target), elementId);
       
       this.previewDialog.$el.off("previewDialogClosed").on("previewDialogClosed", function() {

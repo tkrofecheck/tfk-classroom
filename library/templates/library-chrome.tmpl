@@ -48,6 +48,8 @@
         <!--
           <div id='restore-all-purchases'>{{settings.LBL_RESTORE_ALL_PURCHASES}}</div>
         -->
+        <div id='rate-this-app' data-src='appstore_links/goto_appstore.html?link=http%3A%2F%2Fwww.emagazines.com%2Finsight%2Flink%2F%3Fuser%3D4432%26g%3D%7BCFDB8672-1468-4CE4-AE03-799A05A2C1B5%7D'>{{settings.LBL_RATE_THIS_APP}}</div>
+        
         <div id='remove-issues-from-ipad'>{{settings.LBL_REMOVE_ISSUES_FROM_IPAD}}</div>
     
         {{#if model.autosignout_support}}
@@ -55,7 +57,7 @@
           If testing on desktop then include the
           switch otherwise make sure it is supported.
         -->
-        <div id='auto-signout' class='flip-switch' {{#if model.autosignout_enabled}}state='on'{{else}}state='off'{{/if}}>{{settings.LBL_AUTO_SIGNOUT}}<br/><span style="font-size: 10px; color: grey;">(after 10 minutes of inactivity)</span></div>
+        <div id='auto-signout' class='flip-switch' {{#if model.autosignout_enabled}}state='on'{{else}}state='off'{{/if}}>{{settings.LBL_AUTO_SIGNOUT}}<br/><span style="font-size: 10px; color: grey;">(after 30 minutes of inactivity)</span></div>
         {{/if}}
         
         {{#if model.autoarchive_support}}

@@ -24,7 +24,7 @@ abspath() {
 mkzip "http://subscription-assets.timeinc.com/prod/assets/appstorefronts-jq/${TITLE}/adobe/apple/ipad/classroom/store/index.html" "store"
 mkzip "http://subscription-assets.timeinc.com/prod/assets/appstorefronts-jq/${TITLE}/adobe/apple/ipad/classroom/library/index.html" "library"
 mkzip "http://subscription-assets.timeinc.com/prod/assets/appstorefronts-jq/${TITLE}/adobe/apple/ipad/classroom/store/faqs/index.html" "help"
-mkzip "http://subscription-assets.timeinc.com/prod/assets/themes/magazines/default/template-resources/html/legal/ios/${TITLE}/pp.html" "info"
+mkzip "http://subscription-assets.timeforkids.com/prod/assets/themes/magazines/default/template-resources/html/legal/${TITLE}/teachapp/pp.html" "info"
 #mkzip $(bin/getsetting PRIVACY_POLICY_URL $TITLE) "info"
 
 # ZIP the offline banner

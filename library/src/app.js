@@ -57,7 +57,7 @@
       left: 'auto' // Left position relative to parent in px
     },
     
-    autoSignout: {
+    autoLogout: {
       isSupported: true,
       isEnabled: false,
     },

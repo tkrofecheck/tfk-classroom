@@ -14,10 +14,9 @@ App.preload = function(cb) {
   img("images/x.png");
   img("images/signout_banner_arrow.png");
   img("images/signout_banner_text.png");
-  
-  App.preloader.trigger("finish:loading");
 
   (cb||$.noop)();
+  //App.preloader.trigger("finish:loading");
 };
 
 App.preload.img = function(img_url, cb) {

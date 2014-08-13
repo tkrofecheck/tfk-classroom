@@ -141,9 +141,11 @@ dev_lib 'MockAPI.js'
 
 js_lib 'jquery-1.10.2.min.js'
 js_lib 'md5.js'
+js_lib 'APIWrapper.js'
 js_lib 'async.js'
 js_lib 'jquery.transit.js'
 js_lib 'jquery.hammer.js'
+js_lib 'jquery.imgplaceholder.js'
 js_lib 'jquery.plugin.js'
 js_lib 'jquery.countdown.js'
 js_lib 'moment.js'
@@ -151,6 +153,7 @@ js_lib 'underscore.js'
 js_lib 'backbone.js'
 js_lib 'handlebars.runtime.js'
 js_lib 'spin.min.js'
+js_lib 'slideshow.js'
 
 dev_lib 'tcm_devtools.js'
 
@@ -162,9 +165,6 @@ js_file "settings/$TITLE.js"
 
 # depends on settings
 js_lib 'lucie_entitlements.js'
-
-# depends on settings
-js_lib 'slideshow.js'
 
 # creates App object (which is just a namespace)
 js_file "src/app.js"

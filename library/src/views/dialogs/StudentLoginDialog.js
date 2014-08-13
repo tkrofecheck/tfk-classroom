@@ -111,8 +111,7 @@ App.views.dialogs.StudentLoginDialog = Backbone.View.extend({
 						}
 					}
 					
-					App.userType = "student";
-					localStorage.setItem("assessmentPIN", $username.val());
+					localStorage.setItem("PIN", $username.val());
 					that.$el.trigger("loginSuccess");
 					that.close();
 				}

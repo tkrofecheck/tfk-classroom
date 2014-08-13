@@ -210,7 +210,7 @@ $.fn.dropDown = function(method) {
 				
 				$(window).off("resize", updateLayout);
 				
-				App.autosignout.trigger("autosignout:toggled");
+				App.library.trigger("menu-close");
 			};
 			
 			/**

@@ -21,6 +21,8 @@ App.views.dialogs.LogoutCountdown = Backbone.View.extend({
     
     this.render().$el.appendTo("body");
     this.open();
+    
+    this.listenTo(App.autosignout, "toggled", this.cancel);
   },
   render: function() {
     console.log("App.views.dialogs.LogoutCountdown.render");
@@ -74,7 +76,7 @@ App.views.dialogs.LogoutCountdown = Backbone.View.extend({
   open: function() {
     this.$("#logout-countdown-dialog").addClass("pop");
   },  
-  cancel: function() {
+  cancel: function() {    
     $('#counter').countdown('destroy');
     
     App.autosignout.trigger("cancel");

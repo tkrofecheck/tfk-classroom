@@ -5,12 +5,9 @@ App.views.LibraryChrome = Backbone.View.extend({
   
   logoutTimeout: null,
   logoutInterval: null,
-  subscribeDialog: null,
   
   events: {
     "click #print-subscriber-login"   : "display_loginDialog",
-    "click #subscribe"                : "display_subscribeDialog",
-    "click #go-to-store"              : "redirect_store",
     
     "change #header-drop-down"        : "header_dropDownChangeHandler"
   },
@@ -22,17 +19,23 @@ App.views.LibraryChrome = Backbone.View.extend({
     
     this._debounce_render = _.throttle(_.bind(this.render, this, $.noop), 500);
     
-    App.autoSignout.isEnabled = (localStorage.getItem("autoSignout")=="true") ? true : false;
+    if (!localStorage.getItem("autoLogout")) {
+      localStorage.setItem("autoLogout", "false");
+    }
+    
+    App.autoLogout.isEnabled = (localStorage.getItem("autoLogout")=="true") ? true : false;
     
     $("body").on("subscriptionPurchased", function() {// Triggered from the dialog when a purchase is successful.
       that.$("#subscribe").css("display", "none");
       $("body").off("subscriptionPurchased");
     });
     
-    App.library.listenTo(App.autosignout, "toggled", this._debounce_render);
+    App.library.listenTo(App.library, "menu-close", this._debounce_render);
 
     // User interaction detected, cancel countdown and remove from screen
-    App.library.listenTo(App.autosignout, "cancel", this.endLogoutCountdown);
+    App.library.listenTo(App.autosignout, "cancel", function() {
+      that.resetLogoutCountdown(true);
+    });
     
     App.library.listenTo(App.autosignout, "logout", this.logout_and_archive);
     
@@ -50,7 +53,7 @@ App.views.LibraryChrome = Backbone.View.extend({
     var that = this, loginLbl, model, cx;
     cb = cb || $.noop;
     
-    this.check_isAutoSignoutEnabled();
+    this.resetLogoutCountdown(true);
     
     // Determine the login label for the drop down menu.
     loginLbl = App.api.authenticationService.isUserAuthenticated ? settings.LBL_SIGN_OUT : settings.LBL_SIGN_IN;
@@ -59,8 +62,8 @@ App.views.LibraryChrome = Backbone.View.extend({
       loginLbl: App.api.authenticationService.isUserAuthenticated,
       autoarchive_support: /*App.api.settingsService.autoArchive.isSupported*/ false,
       autoarchive_enabled: /*App.api.settingsService.autoArchive.isEnabled*/ false,
-      autosignout_support: App.autoSignout.isSupported,
-      autosignout_enabled: App.autoSignout.isEnabled
+      autosignout_support: App.autoLogout.isSupported,
+      autosignout_enabled: App.autoLogout.isEnabled
     };
     
     cx = {
@@ -95,59 +98,15 @@ App.views.LibraryChrome = Backbone.View.extend({
     
     e.stopPropagation();
     
-    var selectedLabel = $(e.target).dropDown("getSelectedLabel");
+    var selectedLabel = $(e.target).dropDown("getSelectedLabel"),
+        selectedId = $(e.target).dropDown("getSelectedId");
     if (selectedLabel == settings.LBL_RESTORE_ALL_PURCHASES) {  // Display the restore dialog.
       this.display_restorePurchasesDialog();
     } else if (selectedLabel == settings.LBL_REMOVE_ISSUES_FROM_IPAD) {
       this.display_archiveIssueView();
-    } else { // filter folios by grade
-      this.display_gradeLevelDialog();
+    } else if (selectedLabel == settings.LBL_RATE_THIS_APP) {
+      this.redirect($("#" + selectedId).data("src"));
     }
-  },
-
-  display_gradeLevelDialog: function(e) {
-    console.log("App.views.LibraryChrome.display_gradeLevelDialog");
-    
-    var that = this;
-    
-    var gradeLevelDialog = new App.views.dialogs.GradeLevelDialog();
-    gradeLevelDialog.$el.off("gradeSelected").on("gradeSelected", function(e, transaction) {
-      var gradeScrollPosition = $(window).scrollTop();
-      
-      // Triggered from the dialog when a grade selected.
-      gradeLevelDialog.$el.off("gradeSelectionSuccess").on("gradeSelectionSuccess", function() {
-        $(window).scrollTop(gradeScrollPosition); // set the scroll position back to what it was.
-      });
-    });
-  },
-  
-  display_restorePurchasesDialog: function(e) {
-    console.log("App.views.LibraryChrome.display_restorePurchasesDialog()");
-    
-    var that = this;
-    
-    var restoreDialog = new App.views.dialogs.RestoreDialog();
-    
-    restoreDialog.$el.off("restorePurchasesStarted").on("restorePurchasesStarted", function(e, transaction) {
-      var windowWidth = $(window).width(),
-          spinnerLeft = "410px";
-    
-      if (windowWidth <= 768) {
-        spinnerLeft = "280px";
-      }
-      restoreDialog.$el.off("restorePurchasesStarted");
-
-      App.$headerTitle.text("Restoring Purchases...");
-
-      window.spinner = new Spinner(App.spinnerOpts).spin();
-      $(window.spinner.el).insertBefore("#header #title span").css({'top':'23px','left':spinnerLeft});
-    
-      transaction.completedSignal.addOnce(function() {
-        window.spinner.stop();
-        $("#header #title .spinner").remove();
-        App.$headerTitle.html(settings.IS_HEADER_TEXT);
-      }, this);
-    });
   },
   
   display_archiveIssueView: function(e) {
@@ -192,87 +151,13 @@ App.views.LibraryChrome = Backbone.View.extend({
         $("#print-subscriber-login .spinner").removeClass("show-small-spinner");
       });
     } else {
-      this.endLogoutCountdown();
       this.logout_and_archive();
-    }
-  },
-
-  display_subscribeDialog: function(e) {
-    console.log("App.views.LibraryChrome.display_subscribeDialog()");
-    e.stopPropagation();
-    
-    if (!this.subscribeDialog) {
-      this.subscribeDialog = new App.views.dialogs.SubscribeDialog();
-
-      var that = this;
-      this.subscribeDialog.$el.on("subscribeDialogClosed", function() {
-        that.subscribeDialog = null;
-        
-        that.subscribeDialog.$el.off("subscribeDialogClosed")
-      });
     }
   },
   
   setHeaderWidth: function() {      
     // Need to explicitly set the width otherwise it doesn't always update if width=100% in css.
     this.$("#header").width($(window).width());
-  },
-
-  // Handler for when a user changes the auto archive setting.
-  autoSignout_changeHandler: function(e, isOn) {
-    console.log("App.views.LibraryChrome.autoSignout_changeHandler()");
-    e.stopPropagation();
-
-    App.autoSignout.isEnabled = isOn;
-    localStorage.setItem("autoSignout", isOn);
-  },
-  
-  check_isAutoSignoutEnabled: function() {
-    var that = this;
-    
-    if (!App.autoSignout.isEnabled) {
-      clearInterval(this.logoutInterval);
-      return;
-    }
-    
-    
-    
-    this.logoutInterval = setInterval(function() {
-      if ($("#logout-countdown-dialog").length == 0) {
-        console.log("countdown not displayed, continue...");
-        if (App.api.authenticationService.isUserAuthenticated) {
-          console.log("user logged in, continue...");
-          if (that.logoutTimeout == null) {
-            console.log("logout timeout is null, continue...");
-            that.startLogoutCountdown();
-          }
-        } else {
-          console.log("user not logged in, end.");
-          clearInterval(that.logoutInterval);
-          that.endLogoutCountdown();
-        }
-      } else {
-        console.log("countdown displayed, do not continue...");
-      }
-    }, 1000);
-  },
-  
-  startLogoutCountdown: function() {
-    var that = this,
-        timer = 1000 * (settings.TIME_BEFORE_SIGNOUT_COUNTDOWN_SECONDS + .5);
-    
-    this.logoutTimeout = setTimeout(function() {
-      console.log("logout timeout created, continue...");
-      new App.views.dialogs.LogoutCountdown();
-      that.endLogoutCountdown();
-    }, timer); // display prompt if no activity detected in time-delay-defined
-  },
-  
-  endLogoutCountdown: function() {
-    //remove logout counter
-    clearTimeout(this.logoutTimeout);
-    this.logoutTimeout = null;
-    console.log("clear logout timeout");
   },
   
   autoArchive_changeHandler: function(e, isOn) {
@@ -282,12 +167,70 @@ App.views.LibraryChrome = Backbone.View.extend({
     App.api.settingsService.autoArchive.toggle(isOn);
   },
   
+  // Handler for when a user changes the auto archive setting.
+  autoSignout_changeHandler: function(e, isOn) {
+    console.log("App.views.LibraryChrome.autoSignout_changeHandler()");
+    e.stopPropagation();
+
+    App.autoLogout.isEnabled = isOn;
+    localStorage.setItem("autoLogout", isOn);
+    
+    this.resetLogoutCountdown(isOn);
+  },
+  
+  check_isAutoSignoutEnabled: function() {
+    var that = this,
+        timer = 1000 * (settings.TIME_BEFORE_SIGNOUT_COUNTDOWN_SECONDS + .5);
+
+    if (!App.autoLogout.isEnabled || !App.api.authenticationService.isUserAuthenticated) {
+      this.resetLogoutCountdown(false);
+    } else {
+      console.log("logout timeout created, continue...");
+      this.logoutTimeout = setTimeout(function() {
+        that.startLogoutCountdown();
+      }, timer); // display prompt if no activity detected in time-delay-defined
+    }
+  },
+  
+  startLogoutCountdown: function() {
+    var that = this;
+
+    if (!App.api.authenticationService.isUserAuthenticated) {
+      console.log("User not authenticated. Do not show autosignout dialog.");
+      this.resetLogoutCountdown(false);
+      return;
+    }
+    
+    if ($("#logout-countdown-dialog").length == 0) {
+      console.log("display countdown dialog");
+      new App.views.dialogs.LogoutCountdown();
+    } else {
+      this.resetLogoutCountdown(true);
+    }
+  },
+  
+  resetLogoutCountdown: function(do_check) {
+    var that = this;
+    
+    console.log("clear logout timeout");
+    clearTimeout(this.logoutTimeout);
+    
+    if (do_check) {
+      setTimeout(function() {
+        console.log("continue to check");
+        that.check_isAutoSignoutEnabled();
+      }, 1000);
+    }
+  },
+  
   logout_and_archive: function() {
     var that = this;
 
-    // Clear autosignout countdown interval and timeout
-    clearInterval(this.logoutInterval);
-      
+    // Clear autosignout countdown timeout
+    console.log("clear logout timeout");
+    clearTimeout(this.logoutTimeout);
+    
+    console.log("continue to archive & logout");
     this.foliosToArchive = [];
     
     // Sort the folios descending.
@@ -323,9 +266,16 @@ App.views.LibraryChrome = Backbone.View.extend({
     }
     setTimeout(function() {
       App.api.authenticationService.logout();
+      localStorage.removeItem("userType");
+      localStorage.removeItem("lucieCacheEntitlements");
+      localStorage.removeItem("lucieCacheAuthToken");
      
       console.log("Logged out!");
     }, 1000);
   },
+  
+  redirect: function(url) {
+    window.location.href = url;
+  }
 });
 

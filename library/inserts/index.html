@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>Digital Insert - Assessment</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <!--meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, target-densitydpi=device-dpi"/ -->
+  <!--<script type="text/javascript" src="../lib/jquery.js"></script>-->
+
+  <!-- Reading API needed for digital inserts inside content -->
+  <!--<script type="text/javascript" src="../lib/AdobeReadingAPI.js"></script>-->
+
+  <script type="text/javascript">
+    function get_querystring(sVar) {
+      urlStr = window.location.search.substring(1);
+      sv = urlStr.split("&");
+      for (i=0;i< sv.length;i++) {
+        ft = sv [i].split("=");
+        if (ft[0] == sVar) {
+          return ft[1];
+        }
+      }
+    }
+    
+    (function() {
+      var userType = localStorage.getItem("userType"),
+          teacherVal = localStorage.getItem("TEACHER"),
+          studentVal = localStorage.getItem("PIN"),
+          quizId = get_query_string('quiz_id'), // Get quiz_id from querystring
+          userAttr = (userType == "teacher") ? "TEACHER" : "PIN", // Determine URL attribute to use, based on userType logged in
+          userAttrVal = (userType == "teacher") ? teacherVal : studentVal, // Get value for URL attribute, determined by userAttr
+          err = "";
+      
+      if (quizId && userAttr && userAttrVal) {
+        window.location.href = "https://qa-tfkclassroomapp.timeinc.com/TimeForKids/Quiz.aspx?quiz_id=" + quizId + "&" + userAttr + "=" + userAttrVal;
+      } else {
+        if (!quizId) err += "quiz_id";
+        if (!userAttr) err += " userAttr";
+        if (!userAttrVal) err += " userAttrVal";
+        
+        document.write("Missing for Cognero URL: " + err);
+      }
+    })();
+  </script>
+</head>
+ 
+<body>
+</body>
+
+</html>

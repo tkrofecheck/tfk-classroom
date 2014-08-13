@@ -112,8 +112,7 @@ App.views.dialogs.TeacherLoginDialog = Backbone.View.extend({
 						}
 					}
 					
-					App.userType = "teacher";
-					localStorage.setItem("assessmentEmail", $username.val());
+					localStorage.setItem("TEACHER", $username.val());
 					that.$el.trigger("loginSuccess");
 					that.close();
 				}

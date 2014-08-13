@@ -8,13 +8,7 @@ App.views.Library = Backbone.View.extend({
   initialize: function() {
     console.log("App.views.Library.initialize()");
     var that = this;
-    
-    if (localStorage.getItem("assessmentPIN")) {
-      App.userType = "student";
-    } else if (localStorage.getItem("assessmentEmail")){
-      App.userType = "teacher";
-    }
-    
+
     this.library_chrome_view = new App.views.LibraryChrome();
     this.library_banner_view = new App.views.LibraryBanner();
     this.library_issues_view = new App.views.LibraryIssues();

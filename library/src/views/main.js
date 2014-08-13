@@ -9,12 +9,13 @@ App.views.Main = Backbone.View.extend({
   initialize: function() {
     console.log("App.views.Main.initialize()");
     var that = this,
+        intervalId,
         render;
 
     render = _.bind(this.render, this, $.noop);
     render = _.partial(_.delay, render, 50);
     render = _.debounce(render, 200);
-    
+
     App.api.authenticationService.userAuthenticationChangedSignal.add(render);
 
     if (typeof localStorage.getItem("app_view_count")=="undefined") {
@@ -25,19 +26,17 @@ App.views.Main = Backbone.View.extend({
   },
   render: function(cb) {
     var that = this;
-
+    
     this.$el.hammer();
     
     this.$el.html(this.template({DEBUG:DEBUG}));
-    
+        
     if (!App.api.authenticationService.isUserAuthenticated) {
-      localStorage.removeItem("assessmentPIN");
-      localStorage.removeItem("assessmentEmail");
       App.userType = null;
       new App.views.Welcome;
     } else {
       this.library_view = new App.views.Library;
-      
+
       App.api.libraryService.updateLibrary();
       
       this.library_view.render(function() {
@@ -45,6 +44,7 @@ App.views.Main = Backbone.View.extend({
       });
     }
   },
+  
   launch_repl: function() {
     App.debug.launch_repl();
   },
