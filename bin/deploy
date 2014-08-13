@@ -20,7 +20,7 @@ fi
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 if [[ ($DEPLOYTO == "qa") || ($DEPLOYTO == "prod") ]]; then
   git checkout $DEPLOYTO
-  git pull https://git.timeinc.net/git/tcm/storefront25.git $DEPLOYTO:$DEPLOYTO
+  git pull https://git.timeinc.net/git/tcm/tfk_classroom.git $DEPLOYTO:$DEPLOYTO
   if [[ $? -ne 0 ]]; then
     exit 1
   fi
@@ -42,12 +42,14 @@ rm -rf /tmp/v25/$TITLE
 mkdir -p /tmp/v25/$TITLE
 
 pushd /tmp/v25
-cvs -q checkout -d $TITLE assets/appstorefronts-jq/${TITLE}/adobe/apple/ipad/v25
+cvs -q checkout -d $TITLE assets/appstorefronts-jq/${TITLE}/adobe/apple/ipad/classroom
 
 popd
-cp -R ./-${TITLE}-store-deploy/ /tmp/v25/${TITLE}
+cp -R ./-${TITLE}-library-deploy/ /tmp/v25/${TITLE}/library
+cp -R ./-${TITLE}-store-deploy/ /tmp/v25/${TITLE}/store
 
-pushd /tmp/v25/${TITLE}
+pushd /tmp/v25/${TITLE}/library
+pushd /tmp/v25/${TITLE}/store
 
 # CLEAN OUT VIM SWAP FILES
 find . -iname "*.swp" | xargs rm

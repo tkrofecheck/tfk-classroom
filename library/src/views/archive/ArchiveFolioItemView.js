@@ -58,6 +58,8 @@ App.views.archive.ArchiveFolioItemView = Backbone.View.extend({
 	folioThumb_clickHandler: function(e) {		
 		this.setSelected(!this.selected); // Toggle the selected state.
 		
+		App.omni.event("lb_foliocover_taps");
+		
 		this.$el.trigger("folioArchiveChanged", [this.selected, this.model.productId]);
 	},
 	
@@ -94,6 +96,7 @@ App.views.archive.ArchiveFolioItemView = Backbone.View.extend({
 		
 		if (value) {
 			if (!this.$selectedBorder) {
+				
 				var html = "".concat("<div class='archive-view-selected'>",
 				                       "<div class='archive-view-selected-check-icon-container'>",
 				                         "<div class='archive-view-selected-check-icon'></div>",

@@ -26,7 +26,6 @@ App.views.LibraryIssues = Backbone.View.extend({
   filter: null,
     
 	events: {
-	  "click .slide"             : "banner_tap",
     "click #show-more"         : "showMore_clickHandler",
     "change #grid-drop-down"   : "grid_dropDownChangeHandler"
   },
@@ -354,6 +353,8 @@ App.views.LibraryIssues = Backbone.View.extend({
     
     e.stopPropagation();
     
+    App.omni.event("lb_filter_taps");
+    
     App.stopPreview = true; // prevent preview dialog from bubbling
     var selectedId = $(e.target).dropDown("getSelectedId");
     
@@ -412,6 +413,8 @@ App.views.LibraryIssues = Backbone.View.extend({
     var that = this;
     
     if (!this.previewDialog) {
+      App.omni.event("lb_preview_taps");
+      
       this.previewDialog = new App.views.dialogs.PreviewDialog({model: folio});
       $("body").append(this.previewDialog.render().el);
       this.previewDialog.setImageProperties($(e.target), elementId);
@@ -442,6 +445,8 @@ App.views.LibraryIssues = Backbone.View.extend({
     e.stopPropagation();
     
     if (!this.subscribeDialog) {
+      App.omni.event("lb_subscribe_taps");
+      
       this.subscribeDialog = new App.views.dialogs.SubscribeDialog();
 
       var that = this;
@@ -454,6 +459,8 @@ App.views.LibraryIssues = Backbone.View.extend({
   display_loginDialog: function(e, userType) {
     console.log("App.views.LibraryIssues.display_loginDialog()");
     e.stopPropagation();
+    
+    App.omni.event("lb_login_taps");
     
     if (!App.api.authenticationService.isUserAuthenticated) {
       var that = this,
@@ -478,36 +485,8 @@ App.views.LibraryIssues = Backbone.View.extend({
   showMore_clickHandler: function(e) {
     console.log("App.views.LibraryIssues.showMore_clickHandler()");
     e.stopPropagation();
+    App.omni.event("lb_showmore_taps");
+    
     this.addFolios();
-  },
-  
-  banner_tap: function(e) {
-    console.log("App.views.LibraryIssues.banner_tap()");
-    
-    var element = $(e.currentTarget);
-    
-    if (element.hasClass("subscribe")) {
-      console.log("Banner tap - subscribe");
-      new App.dialogs.Subscribe();
-    } else if (element.hasClass("link")) {
-      console.log("Banner tap - " + settings.BANNER_TARGET_URL + " - this will only work with an R28 app or higher");
-      App.api.dialogService.open(settings.BANNER_TARGET_URL);
-    } else if (element.hasClass("signin")) {
-      if (element.hasClass("teacher")) {
-        this.display_loginDialog(e, true);
-      } else {
-        this.display_loginDialog(e, false);
-      }
-    } else {
-      console.log("Banner tap - no action");
-    }
-    return false;
-  },
-  
-  setup_sidescroller: function(elementId) {
-    var $main_gallery = document.getElementById(elementId);
-
-    gallery = new libBanner.SlideshowGallery($main_gallery);
-    gallery.enableTouch().slideEvery(5000);
   }
 });

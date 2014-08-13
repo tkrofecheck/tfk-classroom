@@ -47,6 +47,8 @@ App.views.dialogs.TeacherLoginDialog = Backbone.View.extend({
 	},
 	
 	open: function() {
+	  this.omni_pv = App.omni.pageview("teacherLoginDialog", "event1");
+	  
 	  this.$("#login").addClass("pop");
 	},
 	
@@ -67,6 +69,8 @@ App.views.dialogs.TeacherLoginDialog = Backbone.View.extend({
 	
 	submit_clickHandler: function(e) {
 		e.preventDefault();
+		
+		App.omni.event("lb_signin_taps");
 		
 		var that = this,
 		    $username = this.$("#username"),
@@ -122,31 +126,37 @@ App.views.dialogs.TeacherLoginDialog = Backbone.View.extend({
 	
 	forgotPassword_clickHandler: function(e) {
     e.preventDefault();
+    App.omni.event("lb_forgotpassword_taps");
     App.api.dialogService.open(settings.FORGOT_PASSWORD_URL);
   },
   
   privacyPolicy_clickHandler: function(e) {
     e.preventDefault();
+    App.omni.event("lb_privacypolicy_taps");
     App.api.dialogService.open(settings.PRIVACY_POLICY_URL);
   },
   
   createAccount_clickHandler: function(e) {
     e.preventDefault();
+    App.omni.event("lb_createaccount_taps");
     App.api.dialogService.open(settings.CREATE_ACCOUNT_URL);
   },
 	
 	cancel_clickHandler: function(e) {
 	  e.stopPropagation();
+	  App.omni.event("lb_cancel_taps");
 	  this.close();
 	},
 	
 	close: function() {
+		TcmOmni.set_pagename(this.omni_pv.prev);
 		this.$el.remove();
 	},
 	
 	// Handler for when a user chooses to restore purchases.
 	restore_clickHandler: function(e) {
 		e.stopPropagation();
+		App.omni.event("lb_restore_taps");
 		App.api.receiptService.restorePurchases();
 		this.close();
 	}

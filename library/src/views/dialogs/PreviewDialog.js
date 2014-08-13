@@ -96,6 +96,8 @@ App.views.dialogs.PreviewDialog = Backbone.View.extend({
 	  
 	  e.preventDefault();
 	  
+	  App.omni.event("lb_download_taps");
+	  
 	  var that = this;
     if (App._using_adobe_api) {
       if (this.model.state == App.api.libraryService.folioStates.PURCHASABLE) {
@@ -117,6 +119,7 @@ App.views.dialogs.PreviewDialog = Backbone.View.extend({
 	  console.log("App.views.dialogs.PreviewDialog() preview");
 	  
 	  e.preventDefault();
+	  App.omni.event("lb_preview_taps");
 	  
     try {
       if (this.model.canDownloadContentPreview()) {  // Preview can be downloaded.
@@ -148,6 +151,8 @@ App.views.dialogs.PreviewDialog = Backbone.View.extend({
 	  console.log("App.views.dialogs.PreviewDialog() subscribe");
     
     e.preventDefault();
+    
+    App.omni.event("lb_subscribe_taps");
     
     this.$el.trigger("subscribeButtonClicked");
 	},
@@ -209,6 +214,8 @@ App.views.dialogs.PreviewDialog = Backbone.View.extend({
 	
 	// Handler for when the image finishes expanding.
 	folioCoverOpen_transitionEndHandler: function() {
+		this.omni_pv = App.omni.pageview("previewDialog", "event1");
+		
 		this.$contentContainer.off("webkitTransitionEnd");
 		// Remove the transitions so the user does not see any animations if the device is rotated.
 		this.$contentContainer.css({"-webkit-transition" : "none"});
@@ -246,5 +253,7 @@ App.views.dialogs.PreviewDialog = Backbone.View.extend({
 		});
 		
 		document.ontouchmove = null;
+		
+		TcmOmni.set_pagename(this.omni_pv.prev);
 	}
 });

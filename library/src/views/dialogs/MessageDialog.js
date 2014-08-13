@@ -36,6 +36,8 @@ App.views.dialogs.Message = Backbone.View.extend({
   
   open: function() {
     console.log("App.views.dialogs.Message.open()");
+    this.omni_pv = App.omni.pageview("customMessageDialog", "event1");
+    
     this.$("#message-dialog").addClass("pop");
   },
   
@@ -44,6 +46,7 @@ App.views.dialogs.Message = Backbone.View.extend({
   },
   
   remove: function() {
+    TcmOmni.set_pagename(this.omni_pv.prev);
     Backbone.View.prototype.remove.apply(this, arguments);
   }
 });

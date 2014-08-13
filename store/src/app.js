@@ -49,6 +49,32 @@
       isEnabled: false,
     },
     
+    // Omniture Helper functions
+    omni: {
+      pageview: function(page_name) {
+        this.dps_event("samples|pageview|"+page_name, page_name);
+        return TcmOmni.pageview.apply(TcmOmni, arguments);
+      },
+      event: function(evt_name) {
+        this.dps_event(evt_name);
+        return TcmOmni.event.apply(TcmOmni, arguments);
+      },
+      dps_event: function(evt_name, page_name) {
+        if (page_name !== undefined) page_name = "samples|"+page_name;
+        else page_name = TcmOmni.get_pagename();
+
+        // get the currently running AB tets if the AB testing
+        // framework is loaded
+        var ab_tests = window.AB ? AB.omnitureString() : '';
+
+        App.api.analyticsService.trackCustomEvent("customEvent3", {
+          customVariable3: evt_name,
+          customVariable4: page_name,
+          customVariable7: ab_tests
+        });
+      }
+    },
+    
     debug: {
       launch_repl: function() {
         if (!DEBUG) return;

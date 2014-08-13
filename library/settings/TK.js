@@ -30,9 +30,9 @@ window.settings = {
     // ************************************************************
     // OMNITURE
     // ************************************************************
-    "omniture_account"           : "timagtimekidsall",
-    "omniture_server"            : "metrics.time.com",
-    "omniture_ssl_server"        : "smetrics.time.com",
+    "omniture_account"           : "",
+    "omniture_server"            : "",
+    "omniture_ssl_server"        : "",
     
     // ************************************************************
     // NAV BAR, LOGIN DIALOG, RESTORE

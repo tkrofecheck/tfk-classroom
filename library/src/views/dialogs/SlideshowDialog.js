@@ -54,6 +54,8 @@ App.views.dialogs.SlideshowDialog = Backbone.View.extend({
 	},
 	
 	open: function() {
+	  this.omni_pv = App.omni.pageview("slideshowTutorialDialog", "event1");
+	  
 	  this.$(".dialog").addClass("pop");
 	},
 	
@@ -106,12 +108,16 @@ App.views.dialogs.SlideshowDialog = Backbone.View.extend({
     console.log("Leaving Library... Switching to tab: Samples");
     
     e.preventDefault();
+    App.omni.event("lb_samples_taps");
+    
     App.api.configurationService.gotoState("Samples");
   },
   
 	close: function() {
 		console.log("close");
 		this.$el.trigger("closeSlideshow");
+		
+		TcmOmni.set_pagename(this.omni_pv.prev);
 		this.$el.remove();
 	}
 });

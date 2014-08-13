@@ -114,6 +114,7 @@ App.views.section.SectionsView = Backbone.View.extend({
 	
 	closeButton_clickHandler: function() {
 		this.$el.trigger("sectionsViewClosed");
+		TcmOmni.set_pagename(this.omni_pv.prev);
 		this.remove();
 	},
 	

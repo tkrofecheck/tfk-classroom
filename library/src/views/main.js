@@ -32,9 +32,11 @@ App.views.Main = Backbone.View.extend({
     this.$el.html(this.template({DEBUG:DEBUG}));
         
     if (!App.api.authenticationService.isUserAuthenticated) {
+      App.omni.pageview("welcome", "event1,event43,event44");
       App.userType = null;
       new App.views.Welcome;
     } else {
+      App.omni.pageview("main", "event1,event43");
       this.library_view = new App.views.Library;
 
       App.api.libraryService.updateLibrary();

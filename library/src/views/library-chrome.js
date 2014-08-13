@@ -96,15 +96,20 @@ App.views.LibraryChrome = Backbone.View.extend({
   header_dropDownChangeHandler: function(e) {   
     console.log("App.views.LibraryChrome.header_dropDownChangeHandler()");
     
+    App.omni.event("lb_settings_taps");
+    
     e.stopPropagation();
     
     var selectedLabel = $(e.target).dropDown("getSelectedLabel"),
         selectedId = $(e.target).dropDown("getSelectedId");
     if (selectedLabel == settings.LBL_RESTORE_ALL_PURCHASES) {  // Display the restore dialog.
+      App.omni.event("lb_restore_taps");
       this.display_restorePurchasesDialog();
     } else if (selectedLabel == settings.LBL_REMOVE_ISSUES_FROM_IPAD) {
+      App.omni.event("lb_remove_taps");
       this.display_archiveIssueView();
     } else if (selectedLabel == settings.LBL_RATE_THIS_APP) {
+      App.omni.event("lb_rateus_taps");
       this.redirect($("#" + selectedId).data("src"));
     }
   },
@@ -164,6 +169,8 @@ App.views.LibraryChrome = Backbone.View.extend({
     console.log("App.views.LibraryChrome.autoArchive_changeHandler()");
     e.stopPropagation();
     
+    App.omni.event("lb_autoarchive_taps");
+    
     App.api.settingsService.autoArchive.toggle(isOn);
   },
   
@@ -172,6 +179,8 @@ App.views.LibraryChrome = Backbone.View.extend({
     console.log("App.views.LibraryChrome.autoSignout_changeHandler()");
     e.stopPropagation();
 
+    App.omni.event("lb_autosignout_taps");
+    
     App.autoLogout.isEnabled = isOn;
     localStorage.setItem("autoLogout", isOn);
     

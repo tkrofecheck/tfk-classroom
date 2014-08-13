@@ -74,15 +74,25 @@ App.views.dialogs.LogoutCountdown = Backbone.View.extend({
     }
   },
   open: function() {
+    this.omni_pv = App.omni.pageview("autoSignoutDialog", "event1");
+    
     this.$("#logout-countdown-dialog").addClass("pop");
   },  
   cancel: function() {    
+    App.omni.event("lb_cancel_taps");
+    
     $('#counter').countdown('destroy');
     
     App.autosignout.trigger("cancel");
+    this.close();
+  },
+  close: function() {
+    TcmOmni.set_pagename(this.omni_pv.prev);
     this.$el.remove(); //remove dialog from screen
   },
   logOut: function() {
+    App.omni.event("lb_logout_taps");
+    
     App.autosignout.trigger("logout");
     this.$el.remove(); //remove dialog from screen
   }

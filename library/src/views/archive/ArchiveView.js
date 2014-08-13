@@ -95,6 +95,8 @@ App.views.archive.ArchiveView = Backbone.View.extend({
 			this.$selectAllBtn.addClass("disabled");
 		}
 		
+		this.omni_pv = App.omni.pageview("archiveView", "event1");
+		
 		return this;
 	},
 	
@@ -104,11 +106,14 @@ App.views.archive.ArchiveView = Backbone.View.extend({
 	
 	close: function() {
 		App.archive.trigger("view:closed");
+		TcmOmni.set_pagename(this.omni_pv.prev);
 		this.$el.remove();
 	},
 	
 	selectAllButton_clickHandler: function() {
 		if (this.$selectAllBtn.html() == settings.LBL_SELECT_ALL) {
+			App.omni.event("lb_selectall_taps");
+			
 			console.log("archive view items:", this.folioItemsViews);
 			
 			_.each(this.folioItemViews, function(element, index, list) {
@@ -125,6 +130,8 @@ App.views.archive.ArchiveView = Backbone.View.extend({
 				}
 			}
 		} else {
+			App.omni.event("lb_deselectall_taps");
+			
 			_.each(this.folioItemViews, function(element, index, list) {
 				element.setSelected(false);
 			});
@@ -137,6 +144,9 @@ App.views.archive.ArchiveView = Backbone.View.extend({
 	
 	removeButton_clickHandler: function(e) {
 		e.stopPropagation();
+		
+		App.omni.event("lb_remove_taps");
+		
 		if (this.foliosToArchive.length > 0) {
 			if (App._using_adobe_api) {
 				var folio;
@@ -197,6 +207,8 @@ App.views.archive.ArchiveView = Backbone.View.extend({
 	
 	close_clickHandler: function(e) {
 	  e.stopPropagation();
+	  App.omni.event("lb_close_taps");
+	  
 	  this.close();
 	}
 });

@@ -56,6 +56,12 @@ App.views.Welcome = Backbone.View.extend({
     console.log("App.views.Welcome.display_loginDialog()");
     e.stopPropagation();
 
+    if (userType) {
+      App.omni.event("lb_teacher_login_taps");
+    } else {
+      App.omni.event("lb_student_login_taps");
+    }
+    
     if (!App.api.authenticationService.isUserAuthenticated) {
       var that = this,
           loginDialog;
@@ -83,6 +89,8 @@ App.views.Welcome = Backbone.View.extend({
     e.preventDefault();
     e.stopPropagation();
     
+    App.omni.event("lb_learnmore_taps");
+    
     var that = this,
         slideshowScrollPosition = $(window).scrollTop(),
         slideshowDialog = new App.views.dialogs.SlideshowDialog();
@@ -96,6 +104,8 @@ App.views.Welcome = Backbone.View.extend({
     console.log("Leaving Library... Switching to tab: Samples");
     
     e.preventDefault();
+    App.omni.event("lb_samples_taps");
+    
     App.api.configurationService.gotoState("Samples");
   }
 });
